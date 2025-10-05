@@ -1,0 +1,17 @@
+{
+  "name": "poplog",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix popLog-app\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Nico Caminero",
+  "license": "MIT",
+  "type": "module",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

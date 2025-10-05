@@ -1,0 +1,6 @@
+.env
+server.env
+popLog-app.env
+node_modules/
+server/node_modules/
+popLog-app/node_modules/
