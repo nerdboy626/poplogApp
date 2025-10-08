@@ -1,5 +1,5 @@
 import { Client } from "pg";
-import { DATABASE_URL } from "./env.js";
+import { DATABASE_URL } from "../config/env.js";
 
 const seedTables = `CREATE TABLE IF NOT EXISTS users (
 id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY, 
