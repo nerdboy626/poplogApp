@@ -4,7 +4,7 @@ import validator from "validator";
 import { userExists, insertUser, getUser } from "../database/authQueries.js";
 import { ACCESS_TOKEN_SECRET } from "../config/env.js";
 
-export async function postNewUser(req, res) {
+export const postNewUser = async (req, res) => {
   let { username, email, password } = req.body;
 
   if (!username || !email || !password) {
@@ -55,9 +55,9 @@ export async function postNewUser(req, res) {
       .status(500)
       .json({ error: "Registration failed. Please try again." });
   }
-}
+};
 
-export async function loginUser(req, res) {
+export const loginUser = async (req, res) => {
   let { username, password } = req.body;
 
   if (!username || !password) {
@@ -91,4 +91,4 @@ export async function loginUser(req, res) {
     console.error("Login error:", err.message);
     return res.status(500).json({ error: "Login failed. Please try again." });
   }
-}
+};
