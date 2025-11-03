@@ -9,10 +9,11 @@ export async function userExists(username, email) {
 }
 
 export async function insertUser(username, email, password) {
-  await pool.query(
-    "INSERT INTO users (username, email, hashed_password) VALUES ($1, $2, $3)",
+  const result = await pool.query(
+    "INSERT INTO users (username, email, hashed_password) VALUES ($1, $2, $3) RETURNING id, username",
     [username, email, password]
   );
+  return result.rows[0];
 }
 
 export async function getUser(username) {

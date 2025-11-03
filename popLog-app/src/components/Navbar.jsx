@@ -1,5 +1,10 @@
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../utils/AuthContext.jsx";
 const Navbar = () => {
+  const auth = useAuth();
+  const handleLogout = () => {
+    auth.logout();
+  };
   return (
     <div>
       <ul className="navbar">
@@ -12,9 +17,15 @@ const Navbar = () => {
         <NavLink to="/search">
           <li>Search</li>
         </NavLink>
-        <NavLink to="/login">
-          <li>Login</li>
-        </NavLink>
+        {auth.user ? (
+          <NavLink to="/" onClick={handleLogout}>
+            <li>Logout</li>
+          </NavLink>
+        ) : (
+          <NavLink to="/login">
+            <li>Login</li>
+          </NavLink>
+        )}
       </ul>
     </div>
   );

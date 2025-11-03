@@ -38,17 +38,19 @@ export const postNewUser = async (req, res) => {
 
     const hashed = await bcrypt.hash(password, 10);
 
-    await insertUser(username, email, hashed);
+    const user = await insertUser(username, email, hashed);
 
     console.log("User registered!");
-
-    const user = { name: username };
 
     const accessToken = jwt.sign(user, ACCESS_TOKEN_SECRET, {
       expiresIn: "1h",
     });
 
-    res.status(201).json({ accessToken: accessToken });
+    res.status(201).json({
+      message: "User registered successfully",
+      user,
+      accessToken,
+    });
   } catch (err) {
     console.error("Registration error:", err.message);
     return res
@@ -79,14 +81,18 @@ export const loginUser = async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    const user = { name: username };
+    const user = { id: users[0].id, username: users[0].username };
 
     const accessToken = jwt.sign(user, ACCESS_TOKEN_SECRET, {
       expiresIn: "1h",
     });
 
     console.log("Logged In!");
-    res.status(201).json({ accessToken: accessToken });
+    res.status(201).json({
+      message: "Login successful",
+      user,
+      accessToken,
+    });
   } catch (err) {
     console.error("Login error:", err.message);
     return res.status(500).json({ error: "Login failed. Please try again." });

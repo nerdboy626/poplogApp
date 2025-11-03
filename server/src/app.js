@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import { PORT } from "./config/env.js";
 import { authRouter } from "./routes/auth.js";
 import { movieRouter } from "./routes/movies.js";
@@ -7,6 +8,7 @@ import { gameRouter } from "./routes/games.js";
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRouter);
