@@ -1,0 +1,36 @@
+:root {
+  --color-primary: #4a1d7c;
+  --color-secondary: #be3838;
+  --color-background: #12193d;
+
+  --color-text-dark: #090a0a;
+  --color-text-light: #ffffff;
+
+  --font-family: "Inter", sans-serif;
+  --font-size-small: 0.875rem;
+  --font-size-medium: 1rem;
+  --font-size-large: 1.25rem;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: var(--font-family);
+  background-color: var(--color-background);
+  color: var(--color-text-light);
+}
+
+a {
+  color: var(--color-text-dark);
+  text-decoration: none;
+}
+
+button {
+  font-family: var(--font-family);
+}

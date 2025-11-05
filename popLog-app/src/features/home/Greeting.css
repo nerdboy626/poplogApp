@@ -1,0 +1,13 @@
+.greeting {
+  width: 100%;
+  padding: 2rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border: 2px solid green; */
+}
+
+.greeting a {
+  color: var(--color-text-light);
+  text-decoration: underline;
+}

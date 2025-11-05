@@ -1,0 +1,33 @@
+.navbar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border: 5px solid red; */
+}
+
+.navbar > ul {
+  margin: 0;
+  padding: 0;
+  width: 90%;
+  /* height: 7vh; */
+  padding: 1rem 0;
+  list-style-type: none;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 30px;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+  background-color: #cbccd2;
+  /* border: 2px solid green; */
+}
+
+.navbar > ul li {
+  font-size: var(--font-size-large);
+  /* border: 2px solid purple; */
+  font-weight: 600;
+}
+
+.navbar a.active {
+  color: var(--color-secondary);
+}
