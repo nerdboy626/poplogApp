@@ -9,26 +9,80 @@ const options = {
   },
 };
 
+function formatData(data) {
+  return data.map((item) => ({
+    id: item.id,
+    mediaType: item.media_type,
+    title: item.media_type === "movie" ? item.title : item.name,
+    summary: item.overview || "No description available.",
+    releaseYear:
+      item.media_type === "movie"
+        ? item.release_date?.slice(0, 4)
+        : item.first_air_date?.slice(0, 4),
+    posterUrl: item.poster_path
+      ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
+      : null,
+    backdropUrl: item.backdrop_path
+      ? `https://image.tmdb.org/t/p/w780${item.backdrop_path}`
+      : null,
+    rating: item.vote_average ? Math.round(item.vote_average * 10) / 10 : null,
+  }));
+}
+
+export const getTrendingShows = async (req, res) => {
+  try {
+    const url = "https://api.themoviedb.org/3/trending/tv/week?language=en-US";
+
+    console.log(`Fetching trending shows ... `);
+
+    const response = await fetch(url, options);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`TMDB API error: ${response.status} - ${errorText}`);
+    }
+
+    const data = await response.json();
+    const results = Array.isArray(data.results) ? data.results : [];
+    const formattedData = formatData(results.slice(0, 20));
+
+    console.log("Successfully obtained trending shows!");
+
+    res.json(formattedData);
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).json({ error: "Failed to fetch trending shows" });
+  }
+};
+
 export const getTrendingMovies = async (req, res) => {
   try {
     const url =
-      "https://api.themoviedb.org/3/trending/movie/day?language=en-US";
+      "https://api.themoviedb.org/3/trending/movie/week?language=en-US";
 
     console.log(`Fetching trending movies ... `);
 
     const response = await fetch(url, options);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`TMDB API error: ${response.status} - ${errorText}`);
+    }
+
     const data = await response.json();
+    const results = Array.isArray(data.results) ? data.results : [];
+    const formattedData = formatData(results.slice(0, 20));
 
     console.log("Successfully obtained trending movies!");
 
-    res.json(data);
+    res.json(formattedData);
   } catch (error) {
     console.error("Server error:", error);
     res.status(500).json({ error: "Failed to fetch trending movies" });
   }
 };
 
-export const getMovieResults = async (req, res) => {
+export const getTMDBResults = async (req, res) => {
   const { query, page = 1 } = req.query;
 
   if (!query) {
@@ -46,36 +100,23 @@ export const getMovieResults = async (req, res) => {
     });
 
     const url = `${baseUrl}?${params.toString()}`;
-    //console.log(url);
 
     console.log(`Fetching movie results on ${query} ... `);
 
     const response = await fetch(url, options);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`TMDB API error: ${response.status} - ${errorText}`);
+    }
+
     const data = await response.json();
 
     const filteredData = data.results.filter(
       (item) => item.media_type === "movie" || item.media_type === "tv"
     );
 
-    const formattedData = filteredData.map((item) => ({
-      id: item.id,
-      mediaType: item.media_type,
-      title: item.media_type === "movie" ? item.title : item.name,
-      summary: item.overview || "No description available.",
-      releaseYear:
-        item.media_type === "movie"
-          ? item.release_date?.slice(0, 4)
-          : item.first_air_date?.slice(0, 4),
-      posterUrl: item.poster_path
-        ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
-        : null,
-      backdropUrl: item.backdrop_path
-        ? `https://image.tmdb.org/t/p/w780${item.backdrop_path}`
-        : null,
-      rating: item.vote_average
-        ? Math.round(item.vote_average * 10) / 10
-        : null,
-    }));
+    const formattedData = formatData(filteredData);
 
     console.log("Successfully obtained movie results!");
 

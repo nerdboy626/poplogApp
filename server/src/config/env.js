@@ -9,4 +9,5 @@ export const {
   GOOGLE_API_KEY,
   IGDB_CLIENT_ID,
   IGDB_CLIENT_SECRET,
+  NYT_API_KEY,
 } = process.env;

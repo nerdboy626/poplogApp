@@ -7,6 +7,7 @@ let tokenExpiration = 0;
 export async function getIGDBToken() {
   const now = Date.now();
   if (cachedToken && now < tokenExpiration) {
+    console.log("Returning cached IGDB token!");
     return cachedToken;
   }
 
@@ -17,6 +18,8 @@ export async function getIGDBToken() {
 
   cachedToken = data.access_token;
   tokenExpiration = now + data.expires_in * 1000;
+
+  console.log("New IGDB token obtained!");
 
   return cachedToken;
 }

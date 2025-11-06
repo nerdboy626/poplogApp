@@ -1,10 +1,12 @@
 import express from "express";
 import {
+  getTrendingShows,
   getTrendingMovies,
-  getMovieResults,
+  getTMDBResults,
 } from "../controllers/moviesController.js";
 
 export const movieRouter = express.Router();
 
-movieRouter.get("/trending", getTrendingMovies);
-movieRouter.get("/search", getMovieResults);
+movieRouter.get("/trending/movies", getTrendingMovies);
+movieRouter.get("/trending/shows", getTrendingShows);
+movieRouter.get("/search", getTMDBResults);
