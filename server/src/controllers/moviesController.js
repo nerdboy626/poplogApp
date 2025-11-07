@@ -14,12 +14,12 @@ function formatData(data) {
     id: item.id,
     mediaType: item.media_type,
     title: item.media_type === "movie" ? item.title : item.name,
-    summary: item.overview || "No description available.",
+    summary: item.overview || "No summary available.",
     releaseYear:
       item.media_type === "movie"
         ? item.release_date?.slice(0, 4)
         : item.first_air_date?.slice(0, 4),
-    posterUrl: item.poster_path
+    coverUrl: item.poster_path
       ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
       : null,
     backdropUrl: item.backdrop_path

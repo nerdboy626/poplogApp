@@ -15,6 +15,25 @@ async function fetchNYTList(category) {
   return data.results?.books || [];
 }
 
+function getHighResCover(imageLinks) {
+  // if (!imageLinks) return null;
+  // const base = imageLinks.thumbnail || imageLinks.smallThumbnail;
+  // if (!base) return null;
+  // // Try to increase resolution — Google accepts zoom up to 5
+  // return base.replace(/zoom=\d+/, "zoom=5");
+
+  if (!imageLinks) return null;
+
+  return (
+    imageLinks.extraLarge ||
+    imageLinks.large ||
+    imageLinks.medium ||
+    imageLinks.thumbnail ||
+    imageLinks.smallThumbnail ||
+    null
+  );
+}
+
 async function fetchGoogleBookByISBN(isbn) {
   if (!isbn) return null;
 
@@ -37,7 +56,7 @@ async function fetchGoogleBookByISBN(isbn) {
     authors: book.authors || [],
     summary: book.description || "No summary available.",
     genres: book.categories || [],
-    coverUrl: book.imageLinks?.thumbnail || null,
+    coverUrl: getHighResCover(book.imageLinks),
     publishedDate: book.publishedDate?.slice(0, 4) || null,
   };
 }
@@ -111,7 +130,10 @@ export const getTrendingBooks = async (req, res) => {
         const googleBookData = await fetchGoogleBookByISBN(book.primary_isbn13);
 
         return (
-          googleBookData || {
+          {
+            ...googleBookData,
+            coverUrl: book.book_image || googleBookData.coverUrl || null,
+          } || {
             id: book.primary_isbn13,
             title: book.title,
             authors: [book.author],
@@ -158,7 +180,7 @@ export const getBookResults = async (req, res) => {
         authors: item.volumeInfo.authors || [],
         summary: item.volumeInfo.description || "No summary available.",
         genres: item.volumeInfo.categories || [],
-        coverUrl: item.volumeInfo.imageLinks?.thumbnail || null,
+        coverUrl: getHighResCover(item.volumeInfo.imageLinks) || null,
         publishedDate: item.volumeInfo.publishedDate?.slice(0, 4) || null,
       })) || [];
 
