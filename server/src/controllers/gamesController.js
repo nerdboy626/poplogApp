@@ -24,6 +24,7 @@ async function fetchIGDBQuery(query) {
 
   const formattedData = data.map((game) => ({
     id: game.id,
+    mediaType: "game",
     title: game.name,
     summary: game.summary || "No summary available.",
     releaseYear: game.first_release_date
@@ -36,7 +37,10 @@ async function fetchIGDBQuery(query) {
     platforms: game.platforms?.map((platform) => platform.name) || [],
     developers:
       game.involved_companies?.map((company) => company.company.name) || [],
-    rating: game.total_rating ? Math.round(game.total_rating) : null,
+    rating:
+      typeof game.total_rating === "number"
+        ? Math.round(game.total_rating) / 10
+        : null,
   }));
 
   return formattedData;
@@ -57,7 +61,7 @@ export const getTrendingGames = async (req, res) => {
         & first_release_date < ${now}
         & total_rating_count > 10;
       sort total_rating desc;
-      limit 40;
+      limit 30;
     `;
 
     console.log(`Fetching trending games ... `);

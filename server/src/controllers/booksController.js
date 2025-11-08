@@ -52,12 +52,17 @@ async function fetchGoogleBookByISBN(isbn) {
   const book = data.items[0].volumeInfo;
   return {
     id: data.items[0].id,
+    mediaType: "book",
     title: book.title || null,
-    authors: book.authors || [],
     summary: book.description || "No summary available.",
-    genres: book.categories || [],
+    releaseYear: book.publishedDate?.slice(0, 4) || null,
     coverUrl: getHighResCover(book.imageLinks),
-    publishedDate: book.publishedDate?.slice(0, 4) || null,
+    rating:
+      typeof book.averageRating === "number"
+        ? Math.round(book.averageRating * 20) / 10
+        : null,
+    authors: book.authors || [],
+    genres: book.categories || [],
   };
 }
 
@@ -135,12 +140,14 @@ export const getTrendingBooks = async (req, res) => {
             coverUrl: book.book_image || googleBookData.coverUrl || null,
           } || {
             id: book.primary_isbn13,
+            mediaType: "book",
             title: book.title,
-            authors: [book.author],
             summary: book.description || "No summary available.",
-            genres: [],
+            releaseYear: book.published_date?.slice(0, 4) || null,
             coverUrl: book.book_image || null,
-            publishedDate: book.published_date || null,
+            rating: null,
+            authors: [book.author],
+            genres: [],
           }
         );
       })
@@ -176,12 +183,17 @@ export const getBookResults = async (req, res) => {
     const formattedData =
       data.items?.map((item) => ({
         id: item.id,
+        mediaType: "book",
         title: item.volumeInfo.title || null,
-        authors: item.volumeInfo.authors || [],
         summary: item.volumeInfo.description || "No summary available.",
-        genres: item.volumeInfo.categories || [],
+        releaseYear: item.volumeInfo.publishedDate?.slice(0, 4) || null,
         coverUrl: getHighResCover(item.volumeInfo.imageLinks) || null,
-        publishedDate: item.volumeInfo.publishedDate?.slice(0, 4) || null,
+        rating:
+          typeof item.volumeInfo.averageRating === "number"
+            ? Math.round(item.volumeInfo.averageRating * 20) / 10
+            : null,
+        authors: item.volumeInfo.authors || [],
+        genres: item.volumeInfo.categories || [],
       })) || [];
 
     console.log("Successfully obtained book results!");

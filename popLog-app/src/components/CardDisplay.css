@@ -2,13 +2,13 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  margin: 20px;
+  /* margin: 20px; */
   /* border: 2px solid red; */
 }
 
 .card {
-  width: 180px;
-  height: 270px;
+  width: 200px;
+  height: 300px;
   max-width: 30vw;
   max-height: 45vw;
   overflow: hidden;
@@ -21,6 +21,9 @@
 
 .card:hover {
   transform: scale(1.03);
+  outline: 2px solid white;
+  outline-offset: 3px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .card-image {
@@ -32,9 +35,9 @@
 
 .card-info-box {
   position: absolute;
-  left: 220px;
+  left: 200px;
   top: 0;
-  width: 220px;
+  width: 260px;
   max-width: 40vw;
   background-color: #fff;
   border: 1px solid #ccc;
@@ -64,7 +67,7 @@
   line-height: 1.5;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
   overflow: hidden;
 }

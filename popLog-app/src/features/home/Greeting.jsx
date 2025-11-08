@@ -6,11 +6,11 @@ const Greeting = () => {
   return (
     <div className="greeting">
       {auth.isLoggedIn ? (
-        <h1>Greetings {auth.user.username}!</h1>
+        <h2>Greetings {auth.user.username}!</h2>
       ) : (
-        <h1>
+        <h2>
           Greetings guest! Please click <Link to="/login">here</Link> to log in!
-        </h1>
+        </h2>
       )}
     </div>
   );

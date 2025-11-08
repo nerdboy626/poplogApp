@@ -1,0 +1,30 @@
+.homepage {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: var(--font-size-medium);
+  color: rgb(229, 231, 234);
+  /* border: 5px solid turquoise; */
+}
+
+.trending-header {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  /* border: 3px solid rgb(221, 238, 121); */
+}
+
+.trending-displays {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* border: 3px solid purple; */
+}
+
+.trending-displays > h3 {
+  margin: 0.3rem 0;
+  margin-left: 0.7rem;
+  letter-spacing: 0.05rem;
+}

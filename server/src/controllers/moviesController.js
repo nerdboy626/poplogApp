@@ -25,7 +25,10 @@ function formatData(data) {
     backdropUrl: item.backdrop_path
       ? `https://image.tmdb.org/t/p/w780${item.backdrop_path}`
       : null,
-    rating: item.vote_average ? Math.round(item.vote_average * 10) / 10 : null,
+    rating:
+      typeof item.vote_average === "number"
+        ? Math.round(item.vote_average * 10) / 10
+        : null,
   }));
 }
 
@@ -71,7 +74,7 @@ export const getTrendingMovies = async (req, res) => {
 
     const data = await response.json();
     const results = Array.isArray(data.results) ? data.results : [];
-    const formattedData = formatData(results.slice(0, 20));
+    const formattedData = formatData(results.slice(0, 30));
 
     console.log("Successfully obtained trending movies!");
 
