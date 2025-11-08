@@ -26,6 +26,10 @@ body {
   color: var(--color-text-light);
 }
 
+body {
+  padding-top: 60px;
+}
+
 a {
   color: var(--color-text-dark);
   text-decoration: none;
