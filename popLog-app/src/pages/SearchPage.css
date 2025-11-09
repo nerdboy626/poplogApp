@@ -1,0 +1,9 @@
+.searchpage {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* padding: var(--font-size-medium); */
+  color: rgb(229, 231, 234);
+  border: 5px solid turquoise;
+}

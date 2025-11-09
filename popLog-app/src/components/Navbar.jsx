@@ -19,7 +19,7 @@ const Navbar = () => {
           <NavLink to="/dashboard">Dashboard</NavLink>
         </li>
         <li>
-          <NavLink to="/search">Search</NavLink>
+          <NavLink to="/searchpage">Search</NavLink>
         </li>
         {auth.user ? (
           <li>

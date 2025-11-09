@@ -2,11 +2,13 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
+  Navigate,
 } from "react-router-dom";
 import RootLayout from "../layouts/RootLayout.jsx";
+import { trendingTitlesLoader } from "../loaders/trendingTitlesLoader.js";
 import Home from "../pages/Home.jsx";
 import Dashboard from "../pages/Dashboard.jsx";
-import Search from "../pages/Search.jsx";
+import SearchPage from "../pages/SearchPage.jsx";
 import Login from "../pages/Login.jsx";
 import NotFound from "../pages/NotFound.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
@@ -14,7 +16,7 @@ import ProtectedRoute from "./ProtectedRoute.jsx";
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />}>
-      <Route index element={<Home />} />
+      <Route index element={<Home />} loader={trendingTitlesLoader} />
       <Route
         path="dashboard"
         element={
@@ -23,7 +25,10 @@ export const router = createBrowserRouter(
           </ProtectedRoute>
         }
       />
-      <Route path="search" element={<Search />} />
+      <Route path="searchpage">
+        <Route index element={<Navigate to="movies" replace />} />
+        <Route path=":category" element={<SearchPage />} />
+      </Route>
       <Route path="login" element={<Login />} />
       <Route path="*" element={<NotFound />} />
     </Route>
