@@ -7,3 +7,10 @@
   color: rgb(229, 231, 234);
   border: 5px solid turquoise;
 }
+
+.search-display {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* border: 3px solid purple; */
+}
