@@ -71,3 +71,8 @@
   line-clamp: 4;
   overflow: hidden;
 }
+
+.icon {
+  width: 100%;
+  height: 100%;
+}

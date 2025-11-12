@@ -1,10 +1,29 @@
 import { useState, useEffect, useRef } from "react";
+import { BiSolidMoviePlay } from "react-icons/bi";
+import { IoGameController } from "react-icons/io5";
+import { IoIosBook } from "react-icons/io";
 import "./CardDisplay.css";
 
-const CardDisplay = ({ title, description, releaseYear, imageUrl }) => {
+const CardDisplay = ({
+  title,
+  description,
+  releaseYear,
+  imageUrl,
+  mediaType,
+}) => {
   const [isHovered, setIsHovered] = useState(false);
   const [positionLeft, setPositionLeft] = useState(false);
   const cardRef = useRef(null);
+
+  const imageIcon = (mediaType) => {
+    if (mediaType == "movie") {
+      return <BiSolidMoviePlay className="icon" />;
+    } else if (mediaType == "game") {
+      return <IoGameController className="icon" />;
+    } else {
+      return <IoIosBook className="icon" />;
+    }
+  };
 
   useEffect(() => {
     if (isHovered && cardRef.current) {
@@ -22,7 +41,14 @@ const CardDisplay = ({ title, description, releaseYear, imageUrl }) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="card">
-        <img src={imageUrl} alt={title} className="card-image" />
+        {imageUrl ? (
+          <img src={imageUrl} alt={title} className="card-image" />
+        ) : (
+          <>
+            <p>No Image</p>
+            {imageIcon(mediaType)}
+          </>
+        )}
       </div>
 
       {isHovered && (

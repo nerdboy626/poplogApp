@@ -12,7 +12,7 @@ const options = {
 function formatData(data) {
   return data.map((item) => ({
     id: item.id,
-    mediaType: item.media_type,
+    mediaType: "movie",
     title: item.media_type === "movie" ? item.title : item.name,
     summary: item.overview || "No summary available.",
     releaseYear:
