@@ -36,7 +36,9 @@ async function fetchIGDBQuery(query) {
     genres: game.genres?.map((genre) => genre.name) || [],
     platforms: game.platforms?.map((platform) => platform.name) || [],
     developers:
-      game.involved_companies?.map((company) => company.company.name) || [],
+      game.involved_companies
+        ?.map((company) => company.company.name)
+        .join(", ") || null,
     rating:
       typeof game.total_rating === "number"
         ? Math.round(game.total_rating) / 10

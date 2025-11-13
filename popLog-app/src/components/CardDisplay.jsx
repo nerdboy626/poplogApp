@@ -16,9 +16,9 @@ const CardDisplay = ({
   const cardRef = useRef(null);
 
   const imageIcon = (mediaType) => {
-    if (mediaType == "movie") {
+    if (mediaType === "movie") {
       return <BiSolidMoviePlay className="icon" />;
-    } else if (mediaType == "game") {
+    } else if (mediaType === "game") {
       return <IoGameController className="icon" />;
     } else {
       return <IoIosBook className="icon" />;

@@ -9,6 +9,43 @@ const options = {
   },
 };
 
+let movieGenresMap = {};
+let tvGenresMap = {};
+
+// fetch and cache genre lists at server start
+const fetchGenres = async () => {
+  try {
+    const movieResponse = await fetch(
+      "https://api.themoviedb.org/3/genre/movie/list?language=en-US",
+      options
+    );
+    const tvResponse = await fetch(
+      "https://api.themoviedb.org/3/genre/tv/list?language=en-US",
+      options
+    );
+
+    const movieData = await movieResponse.json();
+    const tvData = await tvResponse.json();
+
+    movieGenresMap = movieData.genres.reduce((acc, genre) => {
+      acc[genre.id] = genre.name;
+      return acc;
+    }, {});
+
+    tvGenresMap = tvData.genres.reduce((acc, genre) => {
+      acc[genre.id] = genre.name;
+      return acc;
+    }, {});
+
+    console.log("Genres cached successfully!");
+  } catch (error) {
+    console.error("Failed to fetch genres:", error);
+  }
+};
+
+// call it once at server start
+fetchGenres();
+
 function formatData(data) {
   return data.map((item) => ({
     id: item.id,
@@ -29,6 +66,10 @@ function formatData(data) {
       typeof item.vote_average === "number"
         ? Math.round(item.vote_average * 10) / 10
         : null,
+    genres:
+      item.media_type === "movie"
+        ? item.genre_ids?.map((id) => movieGenresMap[id]).filter(Boolean) || []
+        : item.genre_ids?.map((id) => tvGenresMap[id]).filter(Boolean) || [],
   }));
 }
 

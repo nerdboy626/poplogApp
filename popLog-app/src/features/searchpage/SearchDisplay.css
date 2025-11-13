@@ -2,24 +2,56 @@
   display: flex;
   justify-content: left;
   align-items: center;
-  margin: 0px 0.7rem;
+  margin: 0 0.7rem;
   margin-top: 1rem;
   border: 2px solid white;
   border-radius: 6px;
   padding: 0.5rem;
 }
 
-.search-entry h2 {
+.search-entry:hover {
+  border-color: var(--color-secondary);
+}
+
+.search-entry-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  /* margin-bottom: 1rem; */
+  width: 100%;
+  max-width: 100%;
+  border: 2px solid pink;
+}
+
+.search-entry-header h2 {
   font-size: 2rem;
-  margin-bottom: 1rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  line-clamp: 1;
-  -webkit-box-orient: vertical;
+  margin: 0;
+}
+
+.search-entry-title {
   overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 0;
+  border: 2px solid red;
+}
+
+.search-entry-year {
+  white-space: nowrap;
+  flex-shrink: 0;
+  border: 2px solid palegreen;
+}
+
+.search-entry-text {
+  flex: 1;
+  min-width: 0;
+  max-width: 100%;
+  border: 2px solid green;
 }
 
 .search-entry p {
+  margin: 0;
+  display: inline-block;
   line-height: 1.5;
   font-size: 1rem;
   display: -webkit-box;
@@ -27,6 +59,43 @@
   line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  border: 2px solid orange;
+  margin-top: 1rem;
+}
+
+.search-entry-creator {
+  margin: 0;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  /* padding-left: 2rem; */
+  border: 2px solid blue;
+}
+
+.genres-container {
+  display: flex;
+  gap: 0.5rem; /* space between genre chips */
+  overflow: hidden; /* hide any chips that don’t fit */
+  white-space: nowrap; /* keep all chips on one line */
+  text-overflow: clip; /* just clip extra content */
+  margin-top: 0.5rem;
+  border: 2px solid plum;
+}
+
+.genre-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px; /* space inside the circle */
+  border-radius: 9999px; /* makes it fully rounded */
+  background-color: var(--color-secondary); /* light gray background */
+  font-size: 0.9rem;
+  white-space: nowrap; /* prevent text wrap inside chip */
 }
 
 .entry-img-container {

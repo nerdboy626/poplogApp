@@ -21,7 +21,7 @@
 
 .card:hover {
   transform: scale(1.03);
-  outline: 2px solid white;
+  outline: 2px solid var(--color-secondary);
   outline-offset: 3px;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }

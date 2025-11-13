@@ -74,14 +74,7 @@ const SearchPage = () => {
         {/* {results.length > 0 && <GridDisplay itemsArray={results} />} */}
         {results.length > 0 &&
           results.map((item, index) => (
-            <SearchDisplay
-              key={index}
-              title={item.title}
-              description={item.summary}
-              releaseYear={item.releaseYear}
-              imageUrl={item.coverUrl}
-              mediaType={item.mediaType}
-            />
+            <SearchDisplay key={index} item={item} />
           ))}
       </div>
     </div>
