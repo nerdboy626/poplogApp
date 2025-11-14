@@ -2,10 +2,10 @@ import fetch from "node-fetch";
 import { getIGDBToken } from "../utils/igdbAuth.js";
 import { IGDB_CLIENT_ID } from "../config/env.js";
 
-async function fetchIGDBQuery(query) {
+async function fetchIGDBQuery(query, endpoint = "games") {
   const token = await getIGDBToken();
 
-  const response = await fetch("https://api.igdb.com/v4/games", {
+  const response = await fetch(`https://api.igdb.com/v4/${endpoint}`, {
     method: "POST",
     headers: {
       "Client-ID": `${IGDB_CLIENT_ID}`,
@@ -21,6 +21,8 @@ async function fetchIGDBQuery(query) {
   }
 
   const data = await response.json();
+
+  if (endpoint !== "games") return data;
 
   const formattedData = data.map((game) => ({
     id: game.id,
@@ -47,6 +49,62 @@ async function fetchIGDBQuery(query) {
 
   return formattedData;
 }
+
+export const getGameGenres = async (req, res) => {
+  try {
+    const queryBody = `
+      fields name;
+      limit 50;
+    `;
+
+    console.log(`Fetching game genres ...`);
+
+    const genres = await fetchIGDBQuery(queryBody, "genres");
+
+    res.json(genres);
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).json({
+      error: "Failed to fetch game genres.",
+    });
+  }
+};
+
+export const getTrendingGamesByGenre = async (req, res) => {
+  const { genreId } = req.params;
+
+  if (!genreId) {
+    return res.status(400).json({ error: "Missing genreId parameter" });
+  }
+
+  try {
+    const queryBody = `
+      fields name, summary, first_release_date, cover.image_id,
+        involved_companies.company.name, genres.name, platforms.name,
+        total_rating, total_rating_count;
+
+      where genres = (${genreId})
+        & total_rating_count > 5
+        & total_rating != null;
+
+      sort total_rating desc;
+      limit 30;
+    `;
+
+    console.log(`Fetching popular games for genre ID ${genreId} ...`);
+
+    const games = await fetchIGDBQuery(queryBody);
+
+    console.log("Successfully obtained popular games by genre!");
+
+    res.json(games);
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).json({
+      error: "Failed to fetch games for genre.",
+    });
+  }
+};
 
 export const getTrendingGames = async (req, res) => {
   const now = Math.floor(Date.now() / 1000);

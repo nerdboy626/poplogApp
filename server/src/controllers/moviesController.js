@@ -12,7 +12,6 @@ const options = {
 let movieGenresMap = {};
 let tvGenresMap = {};
 
-// fetch and cache genre lists at server start
 const fetchGenres = async () => {
   try {
     const movieResponse = await fetch(
@@ -72,6 +71,78 @@ function formatData(data) {
         : item.genre_ids?.map((id) => tvGenresMap[id]).filter(Boolean) || [],
   }));
 }
+
+const unifiedGenres = {
+  action: { movie: 28, tv: 10759, label: "Action & Adventure" },
+  animation: { movie: 16, tv: 16, label: "Animation" },
+  comedy: { movie: 35, tv: 35, label: "Comedy" },
+  crime: { movie: 80, tv: 80, label: "Crime" },
+  documentary: { movie: 99, tv: 99, label: "Documentary" },
+  drama: { movie: 18, tv: 18, label: "Drama" },
+  family: { movie: 10751, tv: 10751, label: "Family" },
+  fantasy: { movie: "14,878", tv: 10765, label: "Fantasy / Sci-Fi" },
+  mystery: { movie: 9648, tv: 9648, label: "Mystery" },
+  war: { movie: 10752, tv: 10768, label: "War & Politics" },
+  western: { movie: 37, tv: 37, label: "Western" },
+};
+
+export const getByGenre = async (req, res) => {
+  const { genreId } = req.params;
+
+  if (!genreId) {
+    return res.status(400).json({ error: "Missing 'genreId' parameter" });
+  }
+
+  const genrePair = unifiedGenres[genreId.toLowerCase()];
+  if (!genrePair) {
+    return res.status(400).json({ error: `Invalid genre '${genreId}'` });
+  }
+
+  try {
+    console.log(`Fetching popular titles for genre '${genrePair.label}' ...`);
+
+    const [moviesRes, tvRes] = await Promise.all([
+      fetch(
+        `https://api.themoviedb.org/3/discover/movie?with_genres=${genrePair.movie}&sort_by=popularity.desc&language=en-US`,
+        options
+      ),
+      fetch(
+        `https://api.themoviedb.org/3/discover/tv?with_genres=${genrePair.tv}&sort_by=popularity.desc&language=en-US`,
+        options
+      ),
+    ]);
+
+    if (!moviesRes.ok || !tvRes.ok) {
+      throw new Error(`TMDB API error: ${moviesRes.status}/${tvRes.status}`);
+    }
+
+    const [moviesData, tvData] = await Promise.all([
+      moviesRes.json(),
+      tvRes.json(),
+    ]);
+
+    const movies = Array.isArray(moviesData.results)
+      ? moviesData.results.map((movie) => ({ ...movie, media_type: "movie" }))
+      : [];
+    const shows = Array.isArray(tvData.results)
+      ? tvData.results.map((tv) => ({ ...tv, media_type: "tv" }))
+      : [];
+
+    const combined = [...movies, ...shows].sort(
+      (a, b) => b.popularity - a.popularity
+    );
+
+    const formatted = formatData(combined.slice(0, 30));
+
+    console.log(
+      `Returned ${formatted.length} titles for '${genrePair.label}'!`
+    );
+    res.json(formatted);
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).json({ error: "Failed to fetch genre results" });
+  }
+};
 
 export const getTrendingShows = async (req, res) => {
   try {

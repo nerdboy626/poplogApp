@@ -1,6 +1,8 @@
 import fetch from "node-fetch";
 import { GOOGLE_API_KEY, NYT_API_KEY } from "../config/env.js";
 
+const googleBooksCache = new Map();
+
 async function fetchNYTList(category) {
   const response = await fetch(
     `https://api.nytimes.com/svc/books/v3/lists/current/${category}.json?api-key=${NYT_API_KEY}`
@@ -14,6 +16,55 @@ async function fetchNYTList(category) {
   const data = await response.json();
   return data.results?.books || [];
 }
+
+export const getBooksByList = async (req, res) => {
+  const { listName } = req.params;
+
+  if (!listName) {
+    return res.status(400).json({ error: "Missing listName parameter" });
+  }
+
+  try {
+    const nytBooks = await fetchNYTList(listName);
+
+    const formatted = await Promise.all(
+      nytBooks.slice(0, 20).map(async (book) => {
+        try {
+          const googleBookData = await fetchGoogleBookByISBN(
+            book.primary_isbn13
+          );
+          if (googleBookData) {
+            return {
+              ...googleBookData,
+              // prefer NYT book image if available (higher-res for NYT)
+              coverUrl: book.book_image || googleBookData.coverUrl || null,
+            };
+          }
+        } catch (err) {
+          // ignore enrichment errors, fall through to fallback
+          console.warn("Google Books enrichment failed:", err);
+        }
+
+        return {
+          id: book.primary_isbn13 || book.title,
+          mediaType: "book",
+          title: book.title,
+          summary: book.description || "No summary available.",
+          releaseYear: book.published_date?.slice(0, 4) || null,
+          coverUrl: book.book_image || null,
+          rating: null,
+          authors: book.author || null,
+          genres: [],
+        };
+      })
+    );
+
+    res.json(formatted);
+  } catch (error) {
+    console.error("Server error (getBooksByList):", error);
+    res.status(500).json({ error: "Failed to fetch books for list." });
+  }
+};
 
 function getHighResCover(imageLinks) {
   // if (!imageLinks) return null;
@@ -37,12 +88,16 @@ function getHighResCover(imageLinks) {
 async function fetchGoogleBookByISBN(isbn) {
   if (!isbn) return null;
 
+  if (googleBooksCache.has(isbn)) {
+    return googleBooksCache.get(isbn);
+  }
+
   const response = await fetch(
     `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${GOOGLE_API_KEY}&maxResults=1`
   );
 
   if (!response.ok) {
-    console.log(`Google Books fetch failed for ISBN ${book.primary_isbn13}:`);
+    console.log(`Google Books fetch failed for ISBN ${isbn}:`);
     return null;
   }
 
@@ -50,7 +105,7 @@ async function fetchGoogleBookByISBN(isbn) {
   if (!data.items?.length) return null;
 
   const book = data.items[0].volumeInfo;
-  return {
+  const enriched = {
     id: data.items[0].id,
     mediaType: "book",
     title: book.title || null,
@@ -64,6 +119,10 @@ async function fetchGoogleBookByISBN(isbn) {
     authors: book.authors?.join(", ") || null,
     genres: book.categories || [],
   };
+
+  googleBooksCache.set(isbn, enriched);
+
+  return enriched;
 }
 
 function getUniqueBooks(books) {

@@ -1,0 +1,12 @@
+.genre-dropdown {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.genre-dropdown select {
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+  font-size: 1rem;
+}
