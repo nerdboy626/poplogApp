@@ -3,69 +3,22 @@ import { useEffect, useState } from "react";
 import SearchBar from "../features/searchpage/SearchBar.jsx";
 import SearchDisplay from "../features/searchpage/SearchDisplay.jsx";
 import GenreMenu from "../features/searchpage/GenreMenu.jsx";
+import genreOptions from "../features/searchpage/constants/genreOptions.js";
+import useGameGenres from "../features/searchpage/hooks/useGameGenres.js";
 import "./SearchPage.css";
-
-const tmdbOptions = [
-  { id: "action", name: "Action & Adventure" },
-  { id: "animation", name: "Animation" },
-  { id: "comedy", name: "Comedy" },
-  { id: "crime", name: "Crime" },
-  { id: "documentary", name: "Documentary" },
-  { id: "drama", name: "Drama" },
-  { id: "family", name: "Family" },
-  { id: "fantasy", name: "Fantasy & Sci Fi" },
-  { id: "mystery", name: "Mystery" },
-  { id: "war", name: "War & Politics" },
-  { id: "western", name: "Western" },
-];
-
-const nytBookLists = [
-  {
-    id: "combined-print-and-e-book-fiction",
-    name: "Combined Print & E‑Book Fiction",
-  },
-  {
-    id: "combined-print-and-e-book-nonfiction",
-    name: "Combined Print & E‑Book Nonfiction",
-  },
-  { id: "hardcover-fiction", name: "Hardcover Fiction" },
-  { id: "hardcover-nonfiction", name: "Hardcover Nonfiction" },
-  { id: "trade-fiction-paperback", name: "Paperback Trade Fiction" },
-  { id: "paperback-nonfiction", name: "Paperback Nonfiction" },
-  {
-    id: "advice-how-to-and-miscellaneous",
-    name: "Advice, How-To & Miscellaneous",
-  },
-  {
-    id: "childrens-middle-grade-hardcover",
-    name: "Children’s Middle Grade Hardcover",
-  },
-  { id: "picture-books", name: "Children’s Picture Books" },
-  { id: "series-books", name: "Children’s & Young Adult Series" },
-  { id: "young-adult-hardcover", name: "Young Adult Hardcover" },
-  { id: "audio-fiction", name: "Audio Fiction" },
-  { id: "audio-nonfiction", name: "Audio NonFiction" },
-  { id: "business-books", name: "Business" },
-  { id: "graphic-books-and-manga", name: "Graphic Books and Manga" },
-  { id: "mass-market-monthly", name: "Mass Market" },
-  { id: "middle-grade-paperback-monthly", name: "Middle Grade Paperback" },
-  {
-    id: "young-adult-paperback-monthly",
-    name: "Young Adult Paperback Monthly",
-  },
-];
 
 const SearchPage = () => {
   const { category } = useParams();
-
+  const gameGenres = useGameGenres();
+  const genreOptionsMap = {
+    ...genreOptions,
+    games: gameGenres,
+  };
   const [inputValue, setInputValue] = useState("");
-  const [results, setResults] = useState([]);
-  const [selectedGenre, setSelectedGenre] = useState("");
-  const [gameGenres, setGameGenres] = useState([]);
   const [searchCache, setSearchCache] = useState({
-    movies: { query: "", results: [] },
-    games: { query: "", results: [] },
-    books: { query: "", results: [] },
+    movies: { query: "", searchResults: [], genre: "", genreResults: [] },
+    games: { query: "", searchResults: [], genre: "", genreResults: [] },
+    books: { query: "", searchResults: [], genre: "", genreResults: [] },
   });
 
   // load saved cache from localStorage on mount
@@ -74,8 +27,6 @@ const SearchPage = () => {
     if (savedCache) {
       setSearchCache(JSON.parse(savedCache));
     }
-    // fetch game genres on mount
-    fetchIGDBGenres();
   }, []);
 
   // save to localStorage whenever cache changes
@@ -83,47 +34,32 @@ const SearchPage = () => {
     localStorage.setItem("searchCache", JSON.stringify(searchCache));
   }, [searchCache]);
 
-  // whenever category changes, load its previous search state
   useEffect(() => {
-    const current = searchCache[category];
-    if (current) {
-      setInputValue(current.query);
-      setResults(current.results);
-    } else {
-      setInputValue("");
-      setResults([]);
-    }
-    setSelectedGenre(""); // reset dropdown
+    const entry = searchCache[category];
+    setInputValue(entry.query);
   }, [category]);
 
-  async function fetchIGDBGenres() {
-    try {
-      const response = await fetch("http://localhost:3500/api/games/genres");
-      const data = await response.json();
-      setGameGenres(data); // array of { id, name }
-    } catch (err) {
-      console.error("Failed to load IGDB genres:", err);
-    }
-  }
+  async function fetchSearchResults(searchInput) {
+    console.log(`Searching ${category} for ${searchInput}`);
 
-  async function fetchSearchResults(mediaCategory, searchInput) {
-    console.log(`Searching ${mediaCategory} for ${searchInput}`);
+    const response = await fetch(
+      `http://localhost:3500/api/${category}/search?query=${searchInput}`
+    );
+    const searchData = await response.json();
 
-    let searchData = [];
-    const baseUrl = `http://localhost:3500/api/${mediaCategory}/search?query=${searchInput}`;
-    const response = await fetch(baseUrl);
-    searchData = await response.json();
-
-    setResults(searchData);
     setSearchCache((prev) => ({
       ...prev,
-      [mediaCategory]: { query: searchInput, results: searchData },
+      [category]: {
+        ...prev[category],
+        query: searchInput,
+        searchResults: searchData,
+      },
     }));
   }
 
   const handleSearchSubmit = () => {
     if (inputValue.trim()) {
-      fetchSearchResults(category, inputValue);
+      fetchSearchResults(inputValue);
     }
   };
 
@@ -136,20 +72,36 @@ const SearchPage = () => {
 
     const data = await response.json();
 
-    setResults(data);
-    setSelectedGenre(genreId);
-
     setSearchCache((prev) => ({
       ...prev,
-      [category]: { query: "", results: data },
+      [category]: { ...prev[category], genre: genreId, genreResults: data },
     }));
 
-    console.log(`${category} by genre successfully fetched!`);
+    console.log(`${category} by ${genreId} successfully fetched!`);
   }
 
-  console.log(results);
-  console.log(gameGenres);
-  console.log(selectedGenre);
+  function displayResults() {
+    const entry = searchCache[category];
+    if (inputValue === "" || entry.searchResults.length == 0) {
+      return (
+        <>
+          {entry.genreResults.length > 0 &&
+            entry.genreResults.map((item, index) => (
+              <SearchDisplay key={index} item={item} />
+            ))}
+        </>
+      );
+    } else {
+      return (
+        <>
+          {entry.searchResults.length > 0 &&
+            entry.searchResults.map((item, index) => (
+              <SearchDisplay key={index} item={item} />
+            ))}
+        </>
+      );
+    }
+  }
 
   return (
     <div className="searchpage">
@@ -159,33 +111,14 @@ const SearchPage = () => {
         onInputChange={setInputValue}
         onSearchSubmit={handleSearchSubmit}
       />
-      {category === "movies" && searchCache[category].query === "" && (
+      {(searchCache[category].query === "" || inputValue === "") && (
         <GenreMenu
-          options={tmdbOptions}
-          selected={selectedGenre}
+          options={genreOptionsMap[category]}
+          selected={searchCache[category].genre}
           onChange={(value) => fetchGenreResults(value)}
         />
       )}
-      {category === "games" && !searchCache[category].query && (
-        <GenreMenu
-          options={gameGenres} // IGDB genres
-          selected={selectedGenre}
-          onChange={(value) => fetchGenreResults(value)}
-        />
-      )}
-      {category === "books" && !searchCache[category].query && (
-        <GenreMenu
-          options={nytBookLists}
-          selected={selectedGenre}
-          onChange={(value) => fetchGenreResults(value)}
-        />
-      )}
-      <div className="search-display">
-        {results.length > 0 &&
-          results.map((item, index) => (
-            <SearchDisplay key={index} item={item} />
-          ))}
-      </div>
+      <div className="search-display">{displayResults()}</div>
     </div>
   );
 };
