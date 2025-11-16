@@ -8,10 +8,12 @@ const Carousel = ({ itemsArray }) => {
       {itemsArray.map((item, index) => (
         <CardDisplay
           key={index}
+          id={item.id}
           title={item.title}
           description={item.summary}
           releaseYear={item.releaseYear}
           imageUrl={item.coverUrl}
+          mediaType={item.mediaType}
         />
       ))}
     </div>

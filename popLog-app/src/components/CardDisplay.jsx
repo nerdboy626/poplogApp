@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import { BiSolidMoviePlay } from "react-icons/bi";
 import { IoGameController } from "react-icons/io5";
 import { IoIosBook } from "react-icons/io";
 import "./CardDisplay.css";
 
 const CardDisplay = ({
+  id,
   title,
   description,
   releaseYear,
@@ -40,16 +42,18 @@ const CardDisplay = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="card">
-        {imageUrl ? (
-          <img src={imageUrl} alt={title} className="card-image" />
-        ) : (
-          <>
-            <p>No Image</p>
-            {imageIcon(mediaType)}
-          </>
-        )}
-      </div>
+      <Link to={`/media/${mediaType}/${id}`} className="card-link">
+        <div className="card">
+          {imageUrl ? (
+            <img src={imageUrl} alt={title} className="card-image" />
+          ) : (
+            <>
+              <p>No Image</p>
+              {imageIcon(mediaType)}
+            </>
+          )}
+        </div>
+      </Link>
 
       {isHovered && (
         <div
