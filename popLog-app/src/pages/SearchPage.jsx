@@ -20,6 +20,11 @@ const SearchPage = () => {
     games: { query: "", searchResults: [], genre: "", genreResults: [] },
     books: { query: "", searchResults: [], genre: "", genreResults: [] },
   });
+  const entry = searchCache[category];
+  const showClearButton = inputValue !== "" || entry.query !== "";
+  const showGenreClear = entry.genre !== "";
+  const displayArray =
+    entry.query !== "" ? entry.searchResults : entry.genreResults;
 
   // load saved cache from localStorage on mount
   useEffect(() => {
@@ -35,9 +40,32 @@ const SearchPage = () => {
   }, [searchCache]);
 
   useEffect(() => {
-    const entry = searchCache[category];
     setInputValue(entry.query);
   }, [category]);
+
+  function handleClear() {
+    setSearchCache((prev) => ({
+      ...prev,
+      [category]: {
+        ...prev[category],
+        query: "",
+        searchResults: [],
+      },
+    }));
+
+    setInputValue(""); // reset UI input
+  }
+
+  function handleClearGenre() {
+    setSearchCache((prev) => ({
+      ...prev,
+      [category]: {
+        ...prev[category],
+        genre: "",
+        genreResults: [],
+      },
+    }));
+  }
 
   async function fetchSearchResults(searchInput) {
     console.log(`Searching ${category} for ${searchInput}`);
@@ -80,29 +108,6 @@ const SearchPage = () => {
     console.log(`${category} by ${genreId} successfully fetched!`);
   }
 
-  function displayResults() {
-    const entry = searchCache[category];
-    if (inputValue === "" || entry.searchResults.length == 0) {
-      return (
-        <>
-          {entry.genreResults.length > 0 &&
-            entry.genreResults.map((item, index) => (
-              <SearchDisplay key={index} item={item} />
-            ))}
-        </>
-      );
-    } else {
-      return (
-        <>
-          {entry.searchResults.length > 0 &&
-            entry.searchResults.map((item, index) => (
-              <SearchDisplay key={index} item={item} />
-            ))}
-        </>
-      );
-    }
-  }
-
   return (
     <div className="searchpage">
       <SearchBar
@@ -110,15 +115,24 @@ const SearchPage = () => {
         inputValue={inputValue}
         onInputChange={setInputValue}
         onSearchSubmit={handleSearchSubmit}
+        showClear={showClearButton}
+        onClear={handleClear}
       />
-      {(searchCache[category].query === "" || inputValue === "") && (
+      {searchCache[category].query === "" && (
         <GenreMenu
           options={genreOptionsMap[category]}
           selected={searchCache[category].genre}
           onChange={(value) => fetchGenreResults(value)}
+          showClear={showGenreClear}
+          onClear={handleClearGenre}
         />
       )}
-      <div className="search-display">{displayResults()}</div>
+      <div className="search-display">
+        {displayArray.length > 0 &&
+          displayArray.map((item, index) => (
+            <SearchDisplay key={index} item={item} />
+          ))}
+      </div>
     </div>
   );
 };

@@ -6,6 +6,8 @@ const SearchBar = ({
   inputValue,
   onInputChange,
   onSearchSubmit,
+  showClear,
+  onClear,
 }) => {
   const mediaCategories = [
     { label: "Movies & TV", path: "movies" },
@@ -35,14 +37,21 @@ const SearchBar = ({
       </div>
 
       <form className="search-bar" onSubmit={handleSubmit}>
-        <input
-          id="searchInput"
-          name="searchInput"
-          type="text"
-          placeholder="Search titles..."
-          value={inputValue}
-          onChange={(e) => onInputChange(e.target.value)}
-        />
+        <div className="search-input-wrapper">
+          <input
+            id="searchInput"
+            name="searchInput"
+            type="text"
+            placeholder="Search all titles..."
+            value={inputValue}
+            onChange={(e) => onInputChange(e.target.value)}
+          />
+          {showClear && (
+            <button type="button" className="clear-button" onClick={onClear}>
+              ✕
+            </button>
+          )}
+        </div>
         <button type="submit" id="searchButton">
           Search
         </button>
