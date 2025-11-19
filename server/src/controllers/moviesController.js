@@ -48,7 +48,7 @@ fetchGenres();
 function formatData(data) {
   return data.map((item) => ({
     id: item.id,
-    mediaType: "movie",
+    mediaType: item.media_type,
     title: item.media_type === "movie" ? item.title : item.name,
     summary: item.overview || "No summary available.",
     releaseYear:
@@ -239,5 +239,138 @@ export const getTMDBResults = async (req, res) => {
   } catch (error) {
     console.error("Server error:", error);
     res.status(500).json({ error: "Failed to fetch movie search results" });
+  }
+};
+
+function formatRuntime(minutes) {
+  if (!minutes || typeof minutes !== "number") return null;
+
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+
+  if (hours === 0) return `${mins}m`;
+  if (mins === 0) return `${hours}h`;
+
+  return `${hours}h ${mins}m`;
+}
+
+export const getTMDBDetailsById = async (req, res) => {
+  const { mediaType, id } = req.params;
+
+  if (!id || !mediaType) {
+    return res
+      .status(400)
+      .json({ error: "Missing 'id' or 'mediaType' parameter" });
+  }
+
+  if (mediaType !== "movie" && mediaType !== "tv") {
+    return res.status(400).json({
+      error: "Invalid mediaType. Must be 'movie' or 'tv'.",
+    });
+  }
+
+  try {
+    const url = `https://api.themoviedb.org/3/${mediaType}/${id}?append_to_response=credits`;
+
+    console.log(`Fetching ${mediaType} details for ID ${id} ...`);
+
+    const response = await fetch(url, options);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`TMDB API error: ${response.status} - ${errorText}`);
+    }
+
+    const data = await response.json();
+
+    // main cast (first 6 actors)
+    const mainCast =
+      data.credits?.cast?.slice(0, 6).map((actor) => ({
+        id: actor.id,
+        name: actor.name,
+        character: actor.character,
+        profileUrl: actor.profile_path
+          ? `https://image.tmdb.org/t/p/w185${actor.profile_path}`
+          : null,
+      })) || [];
+
+    let creator = null;
+
+    if (mediaType === "tv") {
+      creator = data.created_by?.length
+        ? data.created_by.map((creator) => ({
+            id: creator.id,
+            name: creator.name,
+            profileUrl: creator.profile_path
+              ? `https://image.tmdb.org/t/p/w185${creator.profile_path}`
+              : null,
+          }))
+        : [];
+    } else {
+      // movie directors come from crew
+      const directors =
+        data.credits?.crew
+          ?.filter((person) => person.job === "Director")
+          .map((director) => ({
+            id: director.id,
+            name: director.name,
+            profileUrl: director.profile_path
+              ? `https://image.tmdb.org/t/p/w185${director.profile_path}`
+              : null,
+          })) || [];
+
+      creator = directors;
+    }
+
+    const tvInfo =
+      mediaType === "tv"
+        ? {
+            numberOfSeasons: data.number_of_seasons || null,
+            numberOfEpisodes: data.number_of_episodes || null,
+            episodeRunTime: Array.isArray(data.episode_run_time)
+              ? formatRuntime(data.episode_run_time[0])
+              : null,
+          }
+        : null;
+
+    const movieInfo =
+      mediaType === "movie"
+        ? {
+            runtime: formatRuntime(data.runtime),
+          }
+        : null;
+
+    const formatted = {
+      id: data.id,
+      mediaType,
+      title: mediaType === "movie" ? data.title : data.name,
+      summary: data.overview || "No summary available.",
+      releaseYear:
+        mediaType === "movie"
+          ? data.release_date?.slice(0, 4)
+          : data.first_air_date?.slice(0, 4),
+      coverUrl: data.poster_path
+        ? `https://image.tmdb.org/t/p/w500${data.poster_path}`
+        : null,
+      backdropUrl: data.backdrop_path
+        ? `https://image.tmdb.org/t/p/w1280${data.backdrop_path}`
+        : null,
+      rating:
+        typeof data.vote_average === "number"
+          ? Math.round(data.vote_average * 10) / 10
+          : null,
+      genres: data.genres?.map((g) => g.name) || [],
+      productionCompanies: data.production_companies || [],
+      creator,
+      cast: mainCast,
+      ...tvInfo,
+      ...movieInfo,
+    };
+
+    console.log(`Successfully returned details for ID ${id}`);
+    res.json(formatted);
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).json({ error: "Failed to fetch TMDB details" });
   }
 };

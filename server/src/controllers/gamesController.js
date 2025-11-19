@@ -2,6 +2,8 @@ import fetch from "node-fetch";
 import { getIGDBToken } from "../utils/igdbAuth.js";
 import { IGDB_CLIENT_ID } from "../config/env.js";
 
+const IGDBGamesCache = new Map();
+
 async function fetchIGDBQuery(query, endpoint = "games") {
   const token = await getIGDBToken();
 
@@ -24,28 +26,32 @@ async function fetchIGDBQuery(query, endpoint = "games") {
 
   if (endpoint !== "games") return data;
 
-  const formattedData = data.map((game) => ({
-    id: game.id,
-    mediaType: "game",
-    title: game.name,
-    summary: game.summary || "No summary available.",
-    releaseYear: game.first_release_date
-      ? new Date(game.first_release_date * 1000).getFullYear()
-      : null,
-    coverUrl: game.cover
-      ? `https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover.image_id}.jpg`
-      : null,
-    genres: game.genres?.map((genre) => genre.name) || [],
-    platforms: game.platforms?.map((platform) => platform.name) || [],
-    developers:
-      game.involved_companies
-        ?.map((company) => company.company.name)
-        .join(", ") || null,
-    rating:
-      typeof game.total_rating === "number"
-        ? Math.round(game.total_rating) / 10
+  const formattedData = data.map((game) => {
+    const gameData = {
+      id: game.id,
+      mediaType: "games",
+      title: game.name,
+      summary: game.summary || "No summary available.",
+      releaseYear: game.first_release_date
+        ? new Date(game.first_release_date * 1000).getFullYear()
         : null,
-  }));
+      coverUrl: game.cover
+        ? `https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover.image_id}.jpg`
+        : null,
+      genres: game.genres?.map((genre) => genre.name) || [],
+      platforms: game.platforms?.map((platform) => platform.name) || [],
+      developers:
+        game.involved_companies
+          ?.map((company) => company.company.name)
+          .join(", ") || null,
+      rating:
+        typeof game.total_rating === "number"
+          ? Math.round(game.total_rating) / 10
+          : null,
+    };
+    IGDBGamesCache.set(game.id, gameData);
+    return gameData;
+  });
 
   return formattedData;
 }
@@ -167,5 +173,42 @@ export const getGameResults = async (req, res) => {
     res.status(500).json({
       error: "Failed to fetch game search results.",
     });
+  }
+};
+
+export const getGameDetails = async (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    return res.status(400).json({ error: "Missing 'id' parameter" });
+  }
+
+  const gameId = Number(id);
+
+  try {
+    if (IGDBGamesCache.has(gameId)) {
+      res.json(IGDBGamesCache.get(gameId));
+    }
+
+    const queryBody = `
+      fields name, summary, first_release_date, cover.image_id,
+        involved_companies.company.name, genres.name, platforms.name,
+        total_rating, total_rating_count;
+      where id = ${gameId};
+      limit 1;
+    `;
+
+    const [gameData] = await fetchIGDBQuery(queryBody);
+
+    if (!gameData) {
+      return res.status(404).json({ error: "Game not found" });
+    }
+
+    IGDBGamesCache.set(gameId, gameData);
+
+    res.json(gameData);
+  } catch (err) {
+    console.error("Error fetching game details:", err);
+    res.status(500).json({ error: "Failed to game details." });
   }
 };

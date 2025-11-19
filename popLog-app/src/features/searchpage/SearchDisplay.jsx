@@ -6,9 +6,9 @@ import "./SearchDisplay.css";
 
 const SearchDisplay = ({ item }) => {
   const imageIcon = (item) => {
-    if (item.mediaType === "book") {
+    if (item.mediaType === "books") {
       return <IoIosBook className="icon" />;
-    } else if (item.mediaType === "game") {
+    } else if (item.mediaType === "games") {
       return <IoGameController className="icon" />;
     } else {
       return <BiSolidMoviePlay className="icon" />;
@@ -16,7 +16,7 @@ const SearchDisplay = ({ item }) => {
   };
 
   const mediaCreator = (item) => {
-    if (item.mediaType === "book") {
+    if (item.mediaType === "books") {
       return (
         <>
           {item.authors && (
@@ -25,7 +25,7 @@ const SearchDisplay = ({ item }) => {
         </>
       );
     }
-    if (item.mediaType === "game") {
+    if (item.mediaType === "games") {
       return (
         <>
           {item.developers && (

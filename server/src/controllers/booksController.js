@@ -34,11 +34,13 @@ export const getBooksByList = async (req, res) => {
             book.primary_isbn13
           );
           if (googleBookData) {
-            return {
+            const merged = {
               ...googleBookData,
-              // prefer NYT book image if available (higher-res for NYT)
               coverUrl: book.book_image || googleBookData.coverUrl || null,
             };
+            googleBooksCache.set(book.primary_isbn13, merged);
+
+            return merged;
           }
         } catch (err) {
           // ignore enrichment errors, fall through to fallback
@@ -46,8 +48,8 @@ export const getBooksByList = async (req, res) => {
         }
 
         return {
-          id: book.primary_isbn13 || book.title,
-          mediaType: "book",
+          id: book.primary_isbn13,
+          mediaType: "books",
           title: book.title,
           summary: book.description || "No summary available.",
           releaseYear: book.published_date?.slice(0, 4) || null,
@@ -106,8 +108,8 @@ async function fetchGoogleBookByISBN(isbn) {
 
   const book = data.items[0].volumeInfo;
   const enriched = {
-    id: data.items[0].id,
-    mediaType: "book",
+    id: isbn,
+    mediaType: "books",
     title: book.title || null,
     summary: book.description || "No summary available.",
     releaseYear: book.publishedDate?.slice(0, 4) || null,
@@ -199,7 +201,7 @@ export const getTrendingBooks = async (req, res) => {
             coverUrl: book.book_image || googleBookData.coverUrl || null,
           } || {
             id: book.primary_isbn13,
-            mediaType: "book",
+            mediaType: "books",
             title: book.title,
             summary: book.description || "No summary available.",
             releaseYear: book.published_date?.slice(0, 4) || null,
@@ -240,20 +242,44 @@ export const getBookResults = async (req, res) => {
     const data = await response.json();
 
     const formattedData =
-      data.items?.map((item) => ({
-        id: item.id,
-        mediaType: "book",
-        title: item.volumeInfo.title || null,
-        summary: item.volumeInfo.description || "No summary available.",
-        releaseYear: item.volumeInfo.publishedDate?.slice(0, 4) || null,
-        coverUrl: getHighResCover(item.volumeInfo.imageLinks) || null,
-        rating:
-          typeof item.volumeInfo.averageRating === "number"
-            ? Math.round(item.volumeInfo.averageRating * 20) / 10
-            : null,
-        authors: item.volumeInfo.authors?.join(", ") || null,
-        genres: item.volumeInfo.categories || [],
-      })) || [];
+      data.items?.map((item) => {
+        let isbn = null;
+        if (item.volumeInfo?.industryIdentifiers) {
+          const isbn13 = item.volumeInfo.industryIdentifiers.find(
+            (id) => id.type === "ISBN_13"
+          );
+          const isbn10 = item.volumeInfo.industryIdentifiers.find(
+            (id) => id.type === "ISBN_10"
+          );
+
+          isbn = isbn13.identifier || isbn10.identifier;
+        }
+
+        if (!isbn) {
+          return [];
+        }
+
+        const bookData = {
+          id: isbn,
+          mediaType: "books",
+          title: item.volumeInfo.title || null,
+          summary: item.volumeInfo.description || "No summary available.",
+          releaseYear: item.volumeInfo.publishedDate?.slice(0, 4) || null,
+          coverUrl: getHighResCover(item.volumeInfo.imageLinks) || null,
+          rating:
+            typeof item.volumeInfo.averageRating === "number"
+              ? Math.round(item.volumeInfo.averageRating * 20) / 10
+              : null,
+          authors: item.volumeInfo.authors?.join(", ") || null,
+          genres: item.volumeInfo.categories || [],
+        };
+
+        console.log(bookData);
+
+        googleBooksCache.set(isbn, bookData);
+
+        return bookData;
+      }) || [];
 
     console.log("Successfully obtained book results!");
 
@@ -261,5 +287,26 @@ export const getBookResults = async (req, res) => {
   } catch (error) {
     console.error("Server error:", error);
     res.status(500).json({ error: "Failed to fetch book search results" });
+  }
+};
+
+export const getBookDetails = async (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    return res.status(400).json({ error: "Missing ISBN" });
+  }
+
+  try {
+    const book = await fetchGoogleBookByISBN(id);
+
+    if (!book) {
+      return res.status(404).json({ error: "Book not found" });
+    }
+
+    res.json(book);
+  } catch (err) {
+    console.error("Error fetching book details:", err);
+    res.status(500).json({ error: "Failed to fetch book details." });
   }
 };

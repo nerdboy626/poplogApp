@@ -80,7 +80,6 @@
 .card-link {
   text-decoration: none;
   color: inherit;
-
   display: inline-block; /* preserves block hover behavior */
   cursor: pointer;
 }

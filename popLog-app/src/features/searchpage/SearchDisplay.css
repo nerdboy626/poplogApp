@@ -128,7 +128,6 @@
 .search-entry-link {
   text-decoration: none;
   color: inherit;
-
   display: block; /* expand to full width of result block */
   cursor: pointer;
 }

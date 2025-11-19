@@ -4,6 +4,7 @@ import {
   getTrendingGames,
   getGameGenres,
   getTrendingGamesByGenre,
+  getGameDetails,
 } from "../controllers/gamesController.js";
 
 export const gameRouter = express.Router();
@@ -12,3 +13,4 @@ gameRouter.get("/search", getGameResults);
 gameRouter.get("/trending", getTrendingGames);
 gameRouter.get("/genres", getGameGenres);
 gameRouter.get("/search/:genreId", getTrendingGamesByGenre);
+gameRouter.get("/details/:id", getGameDetails);
