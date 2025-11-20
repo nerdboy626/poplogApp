@@ -1,0 +1,111 @@
+.media-details-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* 1/3 and 2/3 ratio */
+  gap: 2rem;
+  padding: 1rem 3rem;
+  border: 5px solid salmon;
+}
+
+.left-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #565458; /* Light background */
+  border-radius: 12px; /* Soft rounded corners */
+  padding: 1.5rem; /* Breathing room */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); /* Soft shadow */
+  /* border: 1px solid rgba(0, 0, 0, 0.05); */
+  border: 2px solid purple;
+}
+
+.img-container {
+  width: 200px;
+  height: 300px;
+  max-width: 30vw;
+  max-height: 45vw;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid green;
+}
+
+.img-container > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.genres-container {
+  display: flex;
+  gap: 0.5rem; /* space between genre chips */
+  overflow: hidden; /* hide any chips that don’t fit */
+  white-space: nowrap; /* keep all chips on one line */
+  text-overflow: clip; /* just clip extra content */
+  margin-top: 0.5rem;
+  border: 2px solid plum;
+}
+
+.genre-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px; /* space inside the circle */
+  border-radius: 9999px; /* makes it fully rounded */
+  background-color: var(--color-secondary); /* light gray background */
+  font-size: 0.9rem;
+  white-space: nowrap; /* prevent text wrap inside chip */
+}
+
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid orange;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  /* margin-bottom: 1rem; */
+  width: 100%;
+  max-width: 100%;
+  border: 2px solid pink;
+}
+
+.header h2 {
+  font-size: 2rem;
+  font-weight: 900;
+  margin: 0;
+}
+
+.right-panel > h1 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.media-text {
+  flex: 1;
+  min-width: 0;
+  max-width: 100%;
+  border: 2px solid green;
+}
+
+.right-panel > p {
+  margin: 0;
+  display: inline-block;
+  line-height: 1.2;
+  font-size: 1.1rem;
+  /* display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-top: 1rem; */
+  border: 2px solid rgb(0, 187, 255);
+}

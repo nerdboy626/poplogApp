@@ -55,7 +55,7 @@ export const getBooksByList = async (req, res) => {
           releaseYear: book.published_date?.slice(0, 4) || null,
           coverUrl: book.book_image || null,
           rating: null,
-          authors: book.author || null,
+          creators: book.author || null,
           genres: [],
         };
       })
@@ -118,7 +118,7 @@ async function fetchGoogleBookByISBN(isbn) {
       typeof book.averageRating === "number"
         ? Math.round(book.averageRating * 20) / 10
         : null,
-    authors: book.authors?.join(", ") || null,
+    creators: book.authors?.join(", ") || null,
     genres: book.categories || [],
   };
 
@@ -207,7 +207,7 @@ export const getTrendingBooks = async (req, res) => {
             releaseYear: book.published_date?.slice(0, 4) || null,
             coverUrl: book.book_image || null,
             rating: null,
-            authors: book.author ? book.author : null,
+            creators: book.author ? book.author : null,
             genres: [],
           }
         );
@@ -270,7 +270,7 @@ export const getBookResults = async (req, res) => {
             typeof item.volumeInfo.averageRating === "number"
               ? Math.round(item.volumeInfo.averageRating * 20) / 10
               : null,
-          authors: item.volumeInfo.authors?.join(", ") || null,
+          creators: item.volumeInfo.authors?.join(", ") || null,
           genres: item.volumeInfo.categories || [],
         };
 

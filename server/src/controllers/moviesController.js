@@ -294,32 +294,21 @@ export const getTMDBDetailsById = async (req, res) => {
           : null,
       })) || [];
 
-    let creator = null;
+    let creators = null;
 
     if (mediaType === "tv") {
-      creator = data.created_by?.length
-        ? data.created_by.map((creator) => ({
-            id: creator.id,
-            name: creator.name,
-            profileUrl: creator.profile_path
-              ? `https://image.tmdb.org/t/p/w185${creator.profile_path}`
-              : null,
-          }))
-        : [];
+      creators = data.created_by?.length
+        ? data.created_by.map((creator) => creator.name).join(", ")
+        : null;
     } else {
       // movie directors come from crew
       const directors =
         data.credits?.crew
           ?.filter((person) => person.job === "Director")
-          .map((director) => ({
-            id: director.id,
-            name: director.name,
-            profileUrl: director.profile_path
-              ? `https://image.tmdb.org/t/p/w185${director.profile_path}`
-              : null,
-          })) || [];
+          .map((director) => director.name)
+          .join(", ") || null;
 
-      creator = directors;
+      creators = directors;
     }
 
     const tvInfo =
@@ -339,6 +328,8 @@ export const getTMDBDetailsById = async (req, res) => {
             runtime: formatRuntime(data.runtime),
           }
         : null;
+
+    // console.log(data);
 
     const formatted = {
       id: data.id,
@@ -361,7 +352,7 @@ export const getTMDBDetailsById = async (req, res) => {
           : null,
       genres: data.genres?.map((g) => g.name) || [],
       productionCompanies: data.production_companies || [],
-      creator,
+      creators,
       cast: mainCast,
       ...tvInfo,
       ...movieInfo,

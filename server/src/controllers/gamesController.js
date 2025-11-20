@@ -40,7 +40,7 @@ async function fetchIGDBQuery(query, endpoint = "games") {
         : null,
       genres: game.genres?.map((genre) => genre.name) || [],
       platforms: game.platforms?.map((platform) => platform.name) || [],
-      developers:
+      creators:
         game.involved_companies
           ?.map((company) => company.company.name)
           .join(", ") || null,

@@ -16,20 +16,11 @@ const SearchDisplay = ({ item }) => {
   };
 
   const mediaCreator = (item) => {
-    if (item.mediaType === "books") {
+    if (item.mediaType === "books" || item.mediaType === "games") {
       return (
         <>
-          {item.authors && (
-            <h2 className="search-entry-creator">by {item.authors}</h2>
-          )}
-        </>
-      );
-    }
-    if (item.mediaType === "games") {
-      return (
-        <>
-          {item.developers && (
-            <h2 className="search-entry-creator">by {item.developers}</h2>
+          {item.creators && (
+            <h2 className="search-entry-creator">by {item.creators}</h2>
           )}
         </>
       );
