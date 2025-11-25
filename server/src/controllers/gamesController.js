@@ -30,7 +30,7 @@ async function fetchIGDBQuery(query, endpoint = "games") {
     const gameData = {
       id: game.id,
       mediaType: "games",
-      title: game.name,
+      title: game.name || null,
       summary: game.summary || "No summary available.",
       releaseYear: game.first_release_date
         ? new Date(game.first_release_date * 1000).getFullYear()
@@ -39,7 +39,8 @@ async function fetchIGDBQuery(query, endpoint = "games") {
         ? `https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover.image_id}.jpg`
         : null,
       genres: game.genres?.map((genre) => genre.name) || [],
-      platforms: game.platforms?.map((platform) => platform.name) || [],
+      platforms:
+        game.platforms?.map((platform) => platform.name).join(", ") || null,
       creators:
         game.involved_companies
           ?.map((company) => company.company.name)

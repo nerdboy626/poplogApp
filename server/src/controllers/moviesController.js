@@ -316,7 +316,7 @@ export const getTMDBDetailsById = async (req, res) => {
         ? {
             numberOfSeasons: data.number_of_seasons || null,
             numberOfEpisodes: data.number_of_episodes || null,
-            episodeRunTime: Array.isArray(data.episode_run_time)
+            episodeRuntime: Array.isArray(data.episode_run_time)
               ? formatRuntime(data.episode_run_time[0])
               : null,
           }
@@ -325,7 +325,7 @@ export const getTMDBDetailsById = async (req, res) => {
     const movieInfo =
       mediaType === "movie"
         ? {
-            runtime: formatRuntime(data.runtime),
+            runtime: formatRuntime(data.runtime) || null,
           }
         : null;
 

@@ -5,6 +5,7 @@ import { IoIosBook } from "react-icons/io";
 import "./SearchDisplay.css";
 
 const SearchDisplay = ({ item }) => {
+  if (!item) return null;
   const imageIcon = (item) => {
     if (item.mediaType === "books") {
       return <IoIosBook className="icon" />;

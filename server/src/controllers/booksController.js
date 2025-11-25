@@ -50,7 +50,7 @@ export const getBooksByList = async (req, res) => {
         return {
           id: book.primary_isbn13,
           mediaType: "books",
-          title: book.title,
+          title: book.title || null,
           summary: book.description || "No summary available.",
           releaseYear: book.published_date?.slice(0, 4) || null,
           coverUrl: book.book_image || null,
@@ -202,7 +202,7 @@ export const getTrendingBooks = async (req, res) => {
           } || {
             id: book.primary_isbn13,
             mediaType: "books",
-            title: book.title,
+            title: book.title || null,
             summary: book.description || "No summary available.",
             releaseYear: book.published_date?.slice(0, 4) || null,
             coverUrl: book.book_image || null,
@@ -242,44 +242,44 @@ export const getBookResults = async (req, res) => {
     const data = await response.json();
 
     const formattedData =
-      data.items?.map((item) => {
-        let isbn = null;
-        if (item.volumeInfo?.industryIdentifiers) {
-          const isbn13 = item.volumeInfo.industryIdentifiers.find(
-            (id) => id.type === "ISBN_13"
+      data.items
+        ?.map((item) => {
+          const identifiers = item.volumeInfo?.industryIdentifiers || [];
+
+          const isbn13 = identifiers.find(
+            (id) => id.type === "ISBN_13" && id.identifier
           );
-          const isbn10 = item.volumeInfo.industryIdentifiers.find(
-            (id) => id.type === "ISBN_10"
+          const isbn10 = identifiers.find(
+            (id) => id.type === "ISBN_10" && id.identifier
           );
 
-          isbn = isbn13.identifier || isbn10.identifier;
-        }
+          const isbn = isbn13?.identifier || isbn10?.identifier || null;
 
-        if (!isbn) {
-          return [];
-        }
+          // Skip books without valid ISBN
+          if (!isbn) return null;
 
-        const bookData = {
-          id: isbn,
-          mediaType: "books",
-          title: item.volumeInfo.title || null,
-          summary: item.volumeInfo.description || "No summary available.",
-          releaseYear: item.volumeInfo.publishedDate?.slice(0, 4) || null,
-          coverUrl: getHighResCover(item.volumeInfo.imageLinks) || null,
-          rating:
-            typeof item.volumeInfo.averageRating === "number"
-              ? Math.round(item.volumeInfo.averageRating * 20) / 10
-              : null,
-          creators: item.volumeInfo.authors?.join(", ") || null,
-          genres: item.volumeInfo.categories || [],
-        };
+          const bookData = {
+            id: isbn,
+            mediaType: "books",
+            title: item.volumeInfo.title || null,
+            summary: item.volumeInfo.description || "No summary available.",
+            releaseYear: item.volumeInfo.publishedDate?.slice(0, 4) || null,
+            coverUrl: getHighResCover(item.volumeInfo.imageLinks) || null,
+            rating:
+              typeof item.volumeInfo.averageRating === "number"
+                ? Math.round(item.volumeInfo.averageRating * 20) / 10
+                : null,
+            creators: item.volumeInfo.authors?.join(", ") || null,
+            genres: item.volumeInfo.categories || [],
+          };
 
-        console.log(bookData);
+          console.log(bookData);
 
-        googleBooksCache.set(isbn, bookData);
+          googleBooksCache.set(isbn, bookData);
 
-        return bookData;
-      }) || [];
+          return bookData;
+        })
+        .filter(Boolean) || [];
 
     console.log("Successfully obtained book results!");
 
