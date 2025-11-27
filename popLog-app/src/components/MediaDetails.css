@@ -1,6 +1,8 @@
 .media-details-container {
   display: grid;
   grid-template-columns: minmax(200px, 1fr) 2fr; /* 1/3 and 2/3 ratio */
+  height: 92vh;
+  overflow: hidden;
   gap: 2rem;
   padding: 1rem 3rem;
   border: 5px solid salmon;
@@ -10,14 +12,19 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-
+  justify-content: center;
+  overflow: hidden;
+  overflow-y: auto;
   min-width: 0;
-  background: rgb(1, 4, 2, 0.4); /* Light background */
-  border-radius: 12px; /* Soft rounded corners */
-  padding: 1.5rem; /* Breathing room */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); /* Soft shadow */
-  border: 1px solid rgba(241, 240, 240, 0.5);
-  /* border: 2px solid purple; */
+  height: 100%;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 /* .img-container {
@@ -84,15 +91,19 @@
 }
 
 .user-rating {
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  /* background: #ffe28c; */
+  border-radius: 6px;
+  font-weight: bold;
   border: 3px solid paleturquoise;
 }
 
 .user-rating > p {
   margin: 0;
   font-size: 2rem;
-  margin-right: 0.5rem;
   /* color: black; */
 }
 
@@ -102,16 +113,26 @@
   height: 100%;
 }
 
+.pages {
+  display: flex;
+  flex-direction: row;
+  border: 3px solid goldenrod;
+}
+
+.pages > p {
+  margin: 0;
+  font-size: 1rem;
+}
+
 .genres-info {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: 0.5rem; /* space between genre chips */
-  overflow: visible; /* hide any chips that don’t fit */
+  overflow: visible;
   /* white-space: nowrap;
   text-overflow: clip;  */
-  margin-top: 0.5rem;
   border: 2px solid plum;
 }
 
@@ -147,6 +168,7 @@
 .right-panel {
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
   min-width: 0;
   border: 2px solid orange;
 }
@@ -192,4 +214,53 @@
   overflow: hidden;
   margin-top: 1rem; */
   border: 2px solid rgb(0, 187, 255);
+}
+
+.notes-label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.textbox {
+  width: 100%;
+  min-height: 100px;
+  resize: vertical;
+  padding: 0.75rem;
+  border-radius: 6px;
+  background-color: #fafafa;
+  border: 1px solid #bbb;
+}
+
+.save-floating-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+
+  background: #ff6b6b;
+  color: white;
+  cursor: pointer;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+
+  transition: opacity 0.25s ease, transform 0.25s ease, background 0.2s ease;
+}
+
+.save-floating-btn.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.save-floating-btn:hover {
+  background: var(--color-secondary);
 }

@@ -16,55 +16,49 @@ const MediaDetails = () => {
   const [userNotes, setUserNotes] = useState("");
   const [isReviewed, setIsReviewed] = useState(false); // tracks if save button should appear
 
-  let titleYear = "";
+  const creatorLabel =
+    mediaType === "movie"
+      ? "directed by"
+      : mediaType === "tv"
+      ? "created by"
+      : mediaType === "games"
+      ? "developed by"
+      : "by";
 
-  if (mediaInfo?.title && mediaInfo?.releaseYear) {
-    titleYear = `${mediaInfo.title} (${mediaInfo.releaseYear})`;
-  } else if (mediaInfo?.title) {
-    titleYear = mediaInfo.title;
-  } else if (mediaInfo?.releaseYear) {
-    titleYear = mediaInfo.releaseYear;
-  } else {
-    titleYear = "No title available.";
-  }
+  const titleYear = mediaInfo
+    ? [mediaInfo.title, mediaInfo.releaseYear && `(${mediaInfo.releaseYear})`]
+        .filter(Boolean)
+        .join(" ")
+    : "No title available.";
 
-  let showInfo = "";
-
-  if (mediaInfo?.mediaType === "tv") {
-    let episodeArr = [];
-    if (mediaInfo.numberOfSeasons) {
-      episodeArr.push(
-        `${mediaInfo.numberOfSeasons} ${
-          mediaInfo.numberOfSeasons === 1 ? "season" : "seasons"
-        }`
-      );
-    }
-    if (mediaInfo.numberOfEpisodes) {
-      episodeArr.push(`${mediaInfo.numberOfEpisodes} episodes`);
-    }
-    if (mediaInfo.episodeRuntime) {
-      episodeArr.push(mediaInfo.episodeRuntime);
-    }
-    showInfo = episodeArr.join(" | ");
-  }
+  const showInfo =
+    mediaInfo?.mediaType === "tv"
+      ? [
+          mediaInfo.numberOfSeasons &&
+            `${mediaInfo.numberOfSeasons} ${
+              mediaInfo.numberOfSeasons === 1 ? "season" : "seasons"
+            }`,
+          mediaInfo.numberOfEpisodes &&
+            `${mediaInfo.numberOfEpisodes} episodes`,
+          mediaInfo.episodeRuntime,
+        ]
+          .filter(Boolean)
+          .join(" | ")
+      : null;
 
   useEffect(() => {
     fetchMediaInfo(mediaType, id);
   }, []);
 
   async function fetchMediaInfo(category, mediaId) {
-    let baseUrl = ``;
-
-    if (category === "movie" || category === "tv") {
-      baseUrl = `http://localhost:3500/api/movies/details/${category}/${mediaId}`;
-    } else {
-      baseUrl = `http://localhost:3500/api/${category}/details/${mediaId}`;
-    }
+    const baseUrl =
+      category === "movie" || category === "tv"
+        ? `http://localhost:3500/api/movies/details/${category}/${mediaId}`
+        : `http://localhost:3500/api/${category}/details/${mediaId}`;
 
     console.log(`Searching ${category} for ${mediaId}`);
 
     const response = await fetch(baseUrl);
-
     const data = await response.json();
 
     console.log(data);
@@ -82,20 +76,14 @@ const MediaDetails = () => {
     }
   };
 
-  const creatorDisplay = () => {
-    if (mediaType === "movie") {
-      return <h1>directed by {mediaInfo.creators}</h1>;
-    } else if (mediaType === "tv") {
-      return <h1>created by {mediaInfo.creators}</h1>;
-    } else {
-      return <h1>by {mediaInfo.creators}</h1>;
-    }
-  };
-
   const handleSave = async () => {
     const payload = {
       mediaId: id,
       mediaType,
+      coverUrl: mediaInfo?.coverUrl,
+      title: mediaInfo?.title,
+      releaseYear: mediaInfo?.releaseYear,
+      summary: mediaInfo?.summary,
       userRating,
       userFavorite,
       userNotes,
@@ -139,12 +127,17 @@ const MediaDetails = () => {
             <FaStar className="star-icon" />
           </div>
         )}
+        {mediaInfo?.mediaType === "books" && mediaInfo?.pageCount && (
+          <div className="pages">
+            <p>{mediaInfo.pageCount} pages</p>
+          </div>
+        )}
         {mediaInfo?.mediaType === "games" && mediaInfo?.platforms && (
           <div className="game-platforms">
             <p>Available on: {mediaInfo.platforms}</p>
           </div>
         )}
-        {mediaInfo?.mediaType === "tv" && showInfo !== "" && (
+        {mediaInfo?.mediaType === "tv" && showInfo && (
           <div className="show-info">
             <p>{showInfo}</p>
           </div>
@@ -169,7 +162,11 @@ const MediaDetails = () => {
         <div className="header">
           <h2>{titleYear}</h2>
         </div>
-        {mediaInfo?.creators && creatorDisplay()}
+        {mediaInfo?.creators && (
+          <h1>
+            {creatorLabel} {mediaInfo.creators}
+          </h1>
+        )}
         <p>{mediaInfo?.summary}</p>
         <MediaRate
           rating={userRating}
@@ -184,14 +181,7 @@ const MediaDetails = () => {
           }}
         />
         <div style={{ marginTop: "1rem" }}>
-          <label
-            htmlFor="user-notes"
-            style={{
-              fontWeight: "bold",
-              display: "block",
-              marginBottom: "0.5rem",
-            }}
-          >
+          <label htmlFor="user-notes" className="notes-label">
             Notes:
           </label>
           <textarea
@@ -202,29 +192,16 @@ const MediaDetails = () => {
               setIsReviewed(true);
             }}
             placeholder="Write your thoughts here..."
-            style={{
-              width: "100%",
-              minHeight: "100px",
-              padding: "0.5rem",
-              borderRadius: "6px",
-              border: "1px solid #ccc",
-            }}
+            className="textbox"
           ></textarea>
         </div>
-        {isReviewed && (
-          <button
-            type="button"
-            onClick={handleSave}
-            style={{
-              marginTop: "0.5rem",
-              padding: "0.5rem 1rem",
-              borderRadius: "6px",
-              cursor: "pointer",
-            }}
-          >
-            Save
-          </button>
-        )}
+
+        <button
+          className={`save-floating-btn ${isReviewed ? "show" : ""}`}
+          onClick={handleSave}
+        >
+          Save
+        </button>
       </div>
     </div>
   );

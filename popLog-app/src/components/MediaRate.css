@@ -1,15 +1,50 @@
 .rate-container {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
   gap: 1rem;
   margin-top: 1rem;
+  border: 2px solid purple;
+}
+
+.star-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 100%;
+  border: 2px solid yellow;
+}
+
+.star-conatiner > h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.stars-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 100%;
+  gap: 0.2rem;
 }
 
 .star {
   font-size: 2rem;
   cursor: pointer;
-  margin-right: 0.2rem;
+}
+
+.heart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid red;
+}
+
+.heart-conatiner > h4 {
+  margin: 0;
+  font-size: 1rem;
 }
 
 .heart {

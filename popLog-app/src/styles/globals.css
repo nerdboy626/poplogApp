@@ -24,10 +24,11 @@ body {
   font-family: var(--font-family);
   background-color: var(--color-background);
   color: var(--color-text-light);
+  /* background: linear-gradient(135deg, #1b1f29, #2a2f3d); */
 }
 
 body {
-  padding-top: 60px;
+  padding-top: 8vh;
 }
 
 a {

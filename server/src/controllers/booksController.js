@@ -57,6 +57,7 @@ export const getBooksByList = async (req, res) => {
           rating: null,
           creators: book.author || null,
           genres: [],
+          pageCount: null,
         };
       })
     );
@@ -120,6 +121,7 @@ async function fetchGoogleBookByISBN(isbn) {
         : null,
     creators: book.authors?.join(", ") || null,
     genres: book.categories || [],
+    pageCount: book.pageCount || null,
   };
 
   googleBooksCache.set(isbn, enriched);
@@ -209,6 +211,7 @@ export const getTrendingBooks = async (req, res) => {
             rating: null,
             creators: book.author ? book.author : null,
             genres: [],
+            pageCount: null,
           }
         );
       })
@@ -271,6 +274,7 @@ export const getBookResults = async (req, res) => {
                 : null,
             creators: item.volumeInfo.authors?.join(", ") || null,
             genres: item.volumeInfo.categories || [],
+            pageCount: item.volumeInfo.pageCount || null,
           };
 
           console.log(bookData);

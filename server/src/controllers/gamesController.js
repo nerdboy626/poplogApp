@@ -189,9 +189,8 @@ export const getGameDetails = async (req, res) => {
   try {
     if (IGDBGamesCache.has(gameId)) {
       res.json(IGDBGamesCache.get(gameId));
-    }
-
-    const queryBody = `
+    } else {
+      const queryBody = `
       fields name, summary, first_release_date, cover.image_id,
         involved_companies.company.name, genres.name, platforms.name,
         total_rating, total_rating_count;
@@ -199,15 +198,14 @@ export const getGameDetails = async (req, res) => {
       limit 1;
     `;
 
-    const [gameData] = await fetchIGDBQuery(queryBody);
+      const responseData = await fetchIGDBQuery(queryBody);
 
-    if (!gameData) {
-      return res.status(404).json({ error: "Game not found" });
+      if (!responseData) {
+        return res.status(404).json({ error: "Game not found" });
+      }
+
+      res.json(responseData);
     }
-
-    IGDBGamesCache.set(gameId, gameData);
-
-    res.json(gameData);
   } catch (err) {
     console.error("Error fetching game details:", err);
     res.status(500).json({ error: "Failed to game details." });
