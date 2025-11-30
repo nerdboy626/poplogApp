@@ -47,7 +47,7 @@ export const getBooksByList = async (req, res) => {
           console.warn("Google Books enrichment failed:", err);
         }
 
-        return {
+        const bookData = {
           id: book.primary_isbn13,
           mediaType: "books",
           title: book.title || null,
@@ -59,6 +59,10 @@ export const getBooksByList = async (req, res) => {
           genres: [],
           pageCount: null,
         };
+
+        googleBooksCache.set(book.primary_isbn13, bookData);
+
+        return bookData;
       })
     );
 
@@ -197,11 +201,13 @@ export const getTrendingBooks = async (req, res) => {
       limitedBooks.map(async (book) => {
         const googleBookData = await fetchGoogleBookByISBN(book.primary_isbn13);
 
-        return (
-          {
+        if (googleBookData) {
+          return {
             ...googleBookData,
             coverUrl: book.book_image || googleBookData.coverUrl || null,
-          } || {
+          };
+        } else {
+          return {
             id: book.primary_isbn13,
             mediaType: "books",
             title: book.title || null,
@@ -212,8 +218,8 @@ export const getTrendingBooks = async (req, res) => {
             creators: book.author ? book.author : null,
             genres: [],
             pageCount: null,
-          }
-        );
+          };
+        }
       })
     );
 

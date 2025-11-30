@@ -4,7 +4,7 @@ const MediaRate = ({ rating, favorite, onRatingChange, onFavoriteToggle }) => {
   return (
     <div className="rate-container">
       <div className="star-container">
-        <h4>Your Rating</h4>
+        <h3>Your Rating</h3>
         <div className="stars-row">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((star) => (
             <FaStar
@@ -18,12 +18,16 @@ const MediaRate = ({ rating, favorite, onRatingChange, onFavoriteToggle }) => {
       </div>
 
       <div className="heart-container">
-        <h4>Favorite</h4>
+        <h3>Favorite</h3>
 
         {favorite ? (
           <FaHeart onClick={onFavoriteToggle} className="heart" color="red" />
         ) : (
-          <FaRegHeart onClick={onFavoriteToggle} className="heart" />
+          <FaRegHeart
+            onClick={onFavoriteToggle}
+            className="heart"
+            color="lightgrey"
+          />
         )}
       </div>
     </div>

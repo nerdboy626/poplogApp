@@ -106,6 +106,7 @@ const SearchPage = () => {
     }));
 
     console.log(`${category} by ${genreId} successfully fetched!`);
+    console.log(data);
   }
 
   return (
