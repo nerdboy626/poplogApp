@@ -8,25 +8,35 @@ email TEXT UNIQUE NOT NULL,
 hashed_password TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS reviews (
-id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-user_id INTEGER NOT NULL REFERENCES users(id),
-type TEXT NOT NULL CHECK (type IN ('movie', 'tv', 'book')),
-title TEXT NOT NULL,
-creator TEXT,
-genre TEXT,
-year INTEGER,
-rating INTEGER CHECK (rating BETWEEN 1 AND 10),
-notes TEXT,
-image_url TEXT
+CREATE TABLE IF NOT EXISTS media (
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    external_id TEXT NOT NULL,
+    media_type TEXT NOT NULL CHECK (media_type IN ('movie', 'tv', 'books', 'games')),
+    title TEXT,
+    summary TEXT,
+    release_year INT,
+    image_url TEXT,
+    UNIQUE (external_id, media_type)
 );
 
-INSERT INTO users (username, email, hashed_password) 
-VALUES
-    ('Jane', 'movielover@gmail.com', 'password1'),
-    ('Joe', 'tvlover@gmail.com', 'password2'),
-    ('Jerry', 'booklover@gmail.com', 'password3');
-`;
+CREATE TABLE IF NOT EXISTS reviews (
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    media_id INTEGER NOT NULL REFERENCES media(id) ON DELETE CASCADE,
+    rating INT CHECK (rating >= 0 AND rating <= 10),
+    favorite BOOLEAN DEFAULT FALSE,
+    notes TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    UNIQUE (user_id, media_id)
+);`;
+
+// INSERT INTO users (username, email, hashed_password)
+// VALUES
+//     ('Jane', 'movielover@gmail.com', 'password1'),
+//     ('Joe', 'tvlover@gmail.com', 'password2'),
+//     ('Jerry', 'booklover@gmail.com', 'password3');
+// `;
 
 async function main() {
   console.log("seeding...");

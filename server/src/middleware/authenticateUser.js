@@ -1,4 +1,4 @@
-import { ACCESS_TOKEN_SECRET } from "../config/env";
+import { ACCESS_TOKEN_SECRET } from "../config/env.js";
 
 export function authenticateUser(req, res, next) {
   const authHeader = req.headers["authorization"];

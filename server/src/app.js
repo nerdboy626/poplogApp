@@ -5,6 +5,7 @@ import { authRouter } from "./routes/auth.js";
 import { movieRouter } from "./routes/movies.js";
 import { bookRouter } from "./routes/books.js";
 import { gameRouter } from "./routes/games.js";
+import { reviewRouter } from "./routes/reviews.js";
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/movies", movieRouter);
 app.use("/api/books", bookRouter);
 app.use("/api/games", gameRouter);
+app.use("/api/reviews", reviewRouter);
 
 app.get("/api/test", (req, res) => {
   res.json({ message: "Server test route is working." });
