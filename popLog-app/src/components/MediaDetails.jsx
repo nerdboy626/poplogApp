@@ -7,9 +7,11 @@ import { FaStar } from "react-icons/fa";
 import { FaSortUp } from "react-icons/fa";
 import { FaSortDown } from "react-icons/fa";
 import MediaRate from "./MediaRate";
+import { useAuth } from "../utils/AuthContext.jsx";
 import "./MediaDetails.css";
 
 const MediaDetails = () => {
+  const auth = useAuth();
   const { mediaType, id } = useParams();
   const [mediaInfo, setMediaInfo] = useState(null);
 
@@ -81,28 +83,34 @@ const MediaDetails = () => {
 
   const handleSave = async () => {
     const payload = {
-      mediaId: id,
+      id,
       mediaType,
-      coverUrl: mediaInfo?.coverUrl,
       title: mediaInfo?.title,
-      releaseYear: mediaInfo?.releaseYear,
       summary: mediaInfo?.summary,
-      userRating,
-      userFavorite,
-      userNotes,
+      releaseYear: mediaInfo?.releaseYear,
+      coverUrl: mediaInfo?.coverUrl,
+      rating: userRating,
+      favorite: userFavorite,
+      notes: userNotes,
     };
 
     try {
-      const response = await fetch("http://localhost:3500/api/userMedia", {
+      const response = await fetch("http://localhost:3500/api/reviews/save", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.user.token}`,
+        },
         body: JSON.stringify(payload),
       });
+
+      const data = await response.json().catch(() => null);
 
       if (response.ok) {
         alert("Saved successfully!");
         setIsReviewed(false); // hide save button
       } else {
+        console.error("Backend error:", data);
         alert("Failed to save.");
       }
     } catch (err) {

@@ -44,8 +44,10 @@ export async function getDashboardItems(userId) {
     `
     SELECT 
       m.id AS media_id,
+      m.external_id,
       m.title,
       m.summary,
+      m.media_type,
       m.release_year,
       m.image_url,
       r.rating,
