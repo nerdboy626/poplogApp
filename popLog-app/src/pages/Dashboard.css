@@ -1,3 +1,20 @@
+.dashboard-controls {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid orange;
+}
+
+.dashboard-controls select {
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+  font-size: 1rem;
+}
+
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);

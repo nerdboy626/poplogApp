@@ -1,11 +1,11 @@
 export const trendingTitlesLoader = async () => {
   try {
-    const bookResponse = await fetch(
-      "http://localhost:3500/api/books/search?query=red rising"
-    );
     // const bookResponse = await fetch(
-    //   "http://localhost:3500/api/books/trending"
+    //   "http://localhost:3500/api/books/search?query=red rising"
     // );
+    const bookResponse = await fetch(
+      "http://localhost:3500/api/books/trending"
+    );
     if (!bookResponse.ok)
       throw new Error("Network response for books was not ok");
 

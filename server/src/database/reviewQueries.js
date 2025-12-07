@@ -52,7 +52,8 @@ export async function getDashboardItems(userId) {
       m.image_url,
       r.rating,
       r.favorite,
-      r.notes
+      r.notes,
+      r.created_at
     FROM reviews r
     JOIN media m ON m.id = r.media_id
     WHERE r.user_id = $1
