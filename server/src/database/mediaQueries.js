@@ -26,6 +26,18 @@ export async function findOrCreateMedia({
   return result.rows[0];
 }
 
+export async function findMediaByExternalId(externalId, mediaType) {
+  const result = await pool.query(
+    `
+    SELECT * FROM media
+    WHERE external_id = $1 AND media_type = $2
+    LIMIT 1
+    `,
+    [externalId, mediaType]
+  );
+  return result.rows[0] || null;
+}
+
 export async function getMediaById(mediaId) {
   const result = await pool.query(`SELECT * FROM media WHERE id = $1`, [
     mediaId,

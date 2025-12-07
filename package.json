@@ -13,5 +13,8 @@
   "type": "module",
   "devDependencies": {
     "concurrently": "^9.2.1"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-darwin-arm64": "^4.53.3"
   }
 }

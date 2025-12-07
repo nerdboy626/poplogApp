@@ -1,6 +1,6 @@
 import pool from "./pool.js";
 
-export async function getUserReview(userId, mediaId) {
+export async function getReviewQuery(userId, mediaId) {
   const result = await pool.query(
     `SELECT * FROM reviews WHERE user_id = $1 AND media_id = $2`,
     [userId, mediaId]

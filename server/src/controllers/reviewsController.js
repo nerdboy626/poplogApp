@@ -2,8 +2,9 @@ import {
   upsertReview,
   deleteReview,
   getDashboardItems,
+  getReviewQuery
 } from "../database/reviewQueries.js";
-import { findOrCreateMedia } from "../database/mediaQueries.js";
+import { findOrCreateMedia,findMediaByExternalId } from "../database/mediaQueries.js";
 
 export async function saveReview(req, res) {
   const user_id = req.user.id;
@@ -65,5 +66,34 @@ export async function getUserDashboard(req, res) {
     res.json(items);
   } catch (err) {
     res.status(500).json({ error: "Failed to retrieve dashboard items" });
+  }
+}
+
+export async function getUserReview(req, res) {
+  const user_id = req.user.id;
+  const { mediaType, externalId } = req.params;
+
+  try {
+    const media = await findMediaByExternalId(externalId, mediaType);
+
+    if (!media) {
+      // user can't have a review if media row doesn't exist
+      return res.json(null);
+    }
+
+    const review = await getReviewQuery(user_id, media.id);
+
+    if (!review) {
+      return res.json(null);
+    }
+
+    res.json({
+      rating: review.rating,
+      favorite: review.favorite,
+      notes: review.notes,
+    });
+  } catch (err) {
+    console.error("Error fetching user review:", err);
+    res.status(500).json({ error: "Failed to fetch review" });
   }
 }

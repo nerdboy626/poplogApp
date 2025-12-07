@@ -6,7 +6,7 @@ import { IoIosBook } from "react-icons/io";
 import { FaStar } from "react-icons/fa";
 import { FaSortUp } from "react-icons/fa";
 import { FaSortDown } from "react-icons/fa";
-import MediaRate from "./MediaRate";
+import MediaRate from "./MediaRate.jsx";
 import { useAuth } from "../utils/AuthContext.jsx";
 import "./MediaDetails.css";
 
@@ -53,6 +53,7 @@ const MediaDetails = () => {
 
   useEffect(() => {
     fetchMediaInfo(mediaType, id);
+    fetchReview();
   }, []);
 
   async function fetchMediaInfo(category, mediaId) {
@@ -69,6 +70,34 @@ const MediaDetails = () => {
     console.log(data);
 
     setMediaInfo(data);
+  }
+
+  async function fetchReview() {
+    if (auth.isLoggedIn) {
+      console.log(
+        `Searching to see if ${auth.user.username} has a review for ${mediaType} with an id of ${id}`
+      );
+
+      const baseUrl = `http://localhost:3500/api/reviews/${mediaType}/${id}`;
+
+      const response = await fetch(baseUrl, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.user.token}`,
+        },
+      });
+      const data = await response.json();
+
+      console.log(`The data was`);
+      console.log(data);
+
+      if (data) {
+        setUserRating(data.rating);
+        setUserFavorite(data.favorite);
+        setUserNotes(data.notes);
+      }
+    }
   }
 
   const imageIcon = () => {
@@ -164,7 +193,7 @@ const MediaDetails = () => {
           </div>
         )}
 
-        {mediaInfo?.genres.length > 0 && (
+        {mediaInfo?.genres?.length > 0 && (
           <div className="lp-genres">
             {mediaInfo.genres.map((genre, index) => (
               <span key={index} className="lp-genre-chip">
