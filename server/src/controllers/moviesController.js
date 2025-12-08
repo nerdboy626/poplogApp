@@ -11,6 +11,10 @@ const options = {
 
 let movieGenresMap = {};
 let tvGenresMap = {};
+let trendingShowsCache = null;
+let trendingMoviesCache = null;
+let trendingTimestamp = 0;
+const TRENDING_CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
 const fetchGenres = async () => {
   try {
@@ -145,6 +149,12 @@ export const getByGenre = async (req, res) => {
 };
 
 export const getTrendingShows = async (req, res) => {
+  const now = Date.now();
+
+  if (trendingShowsCache && now - trendingTimestamp < TRENDING_CACHE_DURATION) {
+    console.log("Serving trending shows from cache");
+    return res.json(trendingShowsCache);
+  }
   try {
     const url = "https://api.themoviedb.org/3/trending/tv/week?language=en-US";
 
@@ -163,14 +173,32 @@ export const getTrendingShows = async (req, res) => {
 
     console.log("Successfully obtained trending shows!");
 
+    trendingShowsCache = formattedData;
+    trendingTimestamp = now;
+
     res.json(formattedData);
   } catch (error) {
     console.error("Server error:", error);
+
+    if (trendingShowsCache) {
+      console.warn("Returning stale trending shows cache due to error");
+      return res.json(trendingShowsCache);
+    }
+
     res.status(500).json({ error: "Failed to fetch trending shows" });
   }
 };
 
 export const getTrendingMovies = async (req, res) => {
+  const now = Date.now();
+
+  if (
+    trendingMoviesCache &&
+    now - trendingTimestamp < TRENDING_CACHE_DURATION
+  ) {
+    console.log("Serving trending movies from cache");
+    return res.json(trendingMoviesCache);
+  }
   try {
     const url =
       "https://api.themoviedb.org/3/trending/movie/week?language=en-US";
@@ -190,9 +218,18 @@ export const getTrendingMovies = async (req, res) => {
 
     console.log("Successfully obtained trending movies!");
 
+    trendingMoviesCache = formattedData;
+    trendingTimestamp = now;
+
     res.json(formattedData);
   } catch (error) {
     console.error("Server error:", error);
+
+    if (trendingMoviesCache) {
+      console.warn("Returning stale trending shows cache due to error");
+      return res.json(trendingMoviesCache);
+    }
+
     res.status(500).json({ error: "Failed to fetch trending movies" });
   }
 };

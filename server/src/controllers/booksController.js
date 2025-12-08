@@ -2,11 +2,18 @@ import fetch from "node-fetch";
 import { GOOGLE_API_KEY, NYT_API_KEY } from "../config/env.js";
 
 const googleBooksCache = new Map();
+let trendingBooksCache = null;
+let trendingBooksTimestamp = 0;
+const TRENDING_CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
 async function fetchNYTList(category) {
+  console.log("Fetching NYT list:", category);
   const response = await fetch(
     `https://api.nytimes.com/svc/books/v3/lists/current/${category}.json?api-key=${NYT_API_KEY}`
   );
+
+  // const body = await response.text();
+  // console.log("NYT response body:", body);
 
   if (!response.ok) {
     const errorText = await response.text();
@@ -128,7 +135,7 @@ async function fetchGoogleBookByISBN(isbn) {
     pageCount: book.pageCount || null,
   };
 
-  googleBooksCache.set(isbn, enriched);
+  // googleBooksCache.set(isbn, enriched);
 
   return enriched;
 }
@@ -164,6 +171,17 @@ function shuffleArray(array) {
 }
 
 export const getTrendingBooks = async (req, res) => {
+  const now = Date.now();
+
+  // If cache exists and is less than 24 hours old → return cached data
+  if (
+    trendingBooksCache &&
+    now - trendingBooksTimestamp < TRENDING_CACHE_DURATION
+  ) {
+    console.log("Serving trending books from cache");
+    return res.json(trendingBooksCache);
+  }
+
   try {
     // you can add or remove lists for variety
     const categories = [
@@ -202,12 +220,16 @@ export const getTrendingBooks = async (req, res) => {
         const googleBookData = await fetchGoogleBookByISBN(book.primary_isbn13);
 
         if (googleBookData) {
-          return {
+          const bookData = {
             ...googleBookData,
             coverUrl: book.book_image || googleBookData.coverUrl || null,
           };
+
+          googleBooksCache.set(book.primary_isbn13, bookData);
+
+          return bookData;
         } else {
-          return {
+          const bookData = {
             id: book.primary_isbn13,
             mediaType: "books",
             title: book.title || null,
@@ -219,14 +241,28 @@ export const getTrendingBooks = async (req, res) => {
             genres: [],
             pageCount: null,
           };
+
+          googleBooksCache.set(book.primary_isbn13, bookData);
+
+          return bookData;
         }
       })
     );
 
     console.log("Successfully fetched trending books!");
+
+    trendingBooksCache = enrichedBooks;
+    trendingBooksTimestamp = now;
+
     res.json(enrichedBooks);
   } catch (error) {
     console.error("Server error:", error);
+
+    if (trendingBooksCache) {
+      console.warn("Returning stale trending books cache due to error");
+      return res.json(trendingBooksCache);
+    }
+
     res.status(500).json({ error: "Failed to fetch trending books." });
   }
 };

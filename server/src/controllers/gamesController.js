@@ -3,6 +3,9 @@ import { getIGDBToken } from "../utils/igdbAuth.js";
 import { IGDB_CLIENT_ID } from "../config/env.js";
 
 const IGDBGamesCache = new Map();
+let trendingGamesCache = null;
+let trendingGamesTimestamp = 0;
+const TRENDING_CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
 async function fetchIGDBQuery(query, endpoint = "games") {
   const token = await getIGDBToken();
@@ -114,18 +117,26 @@ export const getTrendingGamesByGenre = async (req, res) => {
 };
 
 export const getTrendingGames = async (req, res) => {
-  const now = Math.floor(Date.now() / 1000);
+  const now = Date.now();
 
-  const sixMonthsAgo = now - 60 * 60 * 24 * 30 * 6;
+  if (
+    trendingGamesCache &&
+    now - trendingGamesTimestamp < TRENDING_CACHE_DURATION
+  ) {
+    console.log("Serving trending games from cache");
+    return res.json(trendingGamesCache);
+  }
 
   try {
+    const sixMonthsAgo = Math.floor(now / 1000) - 60 * 60 * 24 * 30 * 6;
+
     const queryBody = `
       fields name, summary, first_release_date, cover.image_id,
         involved_companies.company.name, genres.name, platforms.name,
         total_rating, total_rating_count;
       where first_release_date != null
         & first_release_date > ${sixMonthsAgo}
-        & first_release_date < ${now}
+        & first_release_date < ${Math.floor(now / 1000)}
         & total_rating_count > 10;
       sort total_rating desc;
       limit 30;
@@ -135,11 +146,20 @@ export const getTrendingGames = async (req, res) => {
 
     const trendingGames = await fetchIGDBQuery(queryBody);
 
+    trendingGamesCache = trendingGames;
+    trendingGamesTimestamp = now;
+
     console.log("Successfully obtained trending games!");
 
     res.json(trendingGames);
   } catch (error) {
     console.error("Server error:", error);
+
+    if (trendingGamesCache) {
+      console.warn("Returning stale trending games cache due to error");
+      return res.json(trendingGamesCache);
+    }
+
     res.status(500).json({
       error: "Failed to fetch trending games.",
     });
