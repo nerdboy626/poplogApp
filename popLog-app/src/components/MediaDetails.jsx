@@ -18,8 +18,10 @@ const MediaDetails = () => {
   const [userRating, setUserRating] = useState(0);
   const [userFavorite, setUserFavorite] = useState(false);
   const [userNotes, setUserNotes] = useState("");
-  const [isReviewed, setIsReviewed] = useState(false); // tracks if save button should appear
+  const [showSave, setShowSave] = useState(false); // tracks if save button should appear
   const [isSummaryExpanded, setIsSummaryExpanded] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const [serverId, setServerId] = useState(0);
 
   const creatorLabel =
     mediaType === "movie"
@@ -89,13 +91,15 @@ const MediaDetails = () => {
       });
       const data = await response.json();
 
-      console.log(`The data was`);
+      console.log(`The fetch review data was`);
       console.log(data);
 
       if (data) {
         setUserRating(data.rating);
         setUserFavorite(data.favorite);
         setUserNotes(data.notes);
+        setServerId(data.mediaId);
+        setShowDelete(true);
       }
     }
   }
@@ -135,9 +139,14 @@ const MediaDetails = () => {
 
       const data = await response.json().catch(() => null);
 
+      console.log(`The handle save data was`);
+      console.log(data);
+
       if (response.ok) {
         alert("Saved successfully!");
-        setIsReviewed(false); // hide save button
+        setServerId(data.media_id);
+        setShowDelete(true);
+        setShowSave(false); // hide save button
       } else {
         console.error("Backend error:", data);
         alert("Failed to save.");
@@ -145,6 +154,44 @@ const MediaDetails = () => {
     } catch (err) {
       console.error(err);
       alert("Error saving data.");
+    }
+  };
+
+  const handleDelete = async () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete your review? This cannot be undone."
+    );
+
+    if (!confirmed) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:3500/api/reviews/delete/${serverId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${auth.user.token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        alert("Failed to delete review.");
+        return;
+      }
+
+      // Reset UI
+      setUserRating(0);
+      setUserFavorite(false);
+      setUserNotes("");
+      setShowDelete(false);
+      setShowSave(false);
+
+      alert("Review deleted.");
+    } catch (error) {
+      console.error(error);
+      alert("Error deleting review.");
     }
   };
 
@@ -217,7 +264,7 @@ const MediaDetails = () => {
 
         <div className="rp-summary">
           <h3>Description</h3>
-          {mediaInfo?.summary?.length > 500 ? (
+          {mediaInfo?.summary?.length > 550 ? (
             <>
               <div
                 className={`rp-summary-wrapper ${
@@ -250,11 +297,11 @@ const MediaDetails = () => {
           favorite={userFavorite}
           onRatingChange={(val) => {
             setUserRating(val);
-            setIsReviewed(true);
+            setShowSave(true);
           }}
           onFavoriteToggle={() => {
             setUserFavorite(!userFavorite);
-            setIsReviewed(true);
+            setShowSave(true);
           }}
         />
 
@@ -267,15 +314,21 @@ const MediaDetails = () => {
             value={userNotes}
             onChange={(e) => {
               setUserNotes(e.target.value);
-              setIsReviewed(true);
+              setShowSave(true);
             }}
             placeholder="Write your thoughts here..."
             className="textbox"
           ></textarea>
         </div>
 
+        {showDelete && (
+          <button className="delete-review-btn" onClick={handleDelete}>
+            Delete Review
+          </button>
+        )}
+
         <button
-          className={`save-floating-btn ${isReviewed ? "show" : ""}`}
+          className={`save-floating-btn ${showSave ? "show" : ""}`}
           onClick={handleSave}
         >
           Save

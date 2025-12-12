@@ -2,9 +2,12 @@ import {
   upsertReview,
   deleteReview,
   getDashboardItems,
-  getReviewQuery
+  getReviewQuery,
 } from "../database/reviewQueries.js";
-import { findOrCreateMedia,findMediaByExternalId } from "../database/mediaQueries.js";
+import {
+  findOrCreateMedia,
+  findMediaByExternalId,
+} from "../database/mediaQueries.js";
 
 export async function saveReview(req, res) {
   const user_id = req.user.id;
@@ -88,6 +91,7 @@ export async function getUserReview(req, res) {
     }
 
     res.json({
+      mediaId: media.id,
       rating: review.rating,
       favorite: review.favorite,
       notes: review.notes,

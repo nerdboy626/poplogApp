@@ -300,6 +300,40 @@
   color: #fff;
 }
 
+/* .delete-review-btn {
+  padding: 0.5rem 1rem;
+  background: #ff4444;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  width: fit-content;
+  margin-top: 1rem;
+  transition: background 0.2s ease;
+}
+
+.delete-review-btn:hover {
+  background: #ff2222;
+} */
+
+.delete-review-btn {
+  background: transparent;
+  border: 1px solid #ff5555;
+  color: #ff5555;
+  padding: 0.5rem 0.75rem;
+
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  /* width: fit-content; */
+  transition: background 0.2s ease;
+}
+
+.delete-review-btn:hover {
+  background: rgba(255, 85, 85, 0.15);
+}
+
 .save-floating-btn {
   position: fixed;
   bottom: 24px;
