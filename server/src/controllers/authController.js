@@ -84,7 +84,7 @@ export const loginUser = async (req, res) => {
     const user = { id: users[0].id, username: users[0].username };
 
     const accessToken = jwt.sign(user, ACCESS_TOKEN_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "10s",
     });
 
     console.log("Logged In!");

@@ -15,8 +15,8 @@ export function authenticateUser(req, res, next) {
   jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
     if (err) {
       return res
-        .status(403)
-        .json({ error: "Sorry, your access token is not valid." });
+        .status(401)
+        .json({ error: "Sorry, your access token is expired" });
     }
 
     req.user = user;

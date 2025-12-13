@@ -71,6 +71,11 @@ const Login = () => {
   };
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
+      {auth.logoutReason === "expired" && (
+        <p style={{ color: "orange" }}>
+          Your session expired. Please log in again.
+        </p>
+      )}
       <h1>Login Page</h1>
       <form onSubmit={handleLogin}>
         <input

@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { useAuth } from "../utils/AuthContext.jsx";
+import { fetchWithAuth } from "../utils/fetchWithAuth.js";
 import CardDisplay from "../components/CardDisplay.jsx";
 import "./Dashboard.css";
 const Dashboard = () => {
@@ -14,24 +15,29 @@ const Dashboard = () => {
   }, []);
 
   async function fetchReviews() {
+    if (!auth.user) return;
     const baseUrl = `http://localhost:3500/api/reviews/dashboard`;
 
-    console.log(
-      `Trying to grab reviews for user ${auth.user.username} with user id of ${auth.user.id}`
-    );
+    try {
+      console.log(
+        `Trying to grab reviews for user ${auth.user.username} with user id of ${auth.user.id}`
+      );
 
-    const response = await fetch(baseUrl, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.user.token}`,
-      },
-    });
-    const data = await response.json();
+      const response = await fetchWithAuth(
+        baseUrl,
+        {
+          method: "GET",
+        },
+        auth
+      );
+      const data = await response.json();
 
-    console.log(data);
+      console.log(data);
 
-    setReviews(data);
+      setReviews(data);
+    } catch (err) {
+      console.error("Failed to fetch reviews:", err.message);
+    }
   }
 
   const filteredAndSorted = useMemo(() => {

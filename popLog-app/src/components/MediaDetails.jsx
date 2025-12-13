@@ -8,6 +8,7 @@ import { FaSortUp } from "react-icons/fa";
 import { FaSortDown } from "react-icons/fa";
 import MediaRate from "./MediaRate.jsx";
 import { useAuth } from "../utils/AuthContext.jsx";
+import { fetchWithAuth } from "../utils/fetchWithAuth.js";
 import "./MediaDetails.css";
 
 const MediaDetails = () => {
@@ -55,8 +56,10 @@ const MediaDetails = () => {
 
   useEffect(() => {
     fetchMediaInfo(mediaType, id);
-    fetchReview();
-  }, []);
+    if (auth.isLoggedIn) {
+      fetchReview();
+    }
+  }, [auth.isLoggedIn]);
 
   async function fetchMediaInfo(category, mediaId) {
     const baseUrl =
@@ -75,24 +78,19 @@ const MediaDetails = () => {
   }
 
   async function fetchReview() {
-    if (auth.isLoggedIn) {
-      console.log(
-        `Searching to see if ${auth.user.username} has a review for ${mediaType} with an id of ${id}`
-      );
+    if (!auth.isLoggedIn) return;
 
-      const baseUrl = `http://localhost:3500/api/reviews/${mediaType}/${id}`;
+    console.log(
+      `Searching to see if ${auth.user.username} has a review for ${mediaType} with an id of ${id}`
+    );
 
-      const response = await fetch(baseUrl, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${auth.user.token}`,
-        },
-      });
+    const baseUrl = `http://localhost:3500/api/reviews/${mediaType}/${id}`;
+
+    try {
+      const response = await fetchWithAuth(baseUrl, { method: "GET" }, auth);
       const data = await response.json();
 
-      console.log(`The fetch review data was`);
-      console.log(data);
+      console.log("The fetch review data was", data);
 
       if (data) {
         setUserRating(data.rating);
@@ -101,6 +99,8 @@ const MediaDetails = () => {
         setServerId(data.mediaId);
         setShowDelete(true);
       }
+    } catch (err) {
+      console.error("Error fetching review:", err.message);
     }
   }
 
@@ -128,14 +128,14 @@ const MediaDetails = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:3500/api/reviews/save", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${auth.user.token}`,
+      const response = await fetchWithAuth(
+        "http://localhost:3500/api/reviews/save",
+        {
+          method: "POST",
+          body: JSON.stringify(payload),
         },
-        body: JSON.stringify(payload),
-      });
+        auth
+      );
 
       const data = await response.json().catch(() => null);
 
@@ -152,8 +152,7 @@ const MediaDetails = () => {
         alert("Failed to save.");
       }
     } catch (err) {
-      console.error(err);
-      alert("Error saving data.");
+      console.error("Error saving review:", err.message);
     }
   };
 
@@ -165,15 +164,10 @@ const MediaDetails = () => {
     if (!confirmed) return;
 
     try {
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `http://localhost:3500/api/reviews/delete/${serverId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${auth.user.token}`,
-          },
-        }
+        { method: "DELETE" },
+        auth
       );
 
       if (!response.ok) {
@@ -189,9 +183,8 @@ const MediaDetails = () => {
       setShowSave(false);
 
       alert("Review deleted.");
-    } catch (error) {
-      console.error(error);
-      alert("Error deleting review.");
+    } catch (err) {
+      console.error("Error deleting review:", err.message);
     }
   };
 
