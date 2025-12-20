@@ -17,10 +17,10 @@ export const AuthProvider = ({ children }) => {
 
     if (msUntilExp > 0) {
       logoutTimer.current = setTimeout(() => {
-        logout();
+        logout("expired");
       }, msUntilExp);
     } else {
-      logout();
+      logout("expired");
     }
   };
 

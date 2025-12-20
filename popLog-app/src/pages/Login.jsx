@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext.jsx";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const auth = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const redirectPath = location.state?.path || "/";
+  const redirectPath =
+    sessionStorage.getItem("redirectAfterLogin") || location.state?.path || "/";
 
   const [loginUser, setLoginUser] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
@@ -15,6 +17,12 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (auth.logoutReason === "expired") {
+      toast.error("Your session expired. Please log in again.");
+    }
+  }, [auth.logoutReason]);
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -36,7 +44,9 @@ const Login = () => {
 
       // store user + token in context/localStorage
       auth.login({ ...data.user, token: data.accessToken });
+      toast.success("Welcome back!");
       navigate(redirectPath, { replace: true });
+      sessionStorage.removeItem("redirectAfterLogin");
     } catch (err) {
       console.error("Login error: ", err);
       setError("Something went wrong. Please try again.");
@@ -63,6 +73,7 @@ const Login = () => {
 
       // store user + token in context/localStorage
       auth.login({ ...data.user, token: data.accessToken });
+      toast.success("Account created! We're happy to have you here!");
       navigate(redirectPath, { replace: true });
     } catch (err) {
       console.error("Signup error: ", err);
@@ -71,11 +82,6 @@ const Login = () => {
   };
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
-      {auth.logoutReason === "expired" && (
-        <p style={{ color: "orange" }}>
-          Your session expired. Please log in again.
-        </p>
-      )}
       <h1>Login Page</h1>
       <form onSubmit={handleLogin}>
         <input

@@ -9,6 +9,7 @@ import { FaSortDown } from "react-icons/fa";
 import MediaRate from "./MediaRate.jsx";
 import { useAuth } from "../utils/AuthContext.jsx";
 import { fetchWithAuth } from "../utils/fetchWithAuth.js";
+import toast from "react-hot-toast";
 import "./MediaDetails.css";
 
 const MediaDetails = () => {
@@ -143,13 +144,15 @@ const MediaDetails = () => {
       console.log(data);
 
       if (response.ok) {
-        alert("Saved successfully!");
+        console.log(`The handle save data was`);
+        console.log(data);
+        toast.success("Review saved!");
         setServerId(data.media_id);
         setShowDelete(true);
         setShowSave(false); // hide save button
       } else {
         console.error("Backend error:", data);
-        alert("Failed to save.");
+        toast.error(`${data.error}`);
       }
     } catch (err) {
       console.error("Error saving review:", err.message);
@@ -170,19 +173,21 @@ const MediaDetails = () => {
         auth
       );
 
-      if (!response.ok) {
-        alert("Failed to delete review.");
-        return;
+      if (response.ok) {
+        // Reset UI
+        setUserRating(0);
+        setUserFavorite(false);
+        setUserNotes("");
+        setShowDelete(false);
+        setShowSave(false);
+
+        toast.success("Review deleted.");
+      } else {
+        const data = await response.json().catch(() => null);
+
+        console.error("Backend error:", data);
+        toast.error(`${data.error}`);
       }
-
-      // Reset UI
-      setUserRating(0);
-      setUserFavorite(false);
-      setUserNotes("");
-      setShowDelete(false);
-      setShowSave(false);
-
-      alert("Review deleted.");
     } catch (err) {
       console.error("Error deleting review:", err.message);
     }

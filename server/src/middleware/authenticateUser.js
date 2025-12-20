@@ -6,10 +6,12 @@ export function authenticateUser(req, res, next) {
   console.log(`authHeader looks like ${authHeader}`);
   const token = authHeader && authHeader.split(" ")[1];
   console.log(`The access token looks like ${token}`);
-  if (!token) {
+  if (!token || token === "undefined") {
     return res
       .status(401)
-      .json({ error: "Sorry, you are unauthorized from accessing this page." });
+      .json({
+        error: "Sorry, you are unauthorized from performing this action.",
+      });
   }
 
   jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {

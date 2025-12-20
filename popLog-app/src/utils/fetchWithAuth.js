@@ -11,9 +11,13 @@ export const fetchWithAuth = async (url, options = {}, auth) => {
   });
 
   if (response.status === 401) {
-    auth.logout("expired");
-    throw new Error("No token or token is expired.");
+    if (auth.isLoggedIn) {
+      auth.logout("expired");
+    }
+    // throw new Error("Session expired");
   }
+
+  console.log(response.status);
 
   return response;
 };

@@ -1,11 +1,13 @@
 import { NavLink, Link } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext.jsx";
+import toast from "react-hot-toast";
 import "./Navbar.css";
 
 const Navbar = () => {
   const auth = useAuth();
   const handleLogout = () => {
-    auth.logout();
+    auth.logout("manual");
+    toast.success("Logged out successfully!");
   };
   return (
     <div className="navbar">
