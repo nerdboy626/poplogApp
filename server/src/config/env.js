@@ -10,4 +10,6 @@ export const {
   IGDB_CLIENT_ID,
   IGDB_CLIENT_SECRET,
   NYT_API_KEY,
+  RESEND_API_KEY,
+  FRONTEND_URL,
 } = process.env;

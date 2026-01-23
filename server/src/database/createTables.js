@@ -2,10 +2,10 @@ import { Client } from "pg";
 import { DATABASE_URL } from "../config/env.js";
 
 const seedTables = `CREATE TABLE IF NOT EXISTS users (
-id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY, 
-username VARCHAR ( 32 ) UNIQUE NOT NULL,
-email TEXT UNIQUE NOT NULL,
-hashed_password TEXT NOT NULL
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY, 
+    username VARCHAR ( 32 ) UNIQUE NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    hashed_password TEXT
 );
 
 CREATE TABLE IF NOT EXISTS media (
@@ -29,6 +29,14 @@ CREATE TABLE IF NOT EXISTS reviews (
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     UNIQUE (user_id, media_id)
+);
+
+CREATE TABLE password_reset_tokens (
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    token_hash TEXT NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );`;
 
 // INSERT INTO users (username, email, hashed_password)

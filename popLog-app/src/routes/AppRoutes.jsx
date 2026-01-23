@@ -13,6 +13,8 @@ import MediaDetails from "../components/MediaDetails.jsx";
 import Login from "../pages/Login.jsx";
 import NotFound from "../pages/NotFound.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
+import ForgotPassword from "../pages/ForgotPassword.jsx";
+import ResetPassword from "../pages/ResetPassword.jsx";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -36,7 +38,10 @@ export const router = createBrowserRouter(
       </Route>
 
       <Route path="login" element={<Login />} />
+      <Route path="forgot-password" element={<ForgotPassword />} />
+      <Route path="reset-password" element={<ResetPassword />} />
+
       <Route path="*" element={<NotFound />} />
-    </Route>
-  )
+    </Route>,
+  ),
 );

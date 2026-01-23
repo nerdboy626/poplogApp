@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext.jsx";
 import toast from "react-hot-toast";
@@ -10,7 +11,7 @@ const Login = () => {
   const redirectPath =
     sessionStorage.getItem("redirectAfterLogin") || location.state?.path || "/";
 
-  const [loginUser, setLoginUser] = useState("");
+  const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
   const [username, setUsername] = useState("");
@@ -32,7 +33,10 @@ const Login = () => {
       const res = await fetch("http://localhost:3500/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: loginUser, password: loginPassword }),
+        body: JSON.stringify({
+          email: loginEmail,
+          password: loginPassword,
+        }),
       });
 
       const data = await res.json();
@@ -85,22 +89,25 @@ const Login = () => {
       <h1>Login Page</h1>
       <form onSubmit={handleLogin}>
         <input
-          type="text"
-          placeholder="Username"
-          value={loginUser}
-          onChange={(event) => setLoginUser(event.target.value)}
+          type="email"
+          placeholder="Email"
+          value={loginEmail}
+          onChange={(e) => setLoginEmail(e.target.value)}
           required
         />
         <input
           type="password"
           placeholder="Password"
           value={loginPassword}
-          onChange={(event) => setLoginPassword(event.target.value)}
+          onChange={(e) => setLoginPassword(e.target.value)}
           required
         />
         <button type="submit">Login</button>
       </form>
-      <h4>Don't have an account? Then Sign in here:</h4>
+      <p>
+        <Link to="/forgot-password">Forgot your password?</Link>
+      </p>
+      <h4>Don't have an account? Then Sign Up here:</h4>
       <form onSubmit={handleSignUp}>
         <input
           type="text"
