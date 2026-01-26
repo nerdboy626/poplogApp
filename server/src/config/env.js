@@ -12,4 +12,6 @@ export const {
   NYT_API_KEY,
   RESEND_API_KEY,
   FRONTEND_URL,
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
 } = process.env;

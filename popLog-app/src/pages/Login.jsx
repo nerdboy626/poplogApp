@@ -87,6 +87,13 @@ const Login = () => {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <h1>Login Page</h1>
+      <button
+        onClick={() => {
+          window.location.href = "http://localhost:3500/api/auth/google";
+        }}
+      >
+        Continue with Google
+      </button>
       <form onSubmit={handleLogin}>
         <input
           type="email"

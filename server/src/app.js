@@ -6,6 +6,7 @@ import { movieRouter } from "./routes/movies.js";
 import { bookRouter } from "./routes/books.js";
 import { gameRouter } from "./routes/games.js";
 import { reviewRouter } from "./routes/reviews.js";
+import "./utils/googleStrategy.js";
 
 const app = express();
 
