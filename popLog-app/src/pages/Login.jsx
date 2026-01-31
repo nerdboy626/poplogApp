@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext.jsx";
 import toast from "react-hot-toast";
+import "./Login.css";
 
 const Login = () => {
   const auth = useAuth();
@@ -85,62 +86,87 @@ const Login = () => {
     }
   };
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
-      <h1>Login Page</h1>
-      <button
-        onClick={() => {
-          window.location.href = "http://localhost:3500/api/auth/google";
-        }}
-      >
-        Continue with Google
-      </button>
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={loginEmail}
-          onChange={(e) => setLoginEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={loginPassword}
-          onChange={(e) => setLoginPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Login</button>
-      </form>
-      <p>
-        <Link to="/forgot-password">Forgot your password?</Link>
-      </p>
-      <h4>Don't have an account? Then Sign Up here:</h4>
-      <form onSubmit={handleSignUp}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(event) => setUsername(event.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          required
-        />
-        <button type="submit">Sign Up</button>
-      </form>
+    <div className="login-page">
+      <div className="login-card">
+        <h1 className="login-title">Welcome back</h1>
+        <p className="login-subtitle">Sign in to continue to PopLog</p>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        <button
+          className="google-btn"
+          onClick={() => {
+            window.location.href = "http://localhost:3500/api/auth/google";
+          }}
+        >
+          <img
+            src="./google.svg"
+            alt=""
+            className="google-icon"
+            aria-hidden="true"
+          />
+          Continue with Google
+        </button>
+
+        <div className="divider">
+          <span>or</span>
+        </div>
+
+        <form className="login-form" onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={loginEmail}
+            onChange={(e) => setLoginEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={loginPassword}
+            onChange={(e) => setLoginPassword(e.target.value)}
+            required
+          />
+          <button type="submit" className="login-btn">
+            Login
+          </button>
+        </form>
+
+        <Link className="forgot-link" to="/forgot-password">
+          Forgot your password?
+        </Link>
+
+        <hr className="soft-divider" />
+
+        <h4 className="signup-title">New to PopLog?</h4>
+
+        <form className="signup-form" onSubmit={handleSignUp}>
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit" className="create-btn">
+            Create account
+          </button>
+        </form>
+
+        {error && <p className="error-text">{error}</p>}
+      </div>
     </div>
   );
 };

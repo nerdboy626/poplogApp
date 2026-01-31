@@ -5,7 +5,8 @@ const seedTables = `CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY, 
     username VARCHAR ( 32 ) UNIQUE NOT NULL,
     email TEXT UNIQUE NOT NULL,
-    hashed_password TEXT
+    hashed_password TEXT,
+    google_id TEXT UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS media (
