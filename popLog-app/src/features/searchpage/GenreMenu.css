@@ -9,6 +9,7 @@
   border: 1px solid #ccc;
   background: #f8f8f8;
   font-size: 1rem;
+  cursor: pointer;
 }
 
 .genre-row {

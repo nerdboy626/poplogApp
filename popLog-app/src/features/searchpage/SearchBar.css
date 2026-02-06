@@ -75,6 +75,7 @@
   width: 30%;
   font-size: 0.8rem;
   font-weight: 450;
+  cursor: pointer;
 }
 
 .search-input-wrapper {

@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import "./ResetPassword.css";
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
@@ -45,32 +46,56 @@ const ResetPassword = () => {
   };
 
   if (!token) {
-    return <p>Invalid or missing reset token.</p>;
+    return (
+      <div className="reset-page">
+        <div className="reset-card">
+          <h1 className="reset-title">Invalid reset link</h1>
+          <p className="reset-subtitle">
+            This password reset link is missing or expired.
+          </p>
+          <Link className="request-link" to="/forgot-password">
+            Request a new link
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <h1>Reset Password</h1>
+    <div className="reset-page">
+      <div className="reset-card">
+        <h1 className="reset-title">Reset your password</h1>
+        <p className="reset-subtitle">
+          Choose a new password for your account.
+        </p>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="password"
-          placeholder="New password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Confirm new password"
-          value={confirm}
-          onChange={(e) => setConfirm(e.target.value)}
-          required
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? "Resetting..." : "Reset password"}
-        </button>
-      </form>
+        <form className="reset-form" onSubmit={handleSubmit}>
+          <input
+            type="password"
+            placeholder="New password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            disabled={loading}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Confirm new password"
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+            disabled={loading}
+            required
+          />
+
+          <button type="submit" className="reset-btn" disabled={loading}>
+            {loading ? "Resetting..." : "Reset password"}
+          </button>
+        </form>
+
+        <p className="reset-back">
+          Changed your mind? <Link to="/login">Back to login</Link>
+        </p>
+      </div>
     </div>
   );
 };

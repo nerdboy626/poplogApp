@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext.jsx";
 import { jwtDecode } from "jwt-decode";
+import "./OAuthSuccess.css";
 
 const OAuthSuccess = () => {
   const [params] = useSearchParams();
@@ -20,13 +21,20 @@ const OAuthSuccess = () => {
         token,
       });
 
-      navigate("/");
+      navigate("/", { replace: true });
     } else {
-      navigate("/login");
+      navigate("/login", { replace: true });
     }
   }, []);
 
-  return <p>Signing you in…</p>;
+  return (
+    <div className="oauth-success">
+      <div className="oauth-card">
+        <div className="spinner" />
+        <p>Signing you in…</p>
+      </div>
+    </div>
+  );
 };
 
 export default OAuthSuccess;

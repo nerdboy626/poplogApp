@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import "./ForgotPassword.css";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -28,22 +30,31 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div>
-      <h1>Forgot your password?</h1>
-      <p>Enter your email and we’ll send you a reset link.</p>
+    <div className="forgot-page">
+      <div className="forgot-card">
+        <h1 className="forgot-title">Forgot your password?</h1>
+        <p className="forgot-subtitle">
+          Enter your email and we’ll send you a reset link.
+        </p>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? "Sending..." : "Send reset link"}
-        </button>
-      </form>
+        <form className="forgot-form" onSubmit={handleSubmit}>
+          <input
+            type="email"
+            placeholder="Email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
+          <button type="submit" className="reset-link-btn" disabled={loading}>
+            {loading ? "Sending..." : "Send reset link"}
+          </button>
+        </form>
+
+        <p className="forgot-back">
+          Remembered your password? <Link to="/login">Back to login</Link>
+        </p>
+      </div>
     </div>
   );
 };

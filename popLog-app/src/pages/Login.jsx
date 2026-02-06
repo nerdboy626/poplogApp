@@ -18,7 +18,8 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [signUpError, setSignUpError] = useState("");
 
   useEffect(() => {
     if (auth.logoutReason === "expired") {
@@ -28,7 +29,7 @@ const Login = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    setError("");
+    setLoginError("");
 
     try {
       const res = await fetch("http://localhost:3500/api/auth/login", {
@@ -43,7 +44,7 @@ const Login = () => {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Login failed");
+        setLoginError(data.error || "Login failed");
         return;
       }
 
@@ -54,13 +55,13 @@ const Login = () => {
       sessionStorage.removeItem("redirectAfterLogin");
     } catch (err) {
       console.error("Login error: ", err);
-      setError("Something went wrong. Please try again.");
+      setLoginError("Something went wrong. Please try again.");
     }
   };
 
   const handleSignUp = async (event) => {
     event.preventDefault();
-    setError("");
+    setSignUpError("");
 
     try {
       const res = await fetch("http://localhost:3500/api/auth/signup", {
@@ -72,7 +73,7 @@ const Login = () => {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Signup failed");
+        setSignUpError(data.error || "Signup failed");
         return;
       }
 
@@ -82,7 +83,7 @@ const Login = () => {
       navigate(redirectPath, { replace: true });
     } catch (err) {
       console.error("Signup error: ", err);
-      setError("Something went wrong. Please try again.");
+      setSignUpError("Something went wrong. Please try again.");
     }
   };
   return (
@@ -130,6 +131,8 @@ const Login = () => {
           </button>
         </form>
 
+        {loginError && <p className="error-text">{loginError}</p>}
+
         <Link className="forgot-link" to="/forgot-password">
           Forgot your password?
         </Link>
@@ -165,7 +168,7 @@ const Login = () => {
           </button>
         </form>
 
-        {error && <p className="error-text">{error}</p>}
+        {signUpError && <p className="error-text">{signUpError}</p>}
       </div>
     </div>
   );
