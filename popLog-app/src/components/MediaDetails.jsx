@@ -29,10 +29,10 @@ const MediaDetails = () => {
     mediaType === "movie"
       ? "directed by"
       : mediaType === "tv"
-      ? "created by"
-      : mediaType === "games"
-      ? "developed by"
-      : "by";
+        ? "created by"
+        : mediaType === "games"
+          ? "developed by"
+          : "by";
 
   const titleYear = mediaInfo
     ? [mediaInfo.title, mediaInfo.releaseYear && `(${mediaInfo.releaseYear})`]
@@ -82,7 +82,7 @@ const MediaDetails = () => {
     if (!auth.isLoggedIn) return;
 
     console.log(
-      `Searching to see if ${auth.user.username} has a review for ${mediaType} with an id of ${id}`
+      `Searching to see if ${auth.user.username} has a review for ${mediaType} with an id of ${id}`,
     );
 
     const baseUrl = `http://localhost:3500/api/reviews/${mediaType}/${id}`;
@@ -116,6 +116,10 @@ const MediaDetails = () => {
   };
 
   const handleSave = async () => {
+    if (!auth.isLoggedIn) {
+      toast.error("Sorry, you must be logged in to perform this action.");
+      return;
+    }
     const payload = {
       id,
       mediaType,
@@ -135,7 +139,7 @@ const MediaDetails = () => {
           method: "POST",
           body: JSON.stringify(payload),
         },
-        auth
+        auth,
       );
 
       const data = await response.json().catch(() => null);
@@ -161,7 +165,7 @@ const MediaDetails = () => {
 
   const handleDelete = async () => {
     const confirmed = window.confirm(
-      "Are you sure you want to delete your review? This cannot be undone."
+      "Are you sure you want to delete your review? This cannot be undone.",
     );
 
     if (!confirmed) return;
@@ -170,7 +174,7 @@ const MediaDetails = () => {
       const response = await fetchWithAuth(
         `http://localhost:3500/api/reviews/delete/${serverId}`,
         { method: "DELETE" },
-        auth
+        auth,
       );
 
       if (response.ok) {

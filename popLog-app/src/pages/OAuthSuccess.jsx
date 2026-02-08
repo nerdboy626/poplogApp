@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext.jsx";
 import { jwtDecode } from "jwt-decode";
+import toast from "react-hot-toast";
 import "./OAuthSuccess.css";
 
 const OAuthSuccess = () => {
@@ -23,6 +24,7 @@ const OAuthSuccess = () => {
 
       navigate("/", { replace: true });
     } else {
+      toast.error("Login with Google failed.");
       navigate("/login", { replace: true });
     }
   }, []);

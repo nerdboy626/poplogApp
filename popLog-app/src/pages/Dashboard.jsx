@@ -20,7 +20,7 @@ const Dashboard = () => {
 
     try {
       console.log(
-        `Trying to grab reviews for user ${auth.user.username} with user id of ${auth.user.id}`
+        `Trying to grab reviews for user ${auth.user.username} with user id of ${auth.user.id}`,
       );
 
       const response = await fetchWithAuth(
@@ -28,7 +28,7 @@ const Dashboard = () => {
         {
           method: "GET",
         },
-        auth
+        auth,
       );
       const data = await response.json();
 
@@ -93,7 +93,16 @@ const Dashboard = () => {
       </div>
 
       <div className="dashboard-grid">
-        {filteredAndSorted.length > 0 &&
+        {filteredAndSorted.length === 0 ? (
+          <div className="dashboard-empty-state">
+            <p className="empty-title">
+              You currently don’t have any entries for the selected filters.
+            </p>
+            <p className="empty-subtitle">
+              Add some more from the homepage or search page!
+            </p>
+          </div>
+        ) : (
           filteredAndSorted.map((item, index) => (
             <CardDisplay
               key={index}
@@ -104,7 +113,8 @@ const Dashboard = () => {
               imageUrl={item.image_url}
               mediaType={item.media_type}
             />
-          ))}
+          ))
+        )}
       </div>
     </div>
   );

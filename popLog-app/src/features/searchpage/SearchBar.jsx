@@ -8,6 +8,7 @@ const SearchBar = ({
   onSearchSubmit,
   showClear,
   onClear,
+  error,
 }) => {
   const mediaCategories = [
     { label: "Movies & TV", path: "movies" },
@@ -45,6 +46,7 @@ const SearchBar = ({
             placeholder="Search all titles..."
             value={inputValue}
             onChange={(e) => onInputChange(e.target.value)}
+            className={error ? "input-error" : ""}
           />
           {showClear && (
             <button type="button" className="clear-button" onClick={onClear}>
@@ -52,10 +54,11 @@ const SearchBar = ({
             </button>
           )}
         </div>
-        <button type="submit" id="searchButton">
+        <button type="submit" id="searchButton" disabled={!inputValue.trim()}>
           Search
         </button>
       </form>
+      {error && <p className="search-error">{error}</p>}
     </div>
   );
 };

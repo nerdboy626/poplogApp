@@ -15,6 +15,7 @@ const SearchPage = () => {
     games: gameGenres,
   };
   const [inputValue, setInputValue] = useState("");
+  const [searchError, setSearchError] = useState("");
   const [searchCache, setSearchCache] = useState({
     movies: { query: "", searchResults: [], genre: "", genreResults: [] },
     games: { query: "", searchResults: [], genre: "", genreResults: [] },
@@ -25,6 +26,12 @@ const SearchPage = () => {
   const showGenreClear = entry.genre !== "";
   const displayArray =
     entry.query !== "" ? entry.searchResults : entry.genreResults;
+
+  useEffect(() => {
+    if (inputValue.trim()) {
+      setSearchError("");
+    }
+  }, [inputValue]);
 
   // load saved cache from localStorage on mount
   useEffect(() => {
@@ -71,7 +78,7 @@ const SearchPage = () => {
     console.log(`Searching ${category} for ${searchInput}`);
 
     const response = await fetch(
-      `http://localhost:3500/api/${category}/search?query=${searchInput}`
+      `http://localhost:3500/api/${category}/search?query=${searchInput}`,
     );
     const searchData = await response.json();
 
@@ -86,6 +93,11 @@ const SearchPage = () => {
   }
 
   const handleSearchSubmit = () => {
+    if (!inputValue.trim()) {
+      setSearchError("Search field cannot be empty");
+      return;
+    }
+    setSearchError(""); // clear error if valid
     if (inputValue.trim()) {
       fetchSearchResults(inputValue);
     }
@@ -95,7 +107,7 @@ const SearchPage = () => {
     console.log(`Fetching ${category} with genre ID of ${genreId} ...`);
 
     const response = await fetch(
-      `http://localhost:3500/api/${category}/search/${genreId}`
+      `http://localhost:3500/api/${category}/search/${genreId}`,
     );
 
     const data = await response.json();
@@ -118,6 +130,7 @@ const SearchPage = () => {
         onSearchSubmit={handleSearchSubmit}
         showClear={showClearButton}
         onClear={handleClear}
+        error={searchError}
       />
       {searchCache[category].query === "" && (
         <GenreMenu
@@ -129,6 +142,20 @@ const SearchPage = () => {
         />
       )}
       <div className="search-display">
+        {displayArray.length === 0 && entry.query !== "" && (
+          <div className="empty-state">
+            <p>
+              No results found
+              {entry.query && (
+                <>
+                  {" "}
+                  for <strong>"{entry.query}"</strong>
+                </>
+              )}
+            </p>
+            <p className="empty-hint">Try a different search.</p>
+          </div>
+        )}
         {displayArray.length > 0 &&
           displayArray.map((item, index) => (
             <SearchDisplay key={index} item={item} />

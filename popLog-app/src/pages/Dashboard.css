@@ -27,6 +27,24 @@
   border: 5px solid salmon;
 }
 
+.dashboard-empty-state {
+  grid-column: 1 / -1; /* span full grid */
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #aaa;
+}
+
+.empty-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.empty-subtitle {
+  font-size: 0.95rem;
+  opacity: 0.8;
+}
+
 @media (max-width: 1200px) {
   .dashboard-grid {
     grid-template-columns: repeat(4, 1fr);
