@@ -9,6 +9,7 @@ const Login = () => {
   const auth = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const message = location.state?.message;
   const redirectPath =
     sessionStorage.getItem("redirectAfterLogin") || location.state?.path || "/";
 
@@ -88,6 +89,7 @@ const Login = () => {
   };
   return (
     <div className="login-page">
+      {message && <div className="login-info-message">{message}</div>}
       <div className="login-card">
         <h1 className="login-title">Welcome back</h1>
         <p className="login-subtitle">Sign in to continue to PopLog</p>

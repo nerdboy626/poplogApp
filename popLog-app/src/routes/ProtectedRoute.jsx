@@ -6,11 +6,18 @@ const ProtectedRoute = ({ children }) => {
   const { isLoggedIn, loading } = useAuth();
 
   if (!isLoggedIn) {
-    if (loading) {
-      return <div>Loading...</div>;
-    }
-    return <Navigate to="/login" state={{ path: location.pathname }} />;
+    return (
+      <Navigate
+        to="/login"
+        replace
+        state={{
+          from: location.pathname,
+          message: "You must be logged in to access the dashboard.",
+        }}
+      />
+    );
   }
+
   return children;
 };
 
