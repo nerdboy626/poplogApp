@@ -10,7 +10,9 @@ import {
   getPasswordResetToken,
   deleteAllPasswordResetTokens,
   updateUserPassword,
+  getUserById,
 } from "../database/authQueries.js";
+import { getDashboardItems } from "../database/reviewQueries.js";
 import { sendResetEmail } from "../utils/email.js";
 import { ACCESS_TOKEN_SECRET } from "../config/env.js";
 
@@ -179,3 +181,32 @@ export const resetPassword = async (req, res) => {
 
   res.json({ message: "Password reset successful." });
 };
+
+export async function getAccountInfo(req, res) {
+  try {
+    const userId = req.user.id;
+
+    const [reviews, user] = await Promise.all([
+      getDashboardItems(userId),
+      getUserById(userId),
+    ]);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const stats = {
+      email: user.email,
+      total: reviews.length,
+      movies: reviews.filter((r) => r.media_type === "movie").length,
+      tv: reviews.filter((r) => r.media_type === "tv").length,
+      books: reviews.filter((r) => r.media_type === "books").length,
+      games: reviews.filter((r) => r.media_type === "games").length,
+    };
+
+    res.json(stats);
+  } catch (err) {
+    console.error("getAccountInfo error:", err);
+    res.status(500).json({ message: "Failed to load account info" });
+  }
+}

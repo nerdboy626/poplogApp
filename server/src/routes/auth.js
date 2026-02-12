@@ -6,8 +6,10 @@ import {
   loginUser,
   forgotPassword,
   resetPassword,
+  getAccountInfo,
 } from "../controllers/authController.js";
 import { ACCESS_TOKEN_SECRET, FRONTEND_URL } from "../config/env.js";
+import { authenticateUser } from "../middleware/authenticateUser.js";
 
 export const authRouter = express.Router();
 
@@ -16,6 +18,7 @@ authRouter.post("/signup", postNewUser);
 authRouter.post("/login", loginUser);
 authRouter.post("/forgot-password", forgotPassword);
 authRouter.post("/reset-password", resetPassword);
+authRouter.get("/account", authenticateUser, getAccountInfo);
 
 // Google OAuth
 authRouter.get(

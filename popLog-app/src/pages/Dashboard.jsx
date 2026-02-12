@@ -3,6 +3,7 @@ import { useAuth } from "../utils/AuthContext.jsx";
 import { fetchWithAuth } from "../utils/fetchWithAuth.js";
 import CardDisplay from "../components/CardDisplay.jsx";
 import "./Dashboard.css";
+
 const Dashboard = () => {
   const auth = useAuth();
   const [reviews, setReviews] = useState([]);

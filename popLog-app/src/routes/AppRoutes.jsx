@@ -16,6 +16,7 @@ import ProtectedRoute from "./ProtectedRoute.jsx";
 import ForgotPassword from "../pages/ForgotPassword.jsx";
 import ResetPassword from "../pages/ResetPassword.jsx";
 import OAuthSuccess from "../pages/OAuthSuccess.jsx";
+import Account from "../pages/Account.jsx";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -42,6 +43,14 @@ export const router = createBrowserRouter(
       <Route path="forgot-password" element={<ForgotPassword />} />
       <Route path="reset-password" element={<ResetPassword />} />
       <Route path="oauth-success" element={<OAuthSuccess />} />
+      <Route
+        path="account"
+        element={
+          <ProtectedRoute>
+            <Account />
+          </ProtectedRoute>
+        }
+      />
 
       <Route path="*" element={<NotFound />} />
     </Route>,
