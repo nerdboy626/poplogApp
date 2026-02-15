@@ -8,6 +8,5 @@
 }
 
 .greeting a {
-  color: var(--color-text-light);
   text-decoration: underline;
 }

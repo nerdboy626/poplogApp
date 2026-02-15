@@ -111,14 +111,14 @@ const Account = () => {
           <p>Forgot password?</p>
           <button
             onClick={handleClick}
-            className="reset-link-btn"
+            className="btn btn-ghost"
             disabled={sendingReset}
           >
             {sendingReset ? "Sending..." : "Send reset link"}
           </button>
         </section>
 
-        <button onClick={handleLogout} className="logout-btn">
+        <button onClick={handleLogout} className="btn btn-danger">
           Logout
         </button>
       </div>

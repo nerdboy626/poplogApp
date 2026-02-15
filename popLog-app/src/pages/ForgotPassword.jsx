@@ -46,7 +46,7 @@ const ForgotPassword = () => {
             required
           />
 
-          <button type="submit" className="reset-link-btn" disabled={loading}>
+          <button type="submit" className="btn btn-primary" disabled={loading}>
             {loading ? "Sending..." : "Send reset link"}
           </button>
         </form>

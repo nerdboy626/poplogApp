@@ -5,7 +5,7 @@
   overflow: hidden;
   gap: 2rem;
   padding: 0rem 3rem;
-  border: 5px solid salmon;
+  /* border: 5px solid salmon; */
 }
 
 .left-panel {
@@ -19,12 +19,9 @@
   height: 100%;
   gap: 1rem;
   padding: 1.25rem;
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 /* .left-panel > * {
@@ -59,20 +56,14 @@
   gap: 0.5rem;
   /* background: #ffe28c; */
   border-radius: 6px;
-  font-size: 1rem;
+  font-size: 2rem;
   font-weight: bold;
+  color: var(--text-primary);
   border: 3px solid paleturquoise;
 }
 
-.lp-user-rating > p {
-  margin: 0;
-  font-size: 2rem;
-}
-
 .lp-star-icon {
-  margin: 0;
   color: gold;
-  font-size: 2rem;
 }
 
 .lp-movie-info {
@@ -84,7 +75,6 @@
 }
 
 .lp-movie-info > p {
-  margin: 0;
   font-size: 1.5rem;
   text-align: center;
 }
@@ -98,7 +88,6 @@
 }
 
 .lp-show-info > p {
-  margin: 0;
   font-size: 1.5rem;
   text-align: center;
 }
@@ -112,7 +101,6 @@
 }
 
 .lp-game-platforms > p {
-  margin: 0;
   font-size: 1.2rem;
   text-align: center;
 }
@@ -126,7 +114,6 @@
 }
 
 .lp-pages > p {
-  margin: 0;
   font-size: 1.5rem;
   text-align: center;
 }
@@ -146,16 +133,19 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.25rem 0.5rem;
+  padding: 0.2rem 0.5rem;
   border-radius: 9999px; /* makes it fully rounded */
-  background-color: var(--color-secondary);
   /* background: rgba(255, 255, 255, 0.15); */
-  font-size: 1rem;
   line-height: 1;
   max-width: 100%; /* allow shrinking */
   white-space: normal; /* allow wrapping inside chip */
   word-break: break-word; /* wrap long words */
   text-align: center;
+
+  background-color: var(--brand-accent);
+  border: 1px solid var(--border-subtle);
+  font-size: var(--font-size-small);
+  color: var(--text-primary);
 }
 
 .right-panel {
@@ -170,7 +160,6 @@
 }
 
 .right-panel h3 {
-  margin: 0;
   font-size: 1.1rem;
   font-weight: 600;
   opacity: 0.9;
@@ -190,21 +179,18 @@
 
 .rp-header > h1 {
   font-size: 2rem;
-  font-weight: 900;
-  margin: 0;
+  font-weight: 800;
 }
 
 .rp-header > h2 {
-  font-size: 1.3rem;
-  opacity: 0.85;
-  font-weight: 500;
-  margin: 0;
+  font-size: 1rem;
+  color: var(--text-secondary);
 }
 
 .rp-header > hr {
   border: none;
   height: 2px;
-  background-color: #ccc;
+  background-color: var(--text-primary);
   margin: 0.5rem 0;
 }
 
@@ -244,7 +230,7 @@
 .rp-summary-text {
   font-size: 1.1rem;
   line-height: 1.5;
-  opacity: 0.9;
+  color: var(--text-secondary);
   margin: 0;
 }
 
@@ -258,21 +244,17 @@
 .rp-summary-toggle {
   background: none;
   border: none;
-  color: var(--color-secondary);
-  font-size: 0.95rem;
-  font-weight: 900;
+  color: var(--brand-primary);
+  font-size: 1rem;
+  font-weight: 600;
   padding: 0;
   cursor: pointer;
   text-align: left;
 }
 
 .rp-summary-toggle:hover {
-  opacity: 0.8;
-}
-
-.rp-arrow-icon {
-  font-size: 0.95rem;
-  color: var(--color-secondary);
+  background: none;
+  border: none;
 }
 
 .rp-summary > h3 {
@@ -294,75 +276,23 @@
   min-height: 100px;
   resize: vertical;
   padding: 0.75rem;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 8px;
-  color: #fff;
-}
-
-/* .delete-review-btn {
-  padding: 0.5rem 1rem;
-  background: #ff4444;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  width: fit-content;
-  margin-top: 1rem;
-  transition: background 0.2s ease;
-}
-
-.delete-review-btn:hover {
-  background: #ff2222;
-} */
-
-.delete-review-btn {
-  background: transparent;
-  border: 1px solid #ff5555;
-  color: #ff5555;
-  padding: 0.5rem 0.75rem;
-
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  /* width: fit-content; */
-  transition: background 0.2s ease;
-}
-
-.delete-review-btn:hover {
-  background: rgba(255, 85, 85, 0.15);
 }
 
 .save-floating-btn {
   position: fixed;
   bottom: 24px;
   right: 24px;
+  opacity: 0;
 
   padding: 0.5rem 1rem;
-  font-size: 1rem;
+  font-size: var(--font-size-medium);
   font-weight: 600;
   border: none;
   border-radius: 12px;
-
-  background: #ff6b6b;
-  color: white;
-  cursor: pointer;
-
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
-  opacity: 0;
-  transform: translateY(10px);
-  pointer-events: none;
-
-  transition: opacity 0.25s ease, transform 0.25s ease, background 0.2s ease;
 }
 
 .save-floating-btn.show {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
-}
-
-.save-floating-btn:hover {
-  background: var(--color-secondary);
 }

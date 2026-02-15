@@ -281,11 +281,7 @@ const MediaDetails = () => {
                   onClick={() => setIsSummaryExpanded(!isSummaryExpanded)}
                 >
                   {isSummaryExpanded ? "Show less" : "Show more"}
-                  {isSummaryExpanded ? (
-                    <FaSortUp className="rp-arrow-icon" />
-                  ) : (
-                    <FaSortDown className="rp-arrow-icon" />
-                  )}
+                  {isSummaryExpanded ? <FaSortUp /> : <FaSortDown />}
                 </button>
               </div>
             </>
@@ -324,13 +320,13 @@ const MediaDetails = () => {
         </div>
 
         {showDelete && (
-          <button className="delete-review-btn" onClick={handleDelete}>
+          <button className="btn btn-danger" onClick={handleDelete}>
             Delete Review
           </button>
         )}
 
         <button
-          className={`save-floating-btn ${showSave ? "show" : ""}`}
+          className={`save-floating-btn btn btn-accent ${showSave ? "show" : ""}`}
           onClick={handleSave}
         >
           Save

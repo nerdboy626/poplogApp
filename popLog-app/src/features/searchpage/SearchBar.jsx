@@ -49,12 +49,21 @@ const SearchBar = ({
             className={error ? "input-error" : ""}
           />
           {showClear && (
-            <button type="button" className="clear-button" onClick={onClear}>
+            <button
+              type="button"
+              className="clear-button btn btn-ghost"
+              onClick={onClear}
+            >
               ✕
             </button>
           )}
         </div>
-        <button type="submit" id="searchButton" disabled={!inputValue.trim()}>
+        <button
+          type="submit"
+          id="searchButton"
+          disabled={!inputValue.trim()}
+          className="btn btn-primary"
+        >
           Search
         </button>
       </form>

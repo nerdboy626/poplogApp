@@ -13,16 +13,13 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
 }
 
 .account-card h1 {
-  margin: 0;
   font-size: 2rem;
   font-weight: 800;
   text-align: center;
@@ -32,8 +29,7 @@
 .account-card hr {
   border: none;
   height: 1px;
-  background: rgba(255, 255, 255, 0.25);
-  margin: 0;
+  background-color: var(--border-subtle);
 }
 
 /* Sections */
@@ -44,12 +40,12 @@
 }
 
 .account-card p {
-  margin: 0;
   font-size: 1rem;
-  opacity: 0.9;
+  color: var(--text-secondary);
 }
 
 .account-card strong {
+  color: var(--text-primary);
   font-weight: 700;
 }
 
@@ -71,44 +67,18 @@
 }
 
 .account-card ul li {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
   border-radius: 10px;
   padding: 0.6rem 0.7rem;
   text-align: center;
   font-weight: 600;
+  color: var(--text-primary);
 }
 
 /* Buttons */
-.account-card button {
+.account-card .btn {
   width: 100%;
-  padding: 0.7rem;
-  border-radius: 10px;
-  font-size: 0.9rem;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-/* Reset password */
-.reset-link-btn {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: #fff;
-}
-
-.reset-link-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-/* Logout button */
-.logout-btn {
-  background: rgba(255, 99, 99, 0.85);
-  border: none;
-  color: white;
-}
-
-.logout-btn:hover {
-  background: rgba(255, 99, 99, 1);
 }
 
 /* Mobile */

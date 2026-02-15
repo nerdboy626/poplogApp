@@ -12,10 +12,9 @@
   flex-direction: column;
   align-items: center;
   gap: 0.7rem;
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
   font-weight: 600;
   font-size: 0.9rem;
 }
@@ -24,8 +23,8 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-top-color: var(--color-secondary);
+  border: 3px solid var(--border-subtle);
+  border-top-color: var(--brand-primary);
   animation: spin 0.9s linear infinite;
 }
 

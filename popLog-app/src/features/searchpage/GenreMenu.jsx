@@ -24,7 +24,7 @@ const GenreMenu = ({ options, selected, onChange, showClear, onClear }) => {
       </div>
 
       <button
-        className={`clear-genre-button ${showClear ? "visible" : ""}`}
+        className={`clear-genre-button btn btn-primary ${showClear ? "visible" : ""}`}
         onClick={onClear}
       >
         Clear Genre

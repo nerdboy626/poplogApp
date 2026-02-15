@@ -2,15 +2,15 @@
   display: flex;
   justify-content: left;
   align-items: center;
-  margin: 0 0.7rem;
-  margin-top: 1rem;
-  border: 2px solid white;
+  margin: 1rem 0.7rem 0 0.7rem;
+  border: 2px solid var(--border-subtle);
   border-radius: 6px;
   padding: 0.5rem;
+  transition: border-color 0.2s ease;
 }
 
 .search-entry:hover {
-  border-color: var(--color-secondary);
+  border-color: var(--brand-primary);
 }
 
 .search-entry-header {
@@ -25,7 +25,6 @@
 
 .search-entry-header h2 {
   font-size: 2rem;
-  margin: 0;
 }
 
 .search-entry-title {
@@ -50,30 +49,26 @@
 }
 
 .search-entry p {
-  margin: 0;
-  display: inline-block;
-  line-height: 1.5;
-  font-size: 1rem;
+  margin: 1rem 0 0 0;
   display: -webkit-box;
+  -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   line-clamp: 3;
-  -webkit-box-orient: vertical;
   overflow: hidden;
+  line-height: 1.5;
+  font-size: var(--font-size-medium);
   border: 2px solid orange;
-  margin-top: 1rem;
 }
 
 .search-entry-creator {
-  margin: 0;
-  margin-top: 0.5rem;
-  font-size: 1rem;
+  margin: 0.5rem 0 0 0;
+  font-size: var(--font-size-medium);
   font-weight: 500;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  /* padding-left: 2rem; */
   border: 2px solid blue;
 }
 
@@ -91,11 +86,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 4px 12px; /* space inside the circle */
-  border-radius: 9999px; /* makes it fully rounded */
-  background-color: var(--color-secondary); /* light gray background */
-  font-size: 0.9rem;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background-color: var(--brand-primary);
+  font-size: var(--font-size-small);
   white-space: nowrap; /* prevent text wrap inside chip */
+  color: var(--text-primary);
 }
 
 .entry-img-container {
@@ -123,6 +119,7 @@
 .icon {
   width: 100%;
   height: 100%;
+  color: var(--text-muted);
 }
 
 .search-entry-link {
@@ -130,4 +127,8 @@
   color: inherit;
   display: block; /* expand to full width of result block */
   cursor: pointer;
+}
+
+.search-entry-link:hover {
+  text-decoration: none;
 }

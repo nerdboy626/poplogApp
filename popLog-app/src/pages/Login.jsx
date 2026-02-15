@@ -95,7 +95,7 @@ const Login = () => {
         <p className="login-subtitle">Sign in to continue to PopLog</p>
 
         <button
-          className="google-btn"
+          className="btn btn-ghost google-btn"
           onClick={() => {
             window.location.href = "http://localhost:3500/api/auth/google";
           }}
@@ -128,7 +128,7 @@ const Login = () => {
             onChange={(e) => setLoginPassword(e.target.value)}
             required
           />
-          <button type="submit" className="login-btn">
+          <button className="btn btn-primary" type="submit">
             Login
           </button>
         </form>
@@ -165,7 +165,7 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button type="submit" className="create-btn">
+          <button className="btn btn-accent" type="submit">
             Create account
           </button>
         </form>

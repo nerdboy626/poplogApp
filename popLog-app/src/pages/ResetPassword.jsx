@@ -87,7 +87,7 @@ const ResetPassword = () => {
             required
           />
 
-          <button type="submit" className="reset-btn" disabled={loading}>
+          <button type="submit" className="btn btn-primary" disabled={loading}>
             {loading ? "Resetting..." : "Reset password"}
           </button>
         </form>

@@ -4,11 +4,13 @@
 }
 
 .genre-dropdown select {
+  width: auto;
   padding: 0.5rem;
   border-radius: 8px;
-  border: 1px solid #ccc;
-  background: #f8f8f8;
-  font-size: 1rem;
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  font-size: var(--font-size-medium);
   cursor: pointer;
 }
 
@@ -24,16 +26,12 @@
 
 .clear-genre-button {
   opacity: 0;
-  visibility: hidden; /* not focusable/clickable when hidden */
-  transition: opacity 0.25s ease;
-  pointer-events: none; /* prevents clicks while hidden */
-
-  padding: 0.5rem 0.75rem;
-  background-color: var(--color-secondary);
-  border: none;
+  visibility: hidden;
+  pointer-events: none;
+  padding: 0.6rem 1rem;
   border-radius: 6px;
-  color: white;
-  font-size: 1rem;
+  font-size: var(--font-size-medium);
+  font-weight: 500;
 }
 
 .clear-genre-button.visible {
@@ -43,5 +41,14 @@
 }
 
 .clear-genre-button:hover {
-  background-color: var(--color-primary);
+  background-color: var(--brand-primary);
+}
+
+.clear-genre-button.btn {
+  background-color: var(--brand-primary);
+  color: var(--text-primary);
+}
+
+.clear-genre-button:hover {
+  background-color: var(--brand-primary-hover);
 }
