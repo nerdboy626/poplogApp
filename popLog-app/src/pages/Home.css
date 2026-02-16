@@ -6,18 +6,6 @@
   /* border: 5px solid turquoise; */
 }
 
-.trending-header {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* border: 3px solid rgb(221, 238, 121); */
-}
-
-.trending-header h1 {
-  color: var(--text-primary);
-}
-
 .trending-displays {
   width: 100%;
   display: flex;

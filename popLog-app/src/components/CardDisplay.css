@@ -3,7 +3,7 @@
   display: block;
   align-items: center;
   /* margin: 20px; */
-  /* border: 2px solid red; */
+  /* border: 2px solid green; */
 }
 
 .card {
@@ -36,18 +36,27 @@
 
 .card-info-box {
   position: absolute;
-  left: 200px;
   top: 0;
+  /* width: clamp(160px, 75vw, 260px);
+  max-width: calc(100vw - 1rem); */
   width: 260px;
   max-width: 30vw;
   background-color: var(--bg-elevated);
   border: 1px solid var(--border-subtle);
   border-radius: 8px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
   padding: 0.8rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
   opacity: 0;
   animation: fadeIn 0.25s ease forwards;
+  pointer-events: none;
   z-index: 10;
+  /* border: 1px solid red; */
+}
+
+@media (hover: none) {
+  .card-info-box {
+    display: none;
+  }
 }
 
 @keyframes fadeIn {

@@ -20,11 +20,11 @@ const fetchGenres = async () => {
   try {
     const movieResponse = await fetch(
       "https://api.themoviedb.org/3/genre/movie/list?language=en-US",
-      options
+      options,
     );
     const tvResponse = await fetch(
       "https://api.themoviedb.org/3/genre/tv/list?language=en-US",
-      options
+      options,
     );
 
     const movieData = await movieResponse.json();
@@ -56,9 +56,9 @@ function formatData(data) {
     title: item.media_type === "movie" ? item.title : item.name,
     summary: item.overview || "No summary available.",
     releaseYear:
-      item.media_type === "movie"
+      (item.media_type === "movie"
         ? item.release_date?.slice(0, 4)
-        : item.first_air_date?.slice(0, 4),
+        : item.first_air_date?.slice(0, 4)) || null,
     coverUrl: item.poster_path
       ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
       : null,
@@ -108,11 +108,11 @@ export const getByGenre = async (req, res) => {
     const [moviesRes, tvRes] = await Promise.all([
       fetch(
         `https://api.themoviedb.org/3/discover/movie?with_genres=${genrePair.movie}&sort_by=popularity.desc&language=en-US`,
-        options
+        options,
       ),
       fetch(
         `https://api.themoviedb.org/3/discover/tv?with_genres=${genrePair.tv}&sort_by=popularity.desc&language=en-US`,
-        options
+        options,
       ),
     ]);
 
@@ -133,13 +133,13 @@ export const getByGenre = async (req, res) => {
       : [];
 
     const combined = [...movies, ...shows].sort(
-      (a, b) => b.popularity - a.popularity
+      (a, b) => b.popularity - a.popularity,
     );
 
     const formatted = formatData(combined.slice(0, 30));
 
     console.log(
-      `Returned ${formatted.length} titles for '${genrePair.label}'!`
+      `Returned ${formatted.length} titles for '${genrePair.label}'!`,
     );
     res.json(formatted);
   } catch (error) {
@@ -265,7 +265,7 @@ export const getTMDBResults = async (req, res) => {
     const data = await response.json();
 
     const filteredData = data.results.filter(
-      (item) => item.media_type === "movie" || item.media_type === "tv"
+      (item) => item.media_type === "movie" || item.media_type === "tv",
     );
 
     const formattedData = formatData(filteredData);
@@ -374,9 +374,9 @@ export const getTMDBDetailsById = async (req, res) => {
       title: mediaType === "movie" ? data.title : data.name,
       summary: data.overview || "No summary available.",
       releaseYear:
-        mediaType === "movie"
+        (mediaType === "movie"
           ? data.release_date?.slice(0, 4)
-          : data.first_air_date?.slice(0, 4),
+          : data.first_air_date?.slice(0, 4)) || null,
       coverUrl: data.poster_path
         ? `https://image.tmdb.org/t/p/w500${data.poster_path}`
         : null,

@@ -14,13 +14,12 @@ const CardDisplay = ({
   mediaType,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [positionLeft, setPositionLeft] = useState(false);
   const cardRef = useRef(null);
 
   const imageIcon = (mediaType) => {
-    if (mediaType === "book") {
+    if (mediaType === "books") {
       return <IoIosBook className="icon" />;
-    } else if (mediaType === "game") {
+    } else if (mediaType === "games") {
       return <IoGameController className="icon" />;
     } else {
       return <BiSolidMoviePlay className="icon" />;
@@ -28,10 +27,27 @@ const CardDisplay = ({
   };
 
   useEffect(() => {
-    if (isHovered && cardRef.current) {
-      const rect = cardRef.current.getBoundingClientRect();
-      // check if the card is near the right side of the viewport
-      setPositionLeft(rect.right + 260 > window.innerWidth); // 220 is the info box width
+    if (!isHovered || !cardRef.current) return;
+
+    const card = cardRef.current;
+    const tooltipWidth = Math.min(260, window.innerWidth * 0.3);
+    const gap = 12;
+
+    const rect = card.getBoundingClientRect();
+
+    const spaceRight = window.innerWidth - rect.right;
+
+    const tooltip = card.querySelector(".card-info-box");
+    if (!tooltip) return;
+
+    if (spaceRight >= tooltipWidth + gap) {
+      // Place tooltip to the right
+      tooltip.style.left = `${card.offsetWidth + gap}px`;
+      tooltip.style.right = "auto";
+    } else {
+      // Place tooltip to the left
+      tooltip.style.right = `${card.offsetWidth + gap}px`;
+      tooltip.style.left = "auto";
     }
   }, [isHovered]);
 
@@ -56,14 +72,9 @@ const CardDisplay = ({
       </Link>
 
       {isHovered && (
-        <div
-          className="card-info-box"
-          style={{
-            left: positionLeft ? `-${280}px` : "220px", // shift left if needed
-          }}
-        >
+        <div className="card-info-box">
           <h3>
-            {title} ({releaseYear})
+            {title} {releaseYear && `(${releaseYear})`}
           </h3>
           <p className="card-desc">{description}</p>
         </div>

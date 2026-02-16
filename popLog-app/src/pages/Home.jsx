@@ -8,9 +8,6 @@ const Home = () => {
   return (
     <div className="homepage">
       <Greeting />
-      <div className="trending-header">
-        <h1>Take a look at these trending titles!</h1>
-      </div>
       <main className="trending-displays">
         <h3>Movies</h3>
         {trendingTitles.movies.length > 0 && (

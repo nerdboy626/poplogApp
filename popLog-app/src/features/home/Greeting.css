@@ -1,12 +1,17 @@
 .greeting {
-  width: 100%;
-  padding: 2rem 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  /* width: 100%; */
+  padding: 1.5rem 1rem;
+  text-align: center;
   /* border: 2px solid blueviolet; */
 }
 
-.greeting a {
-  text-decoration: underline;
+.greeting h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.greeting .subtitle {
+  margin-top: 0.5rem;
+  font-size: var(--font-size-small);
+  color: var(--text-muted);
 }
