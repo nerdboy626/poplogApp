@@ -25,6 +25,7 @@
   outline: 2px solid var(--brand-primary);
   outline-offset: 3px;
   box-shadow: 0 0 12px rgba(124, 58, 237, 0.4);
+  /* box-shadow: 0 0 18px rgba(124, 58, 237, 0.35); */
 }
 
 .card-image {
