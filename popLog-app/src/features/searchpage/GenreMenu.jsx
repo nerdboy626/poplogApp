@@ -8,24 +8,27 @@ const GenreMenu = ({ options, selected, onChange, showClear, onClear }) => {
           Browse Popular Titles by Genre:
         </label>
 
-        <select
-          className="genre-dropdown-select"
-          value={selected}
-          onChange={(e) => onChange(e.target.value)}
-        >
-          <option value="">Select a genre</option>
+        <div className="genre-select-wrapper">
+          <select
+            className="genre-dropdown-select"
+            value={selected}
+            onChange={(e) => onChange(e.target.value)}
+          >
+            <option value="">Select a genre</option>
 
-          {options.map((opt) => (
-            <option key={opt.id} value={opt.id}>
-              {opt.name}
-            </option>
-          ))}
-        </select>
+            {options.map((opt) => (
+              <option key={opt.id} value={opt.id}>
+                {opt.name}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <button
-        className={`clear-genre-button btn btn-primary ${showClear ? "visible" : ""}`}
+        className={`btn btn-primary`}
         onClick={onClear}
+        disabled={!showClear}
       >
         Clear Genre
       </button>

@@ -144,7 +144,8 @@ const SearchPage = () => {
       <div className="search-display">
         {displayArray.length === 0 && entry.query !== "" && (
           <div className="empty-state">
-            <p>
+            <div className="empty-icon">🔍</div>
+            <h3>
               No results found
               {entry.query && (
                 <>
@@ -152,13 +153,13 @@ const SearchPage = () => {
                   for <strong>"{entry.query}"</strong>
                 </>
               )}
-            </p>
-            <p className="empty-hint">Try a different search.</p>
+            </h3>
+            <p>Try adjusting your search or selecting a different category.</p>
           </div>
         )}
         {displayArray.length > 0 &&
-          displayArray.map((item, index) => (
-            <SearchDisplay key={index} item={item} />
+          displayArray.map((item) => (
+            <SearchDisplay key={item.id} item={item} />
           ))}
       </div>
     </div>

@@ -1,16 +1,31 @@
+.search-entry-link {
+  text-decoration: none;
+  color: inherit;
+  display: block; /* expand to full width of result block */
+  cursor: pointer;
+  /* border: 3px solid green; */
+}
+
 .search-entry {
   display: flex;
   justify-content: left;
   align-items: center;
-  margin: 1rem 0.7rem 0 0.7rem;
+  margin: 0 0.7rem 0 0.7rem;
+  background-color: var(--bg-surface);
   border: 2px solid var(--border-subtle);
   border-radius: 6px;
   padding: 0.5rem;
-  transition: border-color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease;
+  animation: fadeIn 0.25s ease forwards;
+  opacity: 0;
 }
 
 .search-entry:hover {
   border-color: var(--brand-primary);
+  background-color: var(--bg-elevated);
+  transform: translateY(-2px);
 }
 
 .search-entry-header {
@@ -24,7 +39,7 @@
 }
 
 .search-entry-header h2 {
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 .search-entry-title {
@@ -76,10 +91,17 @@
   display: flex;
   gap: 0.5rem; /* space between genre chips */
   overflow: hidden; /* hide any chips that don’t fit */
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   white-space: nowrap; /* keep all chips on one line */
   text-overflow: clip; /* just clip extra content */
   margin-top: 0.5rem;
   border: 2px solid plum;
+}
+
+.genres-container::-webkit-scrollbar {
+  display: none; /* Hides the scrollbar visually */
 }
 
 .genre-chip {
@@ -88,7 +110,11 @@
   justify-content: center;
   padding: 4px 12px;
   border-radius: 9999px;
-  background-color: var(--brand-primary);
+  background: linear-gradient(
+    135deg,
+    var(--brand-primary),
+    var(--brand-primary-hover)
+  );
   font-size: var(--font-size-small);
   white-space: nowrap; /* prevent text wrap inside chip */
   color: var(--text-primary);
@@ -122,13 +148,42 @@
   color: var(--text-muted);
 }
 
-.search-entry-link {
-  text-decoration: none;
-  color: inherit;
-  display: block; /* expand to full width of result block */
-  cursor: pointer;
-}
-
 .search-entry-link:hover {
   text-decoration: none;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-entry {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 0.5rem;
+  }
+
+  .search-entry-header {
+    justify-content: center;
+  }
+
+  .search-entry-creator {
+    text-align: center;
+  }
+
+  .genres-container {
+    justify-content: center;
+  }
+
+  .search-entry-header h2 {
+    font-size: var(--font-size-medium);
+  }
+
+  .search-entry img {
+    width: 100%;
+    max-width: 260px;
+    margin: 0 auto 1rem auto;
+  }
 }

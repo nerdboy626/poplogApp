@@ -1,4 +1,7 @@
 import { Link } from "react-router-dom";
+import { BiSolidMoviePlay } from "react-icons/bi";
+import { IoGameController } from "react-icons/io5";
+import { IoIosBook } from "react-icons/io";
 import "./SearchBar.css";
 
 const SearchBar = ({
@@ -11,9 +14,21 @@ const SearchBar = ({
   error,
 }) => {
   const mediaCategories = [
-    { label: "Movies & TV", path: "movies" },
-    { label: "Games", path: "games" },
-    { label: "Books", path: "books" },
+    {
+      label: "Movies & TV",
+      path: "movies",
+      icon: <BiSolidMoviePlay />,
+    },
+    {
+      label: "Games",
+      path: "games",
+      icon: <IoGameController />,
+    },
+    {
+      label: "Books",
+      path: "books",
+      icon: <IoIosBook />,
+    },
   ];
 
   function handleSubmit(e) {
@@ -32,6 +47,7 @@ const SearchBar = ({
               mediaCategory === category.path ? "active" : ""
             }`}
           >
+            <span className="category-icon">{category.icon}</span>
             {category.label}
           </Link>
         ))}
