@@ -1,74 +1,93 @@
+.dashboard-header {
+  padding: 1.5rem 1rem;
+  text-align: center;
+}
+
+.dashboard-title {
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.dashboard-subtitle {
+  margin-top: 0.5rem;
+  color: var(--text-muted);
+  font-size: var(--font-size-small);
+}
+
+.soft-divider {
+  border: none;
+  height: 1px;
+  background-color: var(--border-subtle);
+}
+
 .dashboard-controls {
   display: flex;
   gap: 1rem;
   padding: 1rem;
   align-items: center;
   justify-content: center;
-  /* background-color: var(--bg-surface); */
-  border-radius: 12px;
-  border: 1px solid var(--border-subtle);
 }
 
 .dashboard-controls label {
+  text-align: center;
   color: var(--text-secondary);
   font-size: var(--font-size-medium);
 }
 
 .dashboard-controls select {
-  max-width: 180px;
+  width: auto;
+  appearance: none;
+  padding-right: 2rem; /* space for arrow */
+  cursor: pointer;
+}
+
+.select-wrapper {
+  position: relative;
+  /* display: inline-block; */
+  width: auto;
+  /* border: 2px solid palegreen; */
+}
+
+.select-wrapper::after {
+  content: "▾";
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  /* padding-left: 1rem; */
+
+  color: var(--text-muted);
+  font-size: var(--font-size-small);
+  /* border: 2px solid orange; */
 }
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 1.5rem;
-  padding: 1rem;
-
-  /* keeps grid responsive on smaller screens */
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   justify-items: center;
-
-  border: 5px solid salmon;
+  gap: 1rem 0.5rem;
+  padding: 1.5rem;
+  background-color: var(--bg-surface);
+  /* border: 5px solid salmon; */
 }
 
 .dashboard-empty-state {
   grid-column: 1 / -1; /* span full grid */
   text-align: center;
-  padding: 3rem 1rem;
+  padding: 1.5rem 1rem;
+
   color: var(--text-secondary);
 }
 
 .empty-title {
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: var(--font-size-large);
   margin-bottom: 0.5rem;
   color: var(--text-primary);
 }
 
 .empty-subtitle {
-  font-size: 0.95rem;
-  color: var(--text-muted);
-}
-
-@media (max-width: 1200px) {
-  .dashboard-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-@media (max-width: 900px) {
-  .dashboard-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 600px) {
-  .dashboard-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 400px) {
-  .dashboard-grid {
-    grid-template-columns: repeat(1, 1fr);
-  }
+  font-size: var(--font-size-medium);
+  color: var(--text-secondary);
 }

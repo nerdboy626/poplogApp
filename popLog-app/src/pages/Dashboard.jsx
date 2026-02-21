@@ -67,40 +67,51 @@ const Dashboard = () => {
 
   return (
     <div>
+      <div className="dashboard-header">
+        <h1 className="dashboard-title">Your Dashboard</h1>
+        <p className="dashboard-subtitle">
+          Track, revisit, and edit your media journal.
+        </p>
+      </div>
+      <hr className="soft-divider" />
       <div className="dashboard-controls">
-        <label>View Media Entries by:</label>
+        <label>View Entries by:</label>
 
-        <select
-          value={mediaFilter}
-          onChange={(e) => setMediaFilter(e.target.value)}
-        >
-          <option value="all">All</option>
-          <option value="movie">Movies</option>
-          <option value="tv">TV</option>
-          <option value="games">Games</option>
-          <option value="books">Books</option>
-        </select>
+        <div className="select-wrapper">
+          <select
+            value={mediaFilter}
+            onChange={(e) => setMediaFilter(e.target.value)}
+          >
+            <option value="all">All</option>
+            <option value="movie">Movies</option>
+            <option value="tv">TV</option>
+            <option value="games">Games</option>
+            <option value="books">Books</option>
+          </select>
+        </div>
 
         <label>Sort Entries by:</label>
 
-        <select
-          value={sortByFilter}
-          onChange={(e) => setSortByFilter(e.target.value)}
-        >
-          <option value="recent">Most Recent</option>
-          <option value="alphabetical">A → Z</option>
-          <option value="favorited">Favorited</option>
-        </select>
+        <div className="select-wrapper">
+          <select
+            value={sortByFilter}
+            onChange={(e) => setSortByFilter(e.target.value)}
+          >
+            <option value="recent">Most Recent</option>
+            <option value="alphabetical">A → Z</option>
+            <option value="favorited">Favorited</option>
+          </select>
+        </div>
       </div>
 
       <div className="dashboard-grid">
         {filteredAndSorted.length === 0 ? (
           <div className="dashboard-empty-state">
-            <p className="empty-title">
+            <h3 className="empty-title">
               You currently don’t have any entries for the selected filters.
-            </p>
+            </h3>
             <p className="empty-subtitle">
-              Add some more from the homepage or search page!
+              Add some more from the homepage or searchpage!
             </p>
           </div>
         ) : (

@@ -17,11 +17,9 @@
 }
 
 .empty-state {
-  padding: 2rem;
+  padding: 1.5rem 1rem;
   text-align: center;
   background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
 }
 
 .empty-icon {

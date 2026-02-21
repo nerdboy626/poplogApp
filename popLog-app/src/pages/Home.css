@@ -19,3 +19,8 @@
   letter-spacing: 0.05rem;
   color: var(--text-secondary);
 }
+.soft-divider {
+  border: none;
+  height: 1px;
+  background-color: var(--border-subtle);
+}

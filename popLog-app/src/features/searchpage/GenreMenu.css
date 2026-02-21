@@ -43,7 +43,7 @@
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
-  padding-left: 1rem;
+  /* padding-left: 1rem; */
 
   color: var(--text-muted);
   font-size: var(--font-size-small);
