@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { FaStar, FaHeart, FaRegHeart } from "react-icons/fa";
 import "./MediaRate.css";
 const MediaRate = ({ rating, favorite, onRatingChange, onFavoriteToggle }) => {
+  const [hoverRating, setHoverRating] = useState(0);
   return (
     <div className="rate-container">
       <div className="star-container">
@@ -10,8 +12,11 @@ const MediaRate = ({ rating, favorite, onRatingChange, onFavoriteToggle }) => {
             <FaStar
               key={star}
               onClick={() => onRatingChange(star)}
-              color={star <= rating ? "gold" : "lightgray"}
-              className="star"
+              onMouseEnter={() => setHoverRating(star)}
+              onMouseLeave={() => setHoverRating(0)}
+              className={`star ${
+                star <= (hoverRating || rating) ? "active" : ""
+              }`}
             />
           ))}
         </div>
@@ -21,13 +26,9 @@ const MediaRate = ({ rating, favorite, onRatingChange, onFavoriteToggle }) => {
         <h3>Favorite</h3>
 
         {favorite ? (
-          <FaHeart onClick={onFavoriteToggle} className="heart" color="red" />
+          <FaHeart onClick={onFavoriteToggle} className="heart active" />
         ) : (
-          <FaRegHeart
-            onClick={onFavoriteToggle}
-            className="heart"
-            color="lightgrey"
-          />
+          <FaRegHeart onClick={onFavoriteToggle} className="heart" />
         )}
       </div>
     </div>

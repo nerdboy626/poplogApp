@@ -66,7 +66,7 @@ const Dashboard = () => {
   }, [reviews, mediaFilter, sortByFilter]);
 
   return (
-    <div>
+    <div className="dashboard-container">
       <div className="dashboard-header">
         <h1 className="dashboard-title">Your Dashboard</h1>
         <p className="dashboard-subtitle">

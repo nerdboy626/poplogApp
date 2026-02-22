@@ -1,11 +1,10 @@
 .media-details-container {
   display: grid;
   grid-template-columns: minmax(150px, 1fr) 2fr; /* 1/3 and 2/3 ratio */
-  height: 92vh;
-  overflow: hidden;
+  height: calc(100vh - 8vh);
   gap: 2rem;
-  padding: 0rem 3rem;
-  /* border: 5px solid salmon; */
+  padding: 0 2.5rem;
+  border: 5px solid salmon;
 }
 
 .left-panel {
@@ -13,20 +12,16 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  overflow-y: auto;
+  position: sticky;
+  top: 8vh;
   min-width: 0;
-  height: 100%;
+  margin: 1rem 0 1rem 0;
   gap: 1rem;
   padding: 1.25rem;
   background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: 12px;
 }
-
-/* .left-panel > * {
-  flex: 1 1 auto;
-} */
 
 .lp-img-container {
   width: 100%;
@@ -165,10 +160,6 @@
   opacity: 0.9;
 }
 
-/* .right-panel > * {
-  flex: 1;
-} */
-
 .rp-header {
   /* display: flex;
   flex-direction: column;
@@ -179,7 +170,6 @@
 
 .rp-header > h1 {
   font-size: 2rem;
-  font-weight: 800;
 }
 
 .rp-header > h2 {
@@ -190,7 +180,11 @@
 .rp-header > hr {
   border: none;
   height: 2px;
-  background-color: var(--text-primary);
+  background: linear-gradient(
+    to right,
+    var(--brand-primary),
+    var(--brand-accent)
+  );
   margin: 0.5rem 0;
 }
 
@@ -219,7 +213,7 @@
   left: 0;
   right: 0;
   height: 3rem;
-  background: linear-gradient(to bottom, transparent, var(--color-background));
+  background: linear-gradient(to bottom, transparent, var(--bg-main));
   pointer-events: none;
 }
 
@@ -289,10 +283,46 @@
   font-weight: 600;
   border: none;
   border-radius: 12px;
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+  transform: translateY(10px);
 }
 
 .save-floating-btn.show {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
+}
+
+@media (max-width: 700px) {
+  .media-details-container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1rem;
+    height: unset;
+    overflow: unset;
+    min-height: 92vh;
+  }
+
+  .left-panel {
+    order: 1;
+    position: unset;
+    top: unset;
+    margin: 0;
+  }
+
+  .right-panel {
+    padding-top: 0;
+    order: 2;
+  }
+
+  .lp-img-container {
+    max-width: 220px;
+  }
+
+  .rp-header > h1 {
+    font-size: 1.5rem;
+  }
 }

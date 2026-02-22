@@ -56,6 +56,10 @@ const MediaDetails = () => {
       : null;
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     fetchMediaInfo(mediaType, id);
     if (auth.isLoggedIn) {
       fetchReview();

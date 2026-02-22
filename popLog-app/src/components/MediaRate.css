@@ -30,6 +30,18 @@
 .star {
   font-size: 2rem;
   cursor: pointer;
+  color: var(--text-muted);
+  transition:
+    color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.star.active {
+  color: var(--brand-primary);
+}
+
+.star:hover {
+  transform: scale(1.2);
 }
 
 .heart-container {
@@ -47,4 +59,17 @@
 .heart {
   font-size: 2rem;
   cursor: pointer;
+  color: var(--text-muted);
+  transition:
+    color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.heart.active {
+  color: var(--brand-accent);
+}
+
+.heart:hover {
+  transform: scale(1.2);
+  color: var(--brand-accent);
 }
