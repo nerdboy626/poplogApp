@@ -113,7 +113,7 @@ const Login = () => {
           <span>or</span>
         </div>
 
-        <form className="login-form" onSubmit={handleLogin}>
+        <form className="form-container" onSubmit={handleLogin}>
           <input
             type="email"
             placeholder="Email"
@@ -143,7 +143,7 @@ const Login = () => {
 
         <h4 className="signup-title">New to PopLog?</h4>
 
-        <form className="signup-form" onSubmit={handleSignUp}>
+        <form className="form-container" onSubmit={handleSignUp}>
           <input
             type="text"
             placeholder="Username"

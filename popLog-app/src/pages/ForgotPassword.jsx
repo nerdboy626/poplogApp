@@ -34,7 +34,7 @@ const ForgotPassword = () => {
       <div className="forgot-card">
         <h1 className="forgot-title">Forgot your password?</h1>
         <p className="forgot-subtitle">
-          Enter your email and we’ll send you a reset link.
+          Enter your email and we’ll send you a reset link
         </p>
 
         <form className="forgot-form" onSubmit={handleSubmit}>

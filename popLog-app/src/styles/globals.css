@@ -119,6 +119,7 @@ button:hover {
 .btn-ghost {
   background: transparent;
   color: var(--brand-primary);
+  border: 1px solid var(--brand-primary);
 }
 
 .btn-ghost:hover {

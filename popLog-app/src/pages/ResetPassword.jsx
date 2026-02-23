@@ -65,9 +65,7 @@ const ResetPassword = () => {
     <div className="reset-page">
       <div className="reset-card">
         <h1 className="reset-title">Reset your password</h1>
-        <p className="reset-subtitle">
-          Choose a new password for your account.
-        </p>
+        <p className="reset-subtitle">Choose a new password for your account</p>
 
         <form className="reset-form" onSubmit={handleSubmit}>
           <input
