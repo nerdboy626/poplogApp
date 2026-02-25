@@ -136,12 +136,15 @@ button:hover {
 }
 
 .btn-danger {
-  background-color: var(--danger);
-  color: var(--text-primary);
+  background-color: transparent;
+  border: 1px solid var(--danger);
+  color: var(--danger);
 }
 
 .btn-danger:hover {
-  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35);
+  background-color: var(--danger);
+  color: white;
+  /* box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35); */
 }
 
 .btn:disabled,

@@ -7,6 +7,34 @@
   border: 5px solid salmon;
 }
 
+.media-not-found {
+  min-height: calc(100vh - 8vh);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  text-align: center;
+  padding: 2rem;
+}
+
+.media-not-found h1 {
+  font-size: 2rem;
+  background: linear-gradient(
+    135deg,
+    var(--brand-primary),
+    var(--brand-accent)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.media-not-found p {
+  color: var(--text-secondary);
+  max-width: 400px;
+}
+
 .left-panel {
   display: flex;
   flex-direction: column;
@@ -15,7 +43,7 @@
   position: sticky;
   top: 8vh;
   min-width: 0;
-  margin: 1rem 0 1rem 0;
+  margin: 1.5rem 0;
   gap: 1rem;
   padding: 1.25rem;
   background-color: var(--bg-surface);
@@ -148,7 +176,7 @@
   flex-direction: column;
   overflow-y: auto;
   min-width: 0;
-  padding-top: 1rem;
+  padding-top: 1.5rem;
   padding-bottom: 5rem;
   gap: 1.5rem;
   border: 2px solid orange;
@@ -169,7 +197,7 @@
 }
 
 .rp-header > h1 {
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 .rp-header > h2 {
@@ -194,6 +222,11 @@
   flex-direction: column;
   gap: 0.5rem;
   border: 2px solid rgb(0, 187, 255);
+}
+
+.rp-summary > h3 {
+  font-size: var(--font-size-medium);
+  margin-bottom: 0.5rem;
 }
 
 .rp-summary-wrapper {
@@ -249,10 +282,6 @@
 .rp-summary-toggle:hover {
   background: none;
   border: none;
-}
-
-.rp-summary > h3 {
-  margin-bottom: 0.5rem;
 }
 
 .rp-text-section {

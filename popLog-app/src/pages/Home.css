@@ -21,6 +21,12 @@
 }
 .soft-divider {
   border: none;
-  height: 1px;
-  background-color: var(--border-subtle);
+  /* height: 1px;
+  background-color: var(--border-subtle); */
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    var(--brand-primary),
+    var(--brand-accent)
+  );
 }

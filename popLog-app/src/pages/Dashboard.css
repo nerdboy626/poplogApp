@@ -1,6 +1,10 @@
 .dashboard-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* align-items: center; */
   /* padding: 0 2.5rem 0 2.5rem; */
-  border: 2px solid salmon;
+  /* border: 2px solid salmon; */
 }
 
 .dashboard-header {
@@ -21,9 +25,15 @@
 }
 
 .soft-divider {
+  /* height: 1px;
+  background-color: var(--border-subtle); */
   border: none;
-  height: 1px;
-  background-color: var(--border-subtle);
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    var(--brand-primary),
+    var(--brand-accent)
+  );
 }
 
 .dashboard-controls {

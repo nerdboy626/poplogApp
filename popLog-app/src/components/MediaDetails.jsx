@@ -10,6 +10,7 @@ import MediaRate from "./MediaRate.jsx";
 import { useAuth } from "../utils/AuthContext.jsx";
 import { fetchWithAuth } from "../utils/fetchWithAuth.js";
 import toast from "react-hot-toast";
+import Loading from "./Loading.jsx";
 import "./MediaDetails.css";
 
 const MediaDetails = () => {
@@ -24,6 +25,8 @@ const MediaDetails = () => {
   const [isSummaryExpanded, setIsSummaryExpanded] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [serverId, setServerId] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
 
   const creatorLabel =
     mediaType === "movie"
@@ -64,22 +67,51 @@ const MediaDetails = () => {
     if (auth.isLoggedIn) {
       fetchReview();
     }
-  }, [auth.isLoggedIn]);
+  }, [mediaType, id, auth.isLoggedIn]);
 
   async function fetchMediaInfo(category, mediaId) {
-    const baseUrl =
-      category === "movie" || category === "tv"
-        ? `http://localhost:3500/api/movies/details/${category}/${mediaId}`
-        : `http://localhost:3500/api/${category}/details/${mediaId}`;
+    setIsLoading(true);
+    setNotFound(false);
 
-    console.log(`Searching ${category} for ${mediaId}`);
+    const validTypes = ["movie", "tv", "books", "games"];
 
-    const response = await fetch(baseUrl);
-    const data = await response.json();
+    if (!validTypes.includes(category)) {
+      setNotFound(true);
+      setIsLoading(false);
+      return;
+    }
 
-    console.log(data);
+    try {
+      const baseUrl =
+        category === "movie" || category === "tv"
+          ? `http://localhost:3500/api/movies/details/${category}/${mediaId}`
+          : `http://localhost:3500/api/${category}/details/${mediaId}`;
 
-    setMediaInfo(data);
+      console.log(`Searching ${category} for ${mediaId}`);
+
+      const response = await fetch(baseUrl);
+
+      if (!response.ok) {
+        setNotFound(true);
+        setIsLoading(false);
+        return;
+      }
+
+      const data = await response.json();
+
+      console.log(data);
+
+      if (!data || Object.keys(data).length === 0) {
+        setNotFound(true);
+      } else {
+        setMediaInfo(data);
+      }
+    } catch (err) {
+      console.error(err);
+      setNotFound(true);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   async function fetchReview() {
@@ -200,6 +232,25 @@ const MediaDetails = () => {
       console.error("Error deleting review:", err.message);
     }
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (notFound) {
+    return (
+      <div className="media-not-found">
+        <h1>Nothing Found</h1>
+        <p>We couldn’t find anything for this media type or ID.</p>
+        <button
+          className="btn btn-primary"
+          onClick={() => window.history.back()}
+        >
+          Go Back
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="media-details-container">

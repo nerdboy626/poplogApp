@@ -1,11 +1,11 @@
-.oauth-success {
+.loading-page {
   min-height: 92vh;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.oauth-card {
+.spinner-card {
   padding: 1.5rem 2rem;
   border-radius: 14px;
   display: flex;

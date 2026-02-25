@@ -32,7 +32,7 @@
 }
 
 .login-title {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 800;
   text-align: center;
 }
@@ -63,7 +63,7 @@
   height: 18px;
 }
 
-.divider {
+/* .divider {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -77,8 +77,33 @@
 .divider::after {
   content: "";
   flex: 1;
-  height: 1px;
+  height: 2px;
   background-color: var(--border-subtle);
+} */
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  background: linear-gradient(
+    135deg,
+    var(--brand-primary),
+    var(--brand-accent)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background-color: red;
 }
 
 .soft-divider {

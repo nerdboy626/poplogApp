@@ -7,7 +7,7 @@ import { GiGameConsole } from "react-icons/gi";
 import { GiTv } from "react-icons/gi";
 import { GiBlackBook } from "react-icons/gi";
 import { GiFilmStrip } from "react-icons/gi";
-
+import Loading from "../components/Loading.jsx";
 import "./Account.css";
 
 const Account = () => {
@@ -76,9 +76,16 @@ const Account = () => {
     navigate("/login", { replace: true });
   };
 
-  if (loading) return <p>Loading account info...</p>;
+  if (loading) return <Loading text="Loading account info..." />;
 
-  if (!stats) return <p>No account data found.</p>;
+  if (!stats)
+    return (
+      <div className="account-page">
+        <div className="account-card">
+          <h1>No account data found.</h1>
+        </div>
+      </div>
+    );
 
   return (
     <div className="account-page">
@@ -95,7 +102,7 @@ const Account = () => {
           </p>
         </section>
 
-        <hr />
+        <hr className="soft-divider" />
 
         <section>
           <h2>Journal Stats</h2>
@@ -133,7 +140,7 @@ const Account = () => {
           </ul>
         </section>
 
-        <hr />
+        <hr className="soft-divider" />
 
         <section>
           <h2>Account Actions</h2>
@@ -155,7 +162,7 @@ const Account = () => {
             </button>
           </div>
 
-          <button onClick={handleLogout} className="btn btn-danger">
+          <button onClick={handleLogout} className="btn btn-danger logout-btn">
             Logout
           </button>
         </section>

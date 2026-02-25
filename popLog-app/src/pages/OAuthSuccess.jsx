@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext.jsx";
 import { jwtDecode } from "jwt-decode";
 import toast from "react-hot-toast";
-import "./OAuthSuccess.css";
+import Loading from "../components/Loading.jsx";
 
 const OAuthSuccess = () => {
   const [params] = useSearchParams();
@@ -29,14 +29,7 @@ const OAuthSuccess = () => {
     }
   }, []);
 
-  return (
-    <div className="oauth-success">
-      <div className="oauth-card">
-        <div className="spinner" />
-        <p>Signing you in…</p>
-      </div>
-    </div>
-  );
+  return <Loading text="Signing you in..." />;
 };
 
 export default OAuthSuccess;

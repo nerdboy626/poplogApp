@@ -20,17 +20,17 @@
 }
 
 .account-card h1 {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 800;
   text-align: center;
 }
 
 /* Divider */
-.account-card hr {
+/* .account-card hr {
   border: none;
   height: 1px;
   background-color: var(--border-subtle);
-}
+} */
 
 /* Sections */
 .account-card section {
@@ -51,7 +51,7 @@
 
 /* Stats title */
 .account-card h2 {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 700;
 }
 
@@ -71,7 +71,7 @@
 }
 
 .total-entries h3 {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 800;
   margin-top: 0.4rem;
 }
@@ -107,7 +107,7 @@
 }
 
 .stat-value {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -146,16 +146,8 @@
   width: 100%;
 }
 
-.btn-danger {
+.logout-btn {
   margin-top: 0.5rem;
-  background-color: transparent;
-  border: 1px solid var(--danger);
-  color: var(--danger);
-}
-
-.btn-danger:hover {
-  background-color: var(--danger);
-  color: white;
 }
 
 /* Mobile */

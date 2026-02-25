@@ -7,12 +7,12 @@ const Greeting = () => {
     <div className="greeting">
       {auth.isLoggedIn ? (
         <>
-          <h2>Welcome back</h2>
+          <h1>Welcome back</h1>
           <p className="subtitle">Here’s what people are loving right now</p>
         </>
       ) : (
         <>
-          <h2>Discover what’s trending</h2>
+          <h1>Discover what’s trending</h1>
           <p className="subtitle">
             Track your favorites by <Link to="/login">signing in</Link>
           </p>
