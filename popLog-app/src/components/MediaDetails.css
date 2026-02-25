@@ -7,34 +7,6 @@
   border: 5px solid salmon;
 }
 
-.media-not-found {
-  min-height: calc(100vh - 8vh);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  text-align: center;
-  padding: 2rem;
-}
-
-.media-not-found h1 {
-  font-size: 2rem;
-  background: linear-gradient(
-    135deg,
-    var(--brand-primary),
-    var(--brand-accent)
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.media-not-found p {
-  color: var(--text-secondary);
-  max-width: 400px;
-}
-
 .left-panel {
   display: flex;
   flex-direction: column;

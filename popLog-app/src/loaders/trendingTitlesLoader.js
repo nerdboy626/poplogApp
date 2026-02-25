@@ -4,15 +4,17 @@ export const trendingTitlesLoader = async () => {
     //   "http://localhost:3500/api/books/search?query=red rising"
     // );
     const bookResponse = await fetch(
-      "http://localhost:3500/api/books/trending"
+      "http://localhost:3500/api/books/trending",
     );
     if (!bookResponse.ok)
       throw new Error("Network response for books was not ok");
 
     const bookData = await bookResponse.json();
 
+    console.log(bookData);
+
     const gamesResponse = await fetch(
-      "http://localhost:3500/api/games/trending"
+      "http://localhost:3500/api/games/trending",
     );
     if (!gamesResponse.ok)
       throw new Error("Network response for games was not ok");
@@ -20,7 +22,7 @@ export const trendingTitlesLoader = async () => {
     const gamesData = await gamesResponse.json();
 
     const moviesResponse = await fetch(
-      "http://localhost:3500/api/movies/trending/movies"
+      "http://localhost:3500/api/movies/trending/movies",
     );
     if (!moviesResponse.ok)
       throw new Error("Network response for movies was not ok");
@@ -28,7 +30,7 @@ export const trendingTitlesLoader = async () => {
     const moviesData = await moviesResponse.json();
 
     const showsResponse = await fetch(
-      "http://localhost:3500/api/movies/trending/shows"
+      "http://localhost:3500/api/movies/trending/shows",
     );
     if (!showsResponse.ok)
       throw new Error("Network response for shows was not ok");

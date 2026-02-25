@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { useEffect, useState } from "react";
 import SearchBar from "../features/searchpage/SearchBar.jsx";
 import SearchDisplay from "../features/searchpage/SearchDisplay.jsx";
@@ -8,7 +8,7 @@ import useGameGenres from "../features/searchpage/hooks/useGameGenres.js";
 import "./SearchPage.css";
 
 const SearchPage = () => {
-  const { category } = useParams();
+  const { category } = useLoaderData();
   const gameGenres = useGameGenres();
   const genreOptionsMap = {
     ...genreOptions,

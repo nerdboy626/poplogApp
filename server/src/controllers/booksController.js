@@ -9,7 +9,7 @@ const TRENDING_CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 async function fetchNYTList(category) {
   console.log("Fetching NYT list:", category);
   const response = await fetch(
-    `https://api.nytimes.com/svc/books/v3/lists/current/${category}.json?api-key=${NYT_API_KEY}`
+    `https://api.nytimes.com/svc/books/v3/lists/current/${category}.json?api-key=${NYT_API_KEY}`,
   );
 
   // const body = await response.text();
@@ -38,7 +38,7 @@ export const getBooksByList = async (req, res) => {
       nytBooks.slice(0, 20).map(async (book) => {
         try {
           const googleBookData = await fetchGoogleBookByISBN(
-            book.primary_isbn13
+            book.primary_isbn13,
           );
           if (googleBookData) {
             const merged = {
@@ -70,7 +70,7 @@ export const getBooksByList = async (req, res) => {
         googleBooksCache.set(book.primary_isbn13, bookData);
 
         return bookData;
-      })
+      }),
     );
 
     res.json(formatted);
@@ -107,7 +107,7 @@ async function fetchGoogleBookByISBN(isbn) {
   }
 
   const response = await fetch(
-    `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${GOOGLE_API_KEY}&maxResults=1`
+    `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${GOOGLE_API_KEY}&maxResults=1`,
   );
 
   if (!response.ok) {
@@ -211,7 +211,7 @@ export const getTrendingBooks = async (req, res) => {
     const limitedBooks = randomizedBooks.slice(0, 30);
 
     console.log(
-      `Found ${limitedBooks.length} unique books — enriching with Google data...`
+      `Found ${limitedBooks.length} unique books — enriching with Google data...`,
     );
 
     // enrich with Google Books info using ISBN
@@ -246,7 +246,7 @@ export const getTrendingBooks = async (req, res) => {
 
           return bookData;
         }
-      })
+      }),
     );
 
     console.log("Successfully fetched trending books!");
@@ -278,7 +278,7 @@ export const getBookResults = async (req, res) => {
 
   try {
     const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(
-      query
+      query,
     )}&key=${GOOGLE_API_KEY}&maxResults=10`;
 
     console.log(`Fetching book results on ${query} ...`);
@@ -292,10 +292,10 @@ export const getBookResults = async (req, res) => {
           const identifiers = item.volumeInfo?.industryIdentifiers || [];
 
           const isbn13 = identifiers.find(
-            (id) => id.type === "ISBN_13" && id.identifier
+            (id) => id.type === "ISBN_13" && id.identifier,
           );
           const isbn10 = identifiers.find(
-            (id) => id.type === "ISBN_10" && id.identifier
+            (id) => id.type === "ISBN_10" && id.identifier,
           );
 
           const isbn = isbn13?.identifier || isbn10?.identifier || null;

@@ -6,6 +6,8 @@ import {
 } from "react-router-dom";
 import RootLayout from "../layouts/RootLayout.jsx";
 import { trendingTitlesLoader } from "../loaders/trendingTitlesLoader.js";
+import { mediaDetailsLoader } from "../loaders/mediaDetailsLoader.js";
+import { searchPageLoader } from "../loaders/searchPageLoader.js";
 import Home from "../pages/Home.jsx";
 import Dashboard from "../pages/Dashboard.jsx";
 import SearchPage from "../pages/SearchPage.jsx";
@@ -30,14 +32,23 @@ export const router = createBrowserRouter(
           </ProtectedRoute>
         }
       />
+
       <Route path="searchpage">
         <Route index element={<Navigate to="movies" replace />} />
-        <Route path=":category" element={<SearchPage />} />
+        <Route
+          path=":category"
+          element={<SearchPage />}
+          loader={searchPageLoader}
+          errorElement={<NotFound />}
+        />
       </Route>
 
-      <Route path="media">
-        <Route path=":mediaType/:id" element={<MediaDetails />} />
-      </Route>
+      <Route
+        path="media/:mediaType/:id"
+        element={<MediaDetails />}
+        loader={mediaDetailsLoader}
+        errorElement={<NotFound />}
+      />
 
       <Route path="login" element={<Login />} />
       <Route path="forgot-password" element={<ForgotPassword />} />
