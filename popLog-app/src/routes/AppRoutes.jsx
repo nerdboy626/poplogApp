@@ -15,6 +15,7 @@ import MediaDetails from "../components/MediaDetails.jsx";
 import Login from "../pages/Login.jsx";
 import NotFound from "../pages/NotFound.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
+import PublicRoute from "./PublicRoute.jsx";
 import ForgotPassword from "../pages/ForgotPassword.jsx";
 import ResetPassword from "../pages/ResetPassword.jsx";
 import OAuthSuccess from "../pages/OAuthSuccess.jsx";
@@ -50,10 +51,35 @@ export const router = createBrowserRouter(
         errorElement={<NotFound />}
       />
 
-      <Route path="login" element={<Login />} />
-      <Route path="forgot-password" element={<ForgotPassword />} />
+      <Route
+        path="login"
+        element={
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        }
+      />
+
+      <Route
+        path="forgot-password"
+        element={
+          <PublicRoute>
+            <ForgotPassword />
+          </PublicRoute>
+        }
+      />
+
+      <Route
+        path="oauth-success"
+        element={
+          <PublicRoute>
+            <OAuthSuccess />
+          </PublicRoute>
+        }
+      />
+
       <Route path="reset-password" element={<ResetPassword />} />
-      <Route path="oauth-success" element={<OAuthSuccess />} />
+
       <Route
         path="account"
         element={

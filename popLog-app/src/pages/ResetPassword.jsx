@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../utils/AuthContext";
 import toast from "react-hot-toast";
 import "./ResetPassword.css";
 
 const ResetPassword = () => {
+  const auth = useAuth();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const token = searchParams.get("token");
@@ -53,9 +55,15 @@ const ResetPassword = () => {
           <p className="reset-subtitle">
             This password reset link is missing or expired.
           </p>
-          <Link className="request-link" to="/forgot-password">
-            Request a new link
-          </Link>
+          {auth.user ? (
+            <Link className="request-link" to="/account">
+              Go to your account
+            </Link>
+          ) : (
+            <Link className="request-link" to="/forgot-password">
+              Request a new link
+            </Link>
+          )}
         </div>
       </div>
     );

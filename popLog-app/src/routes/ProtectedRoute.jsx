@@ -3,7 +3,7 @@ import { useAuth } from "../utils/AuthContext.jsx";
 
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
-  const { isLoggedIn, loading } = useAuth();
+  const { isLoggedIn } = useAuth();
 
   if (!isLoggedIn) {
     return (
