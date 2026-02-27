@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+import { findMediaByExternalId } from "../database/mediaQueries.js";
 import { GOOGLE_API_KEY, NYT_API_KEY } from "../config/env.js";
 
 const googleBooksCache = new Map();
@@ -54,8 +55,10 @@ export const getBooksByList = async (req, res) => {
           console.warn("Google Books enrichment failed:", err);
         }
 
+        const bookId = book.primary_isbn13 || `nyt-${book.title}`;
+
         const bookData = {
-          id: book.primary_isbn13,
+          id: bookId,
           mediaType: "books",
           title: book.title || null,
           summary: book.description || "No summary available.",
@@ -67,7 +70,7 @@ export const getBooksByList = async (req, res) => {
           pageCount: null,
         };
 
-        googleBooksCache.set(book.primary_isbn13, bookData);
+        googleBooksCache.set(bookId, bookData);
 
         return bookData;
       }),
@@ -106,38 +109,43 @@ async function fetchGoogleBookByISBN(isbn) {
     return googleBooksCache.get(isbn);
   }
 
-  const response = await fetch(
-    `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${GOOGLE_API_KEY}&maxResults=1`,
-  );
+  try {
+    const response = await fetch(
+      `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${GOOGLE_API_KEY}&maxResults=1`,
+    );
 
-  if (!response.ok) {
-    console.log(`Google Books fetch failed for ISBN ${isbn}:`);
+    if (!response.ok) {
+      console.log(`Google Books fetch failed for ISBN ${isbn}:`);
+      return null;
+    }
+
+    const data = await response.json();
+    if (!data.items?.length) return null;
+
+    const book = data.items[0].volumeInfo;
+    const enriched = {
+      id: isbn,
+      mediaType: "books",
+      title: book.title || null,
+      summary: book.description || "No summary available.",
+      releaseYear: book.publishedDate?.slice(0, 4) || null,
+      coverUrl: getHighResCover(book.imageLinks),
+      rating:
+        typeof book.averageRating === "number"
+          ? Math.round(book.averageRating * 20) / 10
+          : null,
+      creators: book.authors?.join(", ") || null,
+      genres: book.categories || [],
+      pageCount: book.pageCount || null,
+    };
+
+    googleBooksCache.set(isbn, enriched);
+
+    return enriched;
+  } catch (err) {
+    console.warn("Google Books fetch failed:", err);
     return null;
   }
-
-  const data = await response.json();
-  if (!data.items?.length) return null;
-
-  const book = data.items[0].volumeInfo;
-  const enriched = {
-    id: isbn,
-    mediaType: "books",
-    title: book.title || null,
-    summary: book.description || "No summary available.",
-    releaseYear: book.publishedDate?.slice(0, 4) || null,
-    coverUrl: getHighResCover(book.imageLinks),
-    rating:
-      typeof book.averageRating === "number"
-        ? Math.round(book.averageRating * 20) / 10
-        : null,
-    creators: book.authors?.join(", ") || null,
-    genres: book.categories || [],
-    pageCount: book.pageCount || null,
-  };
-
-  // googleBooksCache.set(isbn, enriched);
-
-  return enriched;
 }
 
 function getUniqueBooks(books) {
@@ -229,8 +237,9 @@ export const getTrendingBooks = async (req, res) => {
 
           return bookData;
         } else {
+          const bookId = book.primary_isbn13 || `nyt-${book.title}`;
           const bookData = {
-            id: book.primary_isbn13,
+            id: bookId,
             mediaType: "books",
             title: book.title || null,
             summary: book.description || "No summary available.",
@@ -242,7 +251,7 @@ export const getTrendingBooks = async (req, res) => {
             pageCount: null,
           };
 
-          googleBooksCache.set(book.primary_isbn13, bookData);
+          googleBooksCache.set(bookId, bookData);
 
           return bookData;
         }
@@ -340,17 +349,46 @@ export const getBookDetails = async (req, res) => {
   const { id } = req.params;
 
   if (!id) {
-    return res.status(400).json({ error: "Missing ISBN" });
+    return res.status(400).json({ error: "Missing book ID" });
   }
 
   try {
-    const book = await fetchGoogleBookByISBN(id);
-
-    if (!book) {
-      return res.status(404).json({ error: "Book not found" });
+    if (googleBooksCache.has(id)) {
+      return res.json(googleBooksCache.get(id));
     }
 
-    res.json(book);
+    const looksLikeISBN = /^\d{10}(\d{3})?$/.test(id);
+
+    if (looksLikeISBN) {
+      const googleBook = await fetchGoogleBookByISBN(id);
+
+      if (googleBook) {
+        return res.json(googleBook);
+      }
+    }
+
+    const dbMedia = await findMediaByExternalId(id, "books");
+
+    if (dbMedia) {
+      const formatted = {
+        id: dbMedia.external_id,
+        mediaType: "books",
+        title: dbMedia.title,
+        summary: dbMedia.summary,
+        releaseYear: dbMedia.release_year,
+        coverUrl: dbMedia.image_url,
+        rating: null,
+        creators: null,
+        genres: [],
+        pageCount: null,
+      };
+
+      googleBooksCache.set(id, formatted);
+
+      return res.json(formatted);
+    }
+
+    return res.status(404).json({ error: "Book not found" });
   } catch (err) {
     console.error("Error fetching book details:", err);
     res.status(500).json({ error: "Failed to fetch book details." });

@@ -158,8 +158,8 @@ const SearchPage = () => {
           </div>
         )}
         {displayArray.length > 0 &&
-          displayArray.map((item) => (
-            <SearchDisplay key={item.id} item={item} />
+          displayArray.map((item, index) => (
+            <SearchDisplay key={index} item={item} />
           ))}
       </div>
     </div>

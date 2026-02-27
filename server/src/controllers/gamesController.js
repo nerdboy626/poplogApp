@@ -224,7 +224,7 @@ export const getGameDetails = async (req, res) => {
         return res.status(404).json({ error: "Game not found" });
       }
 
-      res.json(responseData);
+      res.json(responseData[0]);
     }
   } catch (err) {
     console.error("Error fetching game details:", err);
