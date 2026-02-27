@@ -58,6 +58,10 @@ const Dashboard = () => {
       result.sort((a, b) => a.title.localeCompare(b.title));
     }
 
+    if (sortByFilter === "rating") {
+      result.sort((a, b) => b.rating - a.rating);
+    }
+
     if (sortByFilter === "favorited") {
       result = result.filter((review) => review.favorite === true);
     }
@@ -99,6 +103,7 @@ const Dashboard = () => {
           >
             <option value="recent">Most Recent</option>
             <option value="alphabetical">A → Z</option>
+            <option value="rating">My Rating</option>
             <option value="favorited">Favorited</option>
           </select>
         </div>
