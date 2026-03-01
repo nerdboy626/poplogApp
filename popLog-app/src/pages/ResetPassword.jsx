@@ -38,8 +38,12 @@ const ResetPassword = () => {
         return;
       }
 
-      toast.success("Password reset successful. Please log in.");
-      navigate("/login");
+      toast.success("Password reset successful.");
+      if (auth.user) {
+        navigate("/account");
+      } else {
+        navigate("/login");
+      }
     } catch (err) {
       toast.error("Something went wrong.");
     } finally {
@@ -99,7 +103,16 @@ const ResetPassword = () => {
         </form>
 
         <p className="reset-back">
-          Changed your mind? <Link to="/login">Back to login</Link>
+          Changed your mind?{" "}
+          {auth.user ? (
+            <Link className="request-link" to="/account">
+              Go to your account
+            </Link>
+          ) : (
+            <Link className="request-link" to="/forgot-password">
+              Request a new link
+            </Link>
+          )}
         </p>
       </div>
     </div>
