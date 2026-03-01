@@ -37,6 +37,13 @@ export const postNewUser = async (req, res) => {
     return res.status(400).json({ error: "Invalid email format" });
   }
 
+  if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)) {
+    return res.status(400).json({
+      error:
+        "Password must be at least 8 characters and include one uppercase letter, one lowercase letter, and one number.",
+    });
+  }
+
   try {
     const users = await userExists(username, email);
 
@@ -171,6 +178,13 @@ export const resetPassword = async (req, res) => {
     return res.status(400).json({
       error:
         "Token is invalid or expired. Please send a new reset password email.",
+    });
+  }
+
+  if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)) {
+    return res.status(400).json({
+      error:
+        "Password must be at least 8 characters and include one uppercase letter, one lowercase letter, and one number.",
     });
   }
 

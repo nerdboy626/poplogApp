@@ -13,12 +13,14 @@ const ResetPassword = () => {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [loading, setLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setPasswordError("");
 
     if (password !== confirm) {
-      toast.error("Passwords do not match.");
+      setPasswordError("Passwords do not match.");
       return;
     }
 
@@ -34,7 +36,7 @@ const ResetPassword = () => {
       const data = await res.json();
 
       if (!res.ok) {
-        toast.error(data.error || "Reset failed.");
+        setPasswordError(data.error || "Reset failed");
         return;
       }
 
@@ -45,7 +47,8 @@ const ResetPassword = () => {
         navigate("/login");
       }
     } catch (err) {
-      toast.error("Something went wrong.");
+      console.error("Login error: ", err);
+      setPasswordError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -114,6 +117,8 @@ const ResetPassword = () => {
             </Link>
           )}
         </p>
+
+        {passwordError && <p className="error-text">{passwordError}</p>}
       </div>
     </div>
   );
