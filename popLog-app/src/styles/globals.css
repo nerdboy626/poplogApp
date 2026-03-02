@@ -221,3 +221,22 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: var(--text-primary);
   transition: background-color 5000s ease-in-out 0s;
 }
+
+/* Dividers */
+.gradient-divider {
+  border: none;
+  /* height: 1px;
+  background-color: var(--border-subtle); */
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    var(--brand-primary),
+    var(--brand-accent)
+  );
+}
+
+.soft-divider {
+  border: none;
+  height: 2px;
+  background-color: var(--border-subtle);
+}

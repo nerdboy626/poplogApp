@@ -8,7 +8,7 @@ const Home = () => {
   return (
     <div className="homepage">
       <Greeting />
-      <hr className="soft-divider" />
+      <hr className="gradient-divider" />
       <main className="trending-displays">
         <h3>Movies</h3>
         {trendingTitles.movies.length > 0 && (

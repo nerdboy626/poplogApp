@@ -244,7 +244,7 @@ const MediaDetails = () => {
       <div className="right-panel">
         <div className="rp-header">
           <h1>{titleYear}</h1>
-          <hr></hr>
+          <hr className="gradient-divider"></hr>
           {mediaInfo?.creators && (
             <h2>
               {creatorLabel} {mediaInfo.creators}

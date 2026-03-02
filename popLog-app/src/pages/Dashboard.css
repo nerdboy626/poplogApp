@@ -24,18 +24,6 @@
   font-size: var(--font-size-small);
 }
 
-.soft-divider {
-  /* height: 1px;
-  background-color: var(--border-subtle); */
-  border: none;
-  height: 2px;
-  background: linear-gradient(
-    to right,
-    var(--brand-primary),
-    var(--brand-accent)
-  );
-}
-
 .dashboard-controls {
   display: flex;
   gap: 1rem;

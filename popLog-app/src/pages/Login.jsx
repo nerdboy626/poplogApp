@@ -139,7 +139,7 @@ const Login = () => {
           Forgot your password?
         </Link>
 
-        <hr className="soft-divider" />
+        <hr className="gradient-divider" />
 
         <h4 className="signup-title">New to PopLog?</h4>
 

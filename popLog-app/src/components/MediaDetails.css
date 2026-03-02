@@ -178,13 +178,6 @@
 }
 
 .rp-header > hr {
-  border: none;
-  height: 2px;
-  background: linear-gradient(
-    to right,
-    var(--brand-primary),
-    var(--brand-accent)
-  );
   margin: 0.5rem 0;
 }
 

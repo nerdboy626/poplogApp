@@ -77,7 +77,7 @@ const Dashboard = () => {
           Track, revisit, and edit your media journal
         </p>
       </div>
-      <hr className="soft-divider" />
+      <hr className="gradient-divider" />
       <div className="dashboard-controls">
         <label>View Entries by:</label>
 
