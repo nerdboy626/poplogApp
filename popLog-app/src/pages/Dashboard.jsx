@@ -72,7 +72,7 @@ const Dashboard = () => {
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
-        <h1 className="dashboard-title">Your Dashboard</h1>
+        <h1 className="dashboard-title">Your Journal</h1>
         <p className="dashboard-subtitle">
           Track, revisit, and edit your media journal
         </p>

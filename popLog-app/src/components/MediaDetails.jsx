@@ -254,7 +254,7 @@ const MediaDetails = () => {
 
         <div className="rp-summary">
           <h3>Description</h3>
-          {mediaInfo?.summary?.length > 550 ? (
+          {mediaInfo?.summary?.length > 525 ? (
             <>
               <div
                 className={`rp-summary-wrapper ${

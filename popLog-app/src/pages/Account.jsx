@@ -102,7 +102,7 @@ const Account = () => {
           </p>
         </section>
 
-        <hr className="soft-divider" />
+        <hr className="gradient-divider" />
 
         <section>
           <h2>Journal Stats</h2>
@@ -140,7 +140,7 @@ const Account = () => {
           </ul>
         </section>
 
-        <hr className="soft-divider" />
+        <hr className="gradient-divider" />
 
         <section>
           <h2>Account Actions</h2>

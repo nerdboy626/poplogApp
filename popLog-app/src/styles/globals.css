@@ -28,7 +28,8 @@
   --success: #22c55e;
 
   /* Font */
-  --font-family: "Inter", sans-serif;
+  /* --font-family: "Inter", sans-serif; */
+  --font-family: "Manrope", sans-serif;
   --font-size-small: 0.875rem;
   --font-size-medium: 1rem;
   --font-size-large: 1.25rem;
@@ -50,6 +51,16 @@ body {
 
 body {
   padding-top: 8vh;
+  letter-spacing: 0.01em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  letter-spacing: -0.02em;
 }
 
 /* Links */
@@ -220,6 +231,21 @@ input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 1000px var(--bg-surface) inset;
   -webkit-text-fill-color: var(--text-primary);
   transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Toast Base */
+.poplog-toast {
+  background: var(--bg-elevated) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 12px !important;
+
+  box-shadow: var(--shadow-medium) !important;
+  backdrop-filter: blur(8px);
+
+  font-family: var(--font-family);
+  font-size: var(--font-size-medium);
+  padding: 1rem !important;
 }
 
 /* Dividers */

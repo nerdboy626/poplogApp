@@ -9,12 +9,18 @@ const App = () => {
         position="top-right"
         toastOptions={{
           duration: 3000,
-          style: {
-            background: "#333",
-            color: "#fff",
-            fontSize: "1rem",
-            borderRadius: "8px",
-            padding: "1rem",
+          className: "poplog-toast",
+          success: {
+            iconTheme: {
+              primary: "var(--success)",
+              secondary: "var(--bg-elevated)",
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: "var(--danger)",
+              secondary: "var(--bg-elevated)",
+            },
           },
         }}
       />

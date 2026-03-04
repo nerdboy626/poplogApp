@@ -3,63 +3,113 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 8vh;
+  height: 60px;
   z-index: 100;
 
   background-color: var(--bg-surface);
+  background-color: #151327b3;
   border-bottom: 1px solid var(--border-subtle);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  /* border: 2px solid orange; */
+  /* border: 2px solid red; */
 }
 
-.navbar > ul {
-  width: 100%;
-  max-width: 1200px;
+.navbar-container {
   height: 100%;
+  margin: 0 auto;
 
-  list-style: none;
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  padding: 0 2rem;
+  padding: 0 2.5rem;
 
   /* border: 2px solid green; */
 }
 
-.navbar li {
-  font-size: var(--font-size-large);
-  font-weight: 600;
+.navbar-left {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
 }
 
-.navbar a {
+.navbar-logo {
+  height: 100%;
+  /* border: 2px solid pink; */
+}
+
+.navbar-logo img {
+  height: 100%;
+  width: auto;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.navbar-primary-links {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  /* border: 2px solid orange; */
+}
+
+.navbar-container a {
+  font-size: var(--font-size-medium);
+  font-weight: 600;
   color: var(--text-secondary);
   text-decoration: none;
   position: relative;
   padding: 0.3rem 0;
   transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.navbar a:hover {
+.navbar-container a:hover {
   color: var(--text-primary);
 }
 
-.navbar a.active {
+.navbar-container a.active {
   color: var(--brand-primary);
 }
 
-.navbar a.active::after {
+.navbar-container a.active::after {
   content: "";
   position: absolute;
   left: 0;
   bottom: -6px;
   width: 100%;
   height: 2px;
-  background-color: var(--brand-accent);
+  background: var(--brand-accent);
   border-radius: 2px;
+}
+
+@media (max-width: 900px) {
+  .navbar-right span {
+    display: none;
+  }
+
+  .navbar-right svg {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .navbar-container {
+    padding: 0 1rem;
+  }
+
+  .navbar-left {
+    gap: 1rem;
+  }
+
+  .navbar-links {
+    gap: 1rem;
+  }
+
+  .navbar-container a {
+    gap: 0;
+  }
 }

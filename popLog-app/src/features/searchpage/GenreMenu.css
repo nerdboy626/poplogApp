@@ -10,22 +10,25 @@
 }
 
 .genre-dropdown {
-  text-align: center;
-  /* border: 2px solid blueviolet; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  border: 2px solid blueviolet;
 }
 
 .genre-dropdown-label {
-  display: block;
   font-size: var(--font-size-medium);
   color: var(--text-secondary);
-  margin-bottom: 0.5rem;
+  text-align: center;
   /* border: 2px solid aqua; */
 }
 
 .genre-select-wrapper {
   position: relative;
   /* display: inline-block; */
-  width: auto;
+  width: max-content;
   /* border: 2px solid palegreen; */
 }
 

@@ -157,7 +157,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 700px) {
   .search-entry {
     flex-direction: column;
     padding: 1rem;
