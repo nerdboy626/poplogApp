@@ -31,6 +31,9 @@ const SearchBar = ({
     },
   ];
 
+  const placeHolder =
+    mediaCategory === "movies" ? "movies & tv" : mediaCategory;
+
   function handleSubmit(e) {
     e.preventDefault();
     onSearchSubmit(); // trigger parent’s search
@@ -59,7 +62,7 @@ const SearchBar = ({
             id="searchInput"
             name="searchInput"
             type="text"
-            placeholder="Search all titles..."
+            placeholder={`Search all ${placeHolder}...`}
             value={inputValue}
             onChange={(e) => onInputChange(e.target.value)}
             className={error ? "input-error" : ""}

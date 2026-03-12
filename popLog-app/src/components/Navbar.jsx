@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext.jsx";
 import { IoHomeOutline } from "react-icons/io5";
 import { IoSearch } from "react-icons/io5";
@@ -15,9 +15,11 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <div className="navbar-left">
-          <div className="navbar-logo">
-            <img src={logo} alt="Poplog logo" />
-          </div>
+          <Link to="/" className="logo-link">
+            <div className="navbar-logo">
+              <img src={logo} alt="Poplog logo" />
+            </div>
+          </Link>
 
           <ul className="navbar-primary-links">
             <li>

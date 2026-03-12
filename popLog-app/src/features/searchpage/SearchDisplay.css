@@ -34,7 +34,7 @@
   /* margin-bottom: 1rem; */
   width: 100%;
   max-width: 100%;
-  border: 2px solid pink;
+  /* border: 2px solid pink; */
 }
 
 .search-entry-header h2 {
@@ -46,13 +46,13 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   min-width: 0;
-  border: 2px solid red;
+  /* border: 2px solid red; */
 }
 
 .search-entry-year {
   white-space: nowrap;
   flex-shrink: 0;
-  border: 2px solid palegreen;
+  /* border: 2px solid palegreen; */
 }
 
 .search-entry-text {

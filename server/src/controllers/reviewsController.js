@@ -45,7 +45,7 @@ export async function saveReview(req, res) {
     res.json(review);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to save review" });
+    res.status(500).json({ error: "Failed to save entry" });
   }
 }
 
@@ -57,7 +57,7 @@ export async function deleteUserReview(req, res) {
     await deleteReview(user_id, media_id);
     res.json({ success: true });
   } catch (err) {
-    res.status(500).json({ error: "Failed to delete review" });
+    res.status(500).json({ error: "Failed to delete entry" });
   }
 }
 
@@ -68,7 +68,7 @@ export async function getUserDashboard(req, res) {
     const items = await getDashboardItems(user_id);
     res.json(items);
   } catch (err) {
-    res.status(500).json({ error: "Failed to retrieve dashboard items" });
+    res.status(500).json({ error: "Failed to retrieve journal entries" });
   }
 }
 
@@ -97,7 +97,7 @@ export async function getUserReview(req, res) {
       notes: review.notes,
     });
   } catch (err) {
-    console.error("Error fetching user review:", err);
-    res.status(500).json({ error: "Failed to fetch review" });
+    console.error("Error fetching user entry:", err);
+    res.status(500).json({ error: "Failed to fetch entry" });
   }
 }

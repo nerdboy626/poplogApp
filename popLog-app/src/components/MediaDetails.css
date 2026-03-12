@@ -1,7 +1,7 @@
 .media-details-container {
   display: grid;
   grid-template-columns: minmax(150px, 1fr) 2fr; /* 1/3 and 2/3 ratio */
-  height: calc(100vh - 8vh);
+  height: calc(100vh - 60px);
   gap: 2rem;
   padding: 0 2.5rem;
   border: 5px solid salmon;

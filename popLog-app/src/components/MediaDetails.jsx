@@ -138,7 +138,7 @@ const MediaDetails = () => {
       if (response.ok) {
         console.log(`The handle save data was`);
         console.log(data);
-        toast.success("Review saved!");
+        toast.success("Entry saved!");
         setServerId(data.media_id);
         setShowDelete(true);
         setShowSave(false); // hide save button
@@ -173,7 +173,7 @@ const MediaDetails = () => {
         setShowDelete(false);
         setShowSave(false);
 
-        toast.success("Review deleted.");
+        toast.success("Entry deleted.");
       } else {
         const data = await response.json().catch(() => null);
 
@@ -309,7 +309,7 @@ const MediaDetails = () => {
 
         {showDelete && (
           <button className="btn btn-danger" onClick={handleDelete}>
-            Delete Review
+            Delete Entry
           </button>
         )}
 

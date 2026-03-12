@@ -50,6 +50,7 @@ const SearchDisplay = ({ item }) => {
               <h2 className="search-entry-year">({item.releaseYear})</h2>
             )}
           </div>
+          <hr className="gradient-divider"></hr>
           {mediaCreator(item)}
           {item.genres.length > 0 && (
             <div className="genres-container">
