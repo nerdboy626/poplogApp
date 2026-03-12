@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+import { syncMedia } from "../utils/syncMedia.js";
 import { TMDB_ACCESS_TOKEN } from "../config/env.js";
 
 const options = {
@@ -394,6 +395,8 @@ export const getTMDBDetailsById = async (req, res) => {
       ...tvInfo,
       ...movieInfo,
     };
+
+    await syncMedia(formatted);
 
     console.log(`Successfully returned details for ID ${id}`);
     res.json(formatted);

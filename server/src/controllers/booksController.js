@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+import { syncMedia } from "../utils/syncMedia.js";
 import { findMediaByExternalId } from "../database/mediaQueries.js";
 import { GOOGLE_API_KEY, NYT_API_KEY } from "../config/env.js";
 
@@ -354,6 +355,7 @@ export const getBookDetails = async (req, res) => {
 
   try {
     if (googleBooksCache.has(id)) {
+      await syncMedia(googleBooksCache.get(id));
       return res.json(googleBooksCache.get(id));
     }
 
@@ -363,6 +365,7 @@ export const getBookDetails = async (req, res) => {
       const googleBook = await fetchGoogleBookByISBN(id);
 
       if (googleBook) {
+        await syncMedia(googleBook);
         return res.json(googleBook);
       }
     }

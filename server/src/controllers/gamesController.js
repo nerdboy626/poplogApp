@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+import { syncMedia } from "../utils/syncMedia.js";
 import { getIGDBToken } from "../utils/igdbAuth.js";
 import { IGDB_CLIENT_ID } from "../config/env.js";
 
@@ -224,6 +225,7 @@ export const getGameDetails = async (req, res) => {
         return res.status(404).json({ error: "Game not found" });
       }
 
+      await syncMedia(responseData[0]);
       res.json(responseData[0]);
     }
   } catch (err) {
