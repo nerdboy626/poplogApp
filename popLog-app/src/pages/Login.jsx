@@ -11,7 +11,7 @@ const Login = () => {
   const location = useLocation();
   const message = location.state?.message;
   const redirectPath =
-    sessionStorage.getItem("redirectAfterLogin") || location.state?.path || "/";
+    sessionStorage.getItem("redirectAfterLogin") || location.state?.from || "/";
 
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");

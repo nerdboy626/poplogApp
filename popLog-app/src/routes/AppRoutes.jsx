@@ -9,7 +9,7 @@ import { trendingTitlesLoader } from "../loaders/trendingTitlesLoader.js";
 import { mediaDetailsLoader } from "../loaders/mediaDetailsLoader.js";
 import { searchPageLoader } from "../loaders/searchPageLoader.js";
 import Home from "../pages/Home.jsx";
-import Dashboard from "../pages/Dashboard.jsx";
+import Journal from "../pages/Journal.jsx";
 import SearchPage from "../pages/SearchPage.jsx";
 import MediaDetails from "../components/MediaDetails.jsx";
 import Login from "../pages/Login.jsx";
@@ -26,10 +26,10 @@ export const router = createBrowserRouter(
     <Route path="/" element={<RootLayout />}>
       <Route index element={<Home />} loader={trendingTitlesLoader} />
       <Route
-        path="dashboard"
+        path="journal"
         element={
           <ProtectedRoute>
-            <Dashboard />
+            <Journal />
           </ProtectedRoute>
         }
       />

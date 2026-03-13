@@ -2,9 +2,9 @@ import { useEffect, useState, useMemo } from "react";
 import { useAuth } from "../utils/AuthContext.jsx";
 import { fetchWithAuth } from "../utils/fetchWithAuth.js";
 import CardDisplay from "../components/CardDisplay.jsx";
-import "./Dashboard.css";
+import "./Journal.css";
 
-const Dashboard = () => {
+const Journal = () => {
   const auth = useAuth();
   const [reviews, setReviews] = useState([]);
 
@@ -70,15 +70,15 @@ const Dashboard = () => {
   }, [reviews, mediaFilter, sortByFilter]);
 
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-header">
-        <h1 className="dashboard-title">Your Journal</h1>
-        <p className="dashboard-subtitle">
+    <div className="journal-container">
+      <div className="journal-header">
+        <h1 className="journal-title">Your Journal</h1>
+        <p className="journal-subtitle">
           Track, revisit, and edit your media journal
         </p>
       </div>
       <hr className="gradient-divider" />
-      <div className="dashboard-controls">
+      <div className="journal-controls">
         <label>View Entries by:</label>
 
         <div className="select-wrapper">
@@ -109,9 +109,9 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="dashboard-grid">
+      <div className="journal-grid">
         {filteredAndSorted.length === 0 ? (
-          <div className="dashboard-empty-state">
+          <div className="journal-empty-state">
             <h3 className="empty-title">
               You currently don’t have any entries for the selected filters.
             </h3>
@@ -137,4 +137,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Journal;

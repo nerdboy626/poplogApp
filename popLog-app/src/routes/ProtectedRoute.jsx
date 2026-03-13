@@ -11,8 +11,8 @@ const ProtectedRoute = ({ children }) => {
         to="/login"
         replace
         state={{
-          from: location.pathname,
-          message: "You must be logged in to access this page",
+          from: location.pathname + location.search + location.hash,
+          message: `You must be logged in to access the ${location.pathname.slice(1)} page`,
         }}
       />
     );

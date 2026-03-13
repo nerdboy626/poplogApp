@@ -1,4 +1,4 @@
-.dashboard-container {
+.journal-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -7,24 +7,24 @@
   /* border: 2px solid salmon; */
 }
 
-.dashboard-header {
+.journal-header {
   padding: 1.5rem 1rem;
   text-align: center;
 }
 
-.dashboard-title {
+.journal-title {
   color: var(--text-primary);
   font-size: 1.5rem;
   font-weight: 600;
 }
 
-.dashboard-subtitle {
+.journal-subtitle {
   margin-top: 0.5rem;
   color: var(--text-muted);
   font-size: var(--font-size-small);
 }
 
-.dashboard-controls {
+.journal-controls {
   display: flex;
   gap: 1rem;
   padding: 1rem;
@@ -32,13 +32,13 @@
   justify-content: center;
 }
 
-.dashboard-controls label {
+.journal-controls label {
   text-align: center;
   color: var(--text-secondary);
   font-size: var(--font-size-medium);
 }
 
-.dashboard-controls select {
+.journal-controls select {
   width: auto;
   appearance: none;
   padding-right: 2rem; /* space for arrow */
@@ -66,7 +66,7 @@
   /* border: 2px solid orange; */
 }
 
-.dashboard-grid {
+.journal-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   justify-items: center;
@@ -77,7 +77,7 @@
   /* border: 5px solid salmon; */
 }
 
-.dashboard-empty-state {
+.journal-empty-state {
   grid-column: 1 / -1; /* span full grid */
   text-align: center;
   padding: 1.5rem 1rem;

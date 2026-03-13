@@ -4,12 +4,14 @@ import { IoHomeOutline } from "react-icons/io5";
 import { IoSearch } from "react-icons/io5";
 import { LuNotebookPen } from "react-icons/lu";
 import { IoPersonCircleOutline } from "react-icons/io5";
+import { useLocation } from "react-router-dom";
 
 import logo from "../assets/logo.svg";
 import "./Navbar.css";
 
 const Navbar = () => {
   const auth = useAuth();
+  const location = useLocation();
 
   return (
     <nav className="navbar">
@@ -37,7 +39,7 @@ const Navbar = () => {
             </li>
 
             <li>
-              <NavLink to="/dashboard">
+              <NavLink to="/journal">
                 <LuNotebookPen />
                 Journal
               </NavLink>
@@ -52,7 +54,12 @@ const Navbar = () => {
               <span>{auth.user.username} </span>
             </NavLink>
           ) : (
-            <NavLink to="/login">
+            <NavLink
+              to="/login"
+              state={{
+                from: location.pathname + location.search + location.hash,
+              }}
+            >
               <IoPersonCircleOutline className="profile-icon" />
               <span>Login</span>
             </NavLink>
