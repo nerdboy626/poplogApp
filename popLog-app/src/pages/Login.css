@@ -88,13 +88,13 @@
     var(--brand-primary),
     var(--brand-accent)
   );
-  z-index: 0;
+  z-index: 5;
 }
 
 .divider span {
   padding: 0 1rem;
   background: var(--bg-surface);
-  z-index: 1;
+  z-index: 10;
   color: var(--text-secondary);
 }
 

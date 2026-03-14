@@ -290,6 +290,50 @@
   pointer-events: auto;
 }
 
+.delete-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 5, 15, 0.75);
+  backdrop-filter: blur(6px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 100;
+
+  border: 2px solid red;
+}
+
+.delete-modal {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+
+  padding: 1.5rem;
+  gap: 1rem;
+  width: min(420px, 90%);
+
+  box-shadow: var(--shadow-strong);
+}
+
+.delete-modal h1 {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.delete-modal p {
+  color: var(--text-secondary);
+}
+
+.delete-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
 @media (max-width: 700px) {
   .media-details-container {
     grid-template-columns: 1fr;

@@ -25,6 +25,7 @@ const MediaDetails = () => {
   const [isSummaryExpanded, setIsSummaryExpanded] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [serverId, setServerId] = useState(0);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const creatorLabel =
     mediaType === "movie"
@@ -152,12 +153,6 @@ const MediaDetails = () => {
   };
 
   const handleDelete = async () => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete your review? This cannot be undone.",
-    );
-
-    if (!confirmed) return;
-
     try {
       const response = await fetchWithAuth(
         `http://localhost:3500/api/reviews/delete/${serverId}`,
@@ -172,6 +167,7 @@ const MediaDetails = () => {
         setUserNotes("");
         setShowDelete(false);
         setShowSave(false);
+        setShowDeleteModal(false);
 
         toast.success("Entry deleted.");
       } else {
@@ -308,7 +304,10 @@ const MediaDetails = () => {
         </div>
 
         {showDelete && (
-          <button className="btn btn-danger" onClick={handleDelete}>
+          <button
+            className="btn btn-danger"
+            onClick={() => setShowDeleteModal(true)}
+          >
             Delete Entry
           </button>
         )}
@@ -320,6 +319,32 @@ const MediaDetails = () => {
           Save
         </button>
       </div>
+
+      {showDeleteModal && (
+        <div
+          className="delete-modal-overlay"
+          onClick={() => setShowDeleteModal(false)}
+        >
+          <div className="delete-modal" onClick={(e) => e.stopPropagation()}>
+            <h1>Delete Journal Entry?</h1>
+
+            <p>This will permanently remove this entry from your journal.</p>
+
+            <div className="delete-modal-actions">
+              <button
+                className="btn btn-ghost"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                Cancel
+              </button>
+
+              <button className="btn btn-danger" onClick={handleDelete}>
+                Delete Entry
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
