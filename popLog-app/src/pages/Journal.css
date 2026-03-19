@@ -1,10 +1,7 @@
-.journal-container {
+.journal-page {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* align-items: center; */
-  /* padding: 0 2.5rem 0 2.5rem; */
-  /* border: 2px solid salmon; */
 }
 
 .journal-header {
@@ -24,21 +21,26 @@
   font-size: var(--font-size-small);
 }
 
-.journal-controls {
+.journal-filters {
   display: flex;
+  justify-content: center;
+  align-items: center;
   gap: 1rem;
   padding: 1rem;
-  align-items: center;
-  justify-content: center;
 }
 
-.journal-controls label {
-  text-align: center;
+.journal-filters__group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.journal-filters label {
   color: var(--text-secondary);
   font-size: var(--font-size-medium);
 }
 
-.journal-controls select {
+.journal-filters select {
   width: auto;
   appearance: none;
   padding-right: 2rem; /* space for arrow */
@@ -47,9 +49,7 @@
 
 .select-wrapper {
   position: relative;
-  /* display: inline-block; */
   width: auto;
-  /* border: 2px solid palegreen; */
 }
 
 .select-wrapper::after {
@@ -59,14 +59,11 @@
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
-  /* padding-left: 1rem; */
-
   color: var(--text-muted);
   font-size: var(--font-size-small);
-  /* border: 2px solid orange; */
 }
 
-.journal-grid {
+.journal-entries {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   justify-items: center;
@@ -74,24 +71,21 @@
   padding: 1.5rem;
   background-color: var(--bg-surface);
   border-radius: 10px;
-  /* border: 5px solid salmon; */
 }
 
-.journal-empty-state {
-  grid-column: 1 / -1; /* span full grid */
+.journal-empty {
+  grid-column: 1 / -1;
   text-align: center;
   padding: 1.5rem 1rem;
-
-  color: var(--text-secondary);
 }
 
-.empty-title {
+.journal-empty__title {
   font-size: var(--font-size-large);
   margin-bottom: 0.5rem;
   color: var(--text-primary);
 }
 
-.empty-subtitle {
+.journal-empty__subtitle {
   font-size: var(--font-size-medium);
   color: var(--text-secondary);
 }

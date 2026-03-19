@@ -1,10 +1,9 @@
-.carousel-wrapper {
+.media-carousel {
   position: relative;
   width: 100%;
-  /* border: 3px solid green; */
 }
 
-.carousel {
+.media-carousel__track {
   display: flex;
   align-items: center;
   overflow-x: auto;
@@ -12,14 +11,13 @@
   scroll-behavior: smooth;
   gap: 1.5rem;
   padding: 0.7rem 2.5rem; /* space for arrows */
-  /* border: 3px solid pink; */
 }
 
-.carousel::-webkit-scrollbar {
+.media-carousel__track::-webkit-scrollbar {
   display: none;
 }
 
-.carousel-arrow {
+.media-carousel__arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -49,26 +47,26 @@
 }
 
 /* Show only if scrollable AND hovering */
-.carousel-wrapper:hover .carousel-arrow.visible {
+.media-carousel:hover .media-carousel__arrow.visible {
   opacity: 1;
   pointer-events: auto;
 }
 
-.carousel-arrow:hover {
+.media-carousel__arrow:hover {
   background: rgba(0, 0, 0, 0.85);
   transform: translateY(-50%) scale(1.05);
 }
 
-.carousel-arrow.left {
+.media-carousel__arrow.left {
   left: 0.3rem;
 }
 
-.carousel-arrow.right {
+.media-carousel__arrow.right {
   right: 0.3rem;
 }
 
-.carousel-wrapper::before,
-.carousel-wrapper::after {
+.media-carousel::before,
+.media-carousel::after {
   content: "";
   position: absolute;
   top: 0;
@@ -78,18 +76,18 @@
   z-index: 5;
 }
 
-.carousel-wrapper::before {
+.media-carousel::before {
   left: 0;
   background: linear-gradient(to right, var(--bg-primary), transparent);
 }
 
-.carousel-wrapper::after {
+.media-carousel::after {
   right: 0;
   background: linear-gradient(to left, var(--bg-primary), transparent);
 }
 
 @media (hover: none) {
-  .carousel-arrow {
+  .media-carousel__arrow {
     display: none;
   }
 }

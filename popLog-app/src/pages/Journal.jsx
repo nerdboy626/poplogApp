@@ -12,34 +12,34 @@ const Journal = () => {
   const [sortByFilter, setSortByFilter] = useState("recent");
 
   useEffect(() => {
+    async function fetchReviews() {
+      if (!auth.user) return;
+      const baseUrl = `http://localhost:3500/api/reviews/dashboard`;
+
+      try {
+        console.log(
+          `Trying to grab reviews for user ${auth.user.username} with user id of ${auth.user.id}`,
+        );
+
+        const response = await fetchWithAuth(
+          baseUrl,
+          {
+            method: "GET",
+          },
+          auth,
+        );
+        const data = await response.json();
+
+        console.log(data);
+
+        setReviews(data);
+      } catch (err) {
+        console.error("Failed to fetch reviews:", err.message);
+      }
+    }
+
     fetchReviews();
   }, []);
-
-  async function fetchReviews() {
-    if (!auth.user) return;
-    const baseUrl = `http://localhost:3500/api/reviews/dashboard`;
-
-    try {
-      console.log(
-        `Trying to grab reviews for user ${auth.user.username} with user id of ${auth.user.id}`,
-      );
-
-      const response = await fetchWithAuth(
-        baseUrl,
-        {
-          method: "GET",
-        },
-        auth,
-      );
-      const data = await response.json();
-
-      console.log(data);
-
-      setReviews(data);
-    } catch (err) {
-      console.error("Failed to fetch reviews:", err.message);
-    }
-  }
 
   const filteredAndSorted = useMemo(() => {
     let result = [...reviews];
@@ -70,59 +70,68 @@ const Journal = () => {
   }, [reviews, mediaFilter, sortByFilter]);
 
   return (
-    <div className="journal-container">
-      <div className="journal-header">
+    <main className="journal-page">
+      <header className="journal-header">
         <h1 className="journal-title">Your Journal</h1>
         <p className="journal-subtitle">
           Track, revisit, and edit your media journal
         </p>
-      </div>
+      </header>
+
       <hr className="gradient-divider" />
-      <div className="journal-controls">
-        <label>View Entries by:</label>
 
-        <div className="select-wrapper">
-          <select
-            value={mediaFilter}
-            onChange={(e) => setMediaFilter(e.target.value)}
-          >
-            <option value="all">All</option>
-            <option value="movie">Movies</option>
-            <option value="tv">TV</option>
-            <option value="games">Games</option>
-            <option value="books">Books</option>
-          </select>
+      <form className="journal-filters">
+        <div className="journal-filters__group">
+          <label htmlFor="media-filter">View Entries</label>
+
+          <div className="select-wrapper">
+            <select
+              id="media-filter"
+              value={mediaFilter}
+              onChange={(e) => setMediaFilter(e.target.value)}
+            >
+              <option value="all">All</option>
+              <option value="movie">Movies</option>
+              <option value="tv">TV</option>
+              <option value="games">Games</option>
+              <option value="books">Books</option>
+            </select>
+          </div>
         </div>
 
-        <label>Sort Entries by:</label>
+        <div className="journal-filters__group">
+          <label htmlFor="sort-filter">Sort By</label>
 
-        <div className="select-wrapper">
-          <select
-            value={sortByFilter}
-            onChange={(e) => setSortByFilter(e.target.value)}
-          >
-            <option value="recent">Most Recent</option>
-            <option value="alphabetical">A → Z</option>
-            <option value="rating">My Rating</option>
-            <option value="favorited">Favorited</option>
-          </select>
+          <div className="select-wrapper">
+            <select
+              id="sort-filter"
+              value={sortByFilter}
+              onChange={(e) => setSortByFilter(e.target.value)}
+            >
+              <option value="recent">Most Recent</option>
+              <option value="alphabetical">A → Z</option>
+              <option value="rating">My Rating</option>
+              <option value="favorited">Favorited</option>
+            </select>
+          </div>
         </div>
-      </div>
+      </form>
 
-      <div className="journal-grid">
+      <section className="journal-entries">
         {filteredAndSorted.length === 0 ? (
-          <div className="journal-empty-state">
-            <h3 className="empty-title">
+          <div className="journal-empty">
+            <h3 className="journal-empty__title">
               You currently don’t have any entries for the selected filters.
             </h3>
-            <p className="empty-subtitle">
-              Add some more from the homepage or searchpage!
+
+            <p className="journal-empty__subtitle">
+              Add some from the homepage or search page!
             </p>
           </div>
         ) : (
-          filteredAndSorted.map((item, index) => (
+          filteredAndSorted.map((item) => (
             <CardDisplay
-              key={index}
+              key={`${item.media_type}-${item.external_id}`}
               id={item.external_id}
               title={item.title}
               description={item.summary}
@@ -132,8 +141,8 @@ const Journal = () => {
             />
           ))
         )}
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 

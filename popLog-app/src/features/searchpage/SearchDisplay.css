@@ -1,4 +1,4 @@
-.search-entry-link {
+.search-card__link {
   text-decoration: none;
   color: inherit;
   display: block; /* expand to full width of result block */
@@ -6,7 +6,11 @@
   /* border: 3px solid green; */
 }
 
-.search-entry {
+.search-card__link:hover {
+  text-decoration: none;
+}
+
+.search-card {
   display: flex;
   justify-content: left;
   align-items: center;
@@ -21,13 +25,13 @@
   opacity: 0;
 }
 
-.search-entry:hover {
+.search-card:hover {
   border-color: var(--brand-primary);
   background-color: var(--bg-elevated);
   transform: translateY(-2px);
 }
 
-.search-entry-header {
+.search-card__header {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -37,11 +41,11 @@
   /* border: 2px solid pink; */
 }
 
-.search-entry-header h2 {
+.search-card__header h2 {
   font-size: 1.5rem;
 }
 
-.search-entry-title {
+.search-card__title {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -49,21 +53,21 @@
   /* border: 2px solid red; */
 }
 
-.search-entry-year {
+.search-card__year {
   white-space: nowrap;
   flex-shrink: 0;
   /* border: 2px solid palegreen; */
 }
 
-.search-entry-text {
+.search-card__content {
   flex: 1;
   min-width: 0;
   max-width: 100%;
-  border: 2px solid green;
+  /* border: 2px solid green; */
 }
 
-.search-entry p {
-  margin: 1rem 0 0 0;
+.search-card__summary {
+  margin-top: 1rem;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
@@ -71,11 +75,11 @@
   overflow: hidden;
   line-height: 1.5;
   font-size: var(--font-size-medium);
-  border: 2px solid orange;
+  /* border: 2px solid orange; */
 }
 
-.search-entry-creator {
-  margin: 0.5rem 0 0 0;
+.search-card__creator {
+  margin-top: 0.5rem;
   font-size: var(--font-size-medium);
   font-weight: 500;
   display: -webkit-box;
@@ -83,10 +87,11 @@
   line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  border: 2px solid blue;
+  /* border: 2px solid blue; */
 }
 
-.genres-container {
+.search-card__genres {
+  margin-top: 0.5rem;
   display: flex;
   gap: 0.5rem; /* space between genre chips */
   overflow: hidden; /* hide any chips that don’t fit */
@@ -95,15 +100,14 @@
   -ms-overflow-style: none;
   white-space: nowrap; /* keep all chips on one line */
   text-overflow: clip; /* just clip extra content */
-  margin-top: 0.5rem;
-  border: 2px solid plum;
+  /* border: 2px solid plum; */
 }
 
-.genres-container::-webkit-scrollbar {
+.search-card__genres::-webkit-scrollbar {
   display: none; /* Hides the scrollbar visually */
 }
 
-.genre-chip {
+.search-card__genre {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -119,7 +123,7 @@
   color: var(--text-primary);
 }
 
-.entry-img-container {
+.search-card__cover {
   /* border: 2px solid peru; */
   border-radius: 10px;
   width: 150px;
@@ -134,21 +138,17 @@
   align-items: center;
 }
 
-.entry-img-container img {
+.search-card__cover img {
   height: 100%;
   width: 100%;
   object-fit: cover;
   object-position: center center;
 }
 
-.icon {
+.search-card__icon {
   width: 100%;
   height: 100%;
   color: var(--text-muted);
-}
-
-.search-entry-link:hover {
-  text-decoration: none;
 }
 
 @keyframes fadeIn {
@@ -158,29 +158,29 @@
 }
 
 @media (max-width: 700px) {
-  .search-entry {
+  .search-card {
     flex-direction: column;
     padding: 1rem;
     gap: 0.5rem;
   }
 
-  .search-entry-header {
+  .search-card__header {
     justify-content: center;
   }
 
-  .search-entry-creator {
+  .search-card__creator {
     text-align: center;
   }
 
-  .genres-container {
+  .search-card__genres {
     justify-content: center;
   }
 
-  .search-entry-header h2 {
-    font-size: var(--font-size-medium);
+  .search-card__header h2 {
+    font-size: var(--font-size-large);
   }
 
-  .search-entry img {
+  .search-card__cover img {
     width: 100%;
     max-width: 260px;
     margin: 0 auto 1rem auto;

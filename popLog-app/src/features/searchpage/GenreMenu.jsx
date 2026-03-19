@@ -2,15 +2,16 @@ import "./GenreMenu.css";
 
 const GenreMenu = ({ options, selected, onChange, showClear, onClear }) => {
   return (
-    <div className="genre-row">
-      <div className="genre-dropdown">
-        <label className="genre-dropdown-label">
+    <section className="genre-menu">
+      <div className="genre-menu__controls">
+        <label htmlFor="genre-select" className="genre-menu__label">
           Browse Popular Titles by Genre:
         </label>
 
-        <div className="genre-select-wrapper">
+        <div className="genre-menu__select-wrapper">
           <select
-            className="genre-dropdown-select"
+            id="genre-select"
+            className="genre-menu__select"
             value={selected}
             onChange={(e) => onChange(e.target.value)}
           >
@@ -26,13 +27,13 @@ const GenreMenu = ({ options, selected, onChange, showClear, onClear }) => {
       </div>
 
       <button
-        className={`btn btn-primary`}
+        className="btn btn-primary"
         onClick={onClear}
         disabled={!showClear}
       >
         Clear Genre
       </button>
-    </div>
+    </section>
   );
 };
 

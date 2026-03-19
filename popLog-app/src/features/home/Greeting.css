@@ -1,16 +1,14 @@
 .greeting {
-  /* width: 100%; */
   padding: 1.5rem 1rem;
   text-align: center;
-  /* border: 2px solid blueviolet; */
 }
 
-.greeting h1 {
+.greeting-title {
   font-size: 1.5rem;
   font-weight: 600;
 }
 
-.greeting .subtitle {
+.greeting-subtitle {
   margin-top: 0.5rem;
   font-size: var(--font-size-small);
   color: var(--text-muted);

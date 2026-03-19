@@ -40,24 +40,24 @@ const SearchBar = ({
   }
 
   return (
-    <div className="search-menu">
-      <div className="media-selector">
+    <section className="search-bar">
+      <nav className="search-bar__categories">
         {mediaCategories.map((category) => (
           <Link
             key={category.path}
             to={`/searchpage/${category.path}`}
-            className={`category-link ${
+            className={`search-bar__category ${
               mediaCategory === category.path ? "active" : ""
             }`}
           >
-            <span className="category-icon">{category.icon}</span>
+            <span className="search-bar__icon">{category.icon}</span>
             {category.label}
           </Link>
         ))}
-      </div>
+      </nav>
 
-      <form className="search-bar" onSubmit={handleSubmit}>
-        <div className="search-input-wrapper">
+      <form className="search-bar__form" onSubmit={handleSubmit}>
+        <div className="search-bar__input-wrapper">
           <input
             id="searchInput"
             name="searchInput"
@@ -65,12 +65,12 @@ const SearchBar = ({
             placeholder={`Search all ${placeHolder}...`}
             value={inputValue}
             onChange={(e) => onInputChange(e.target.value)}
-            className={error ? "input-error" : ""}
+            className={error ? "search-bar__input--error" : ""}
           />
           {showClear && (
             <button
               type="button"
-              className="clear-button btn btn-ghost"
+              className="search-bar__clear-btn btn btn-ghost"
               onClick={onClear}
             >
               ✕
@@ -86,8 +86,8 @@ const SearchBar = ({
           Search
         </button>
       </form>
-      {error && <p className="search-error">{error}</p>}
-    </div>
+      {error && <p className="search-bar__error">{error}</p>}
+    </section>
   );
 };
 

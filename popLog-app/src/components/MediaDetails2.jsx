@@ -3,16 +3,14 @@ import { useState, useEffect } from "react";
 import { BiSolidMoviePlay } from "react-icons/bi";
 import { IoGameController } from "react-icons/io5";
 import { IoIosBook } from "react-icons/io";
-import { FaStar, FaSortUp, FaSortDown } from "react-icons/fa";
-
+import { FaStar } from "react-icons/fa";
+import { FaSortUp } from "react-icons/fa";
+import { FaSortDown } from "react-icons/fa";
 import MediaRate from "./MediaRate.jsx";
-
 import { useAuth } from "../utils/AuthContext.jsx";
 import { fetchWithAuth } from "../utils/fetchWithAuth.js";
-
 import toast from "react-hot-toast";
 import { useLoaderData } from "react-router-dom";
-
 import "./MediaDetails.css";
 
 const MediaDetails = () => {
@@ -23,7 +21,7 @@ const MediaDetails = () => {
   const [userRating, setUserRating] = useState(0);
   const [userFavorite, setUserFavorite] = useState(false);
   const [userNotes, setUserNotes] = useState("");
-  const [showSave, setShowSave] = useState(false);
+  const [showSave, setShowSave] = useState(false); // tracks if save button should appear
   const [isSummaryExpanded, setIsSummaryExpanded] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [serverId, setServerId] = useState(0);
@@ -72,11 +70,17 @@ const MediaDetails = () => {
   async function fetchReview() {
     if (!auth.isLoggedIn) return;
 
+    console.log(
+      `Searching to see if ${auth.user.username} has a review for ${mediaType} with an id of ${id}`,
+    );
+
     const baseUrl = `http://localhost:3500/api/reviews/${mediaType}/${id}`;
 
     try {
       const response = await fetchWithAuth(baseUrl, { method: "GET" }, auth);
       const data = await response.json();
+
+      console.log("The fetch review data was", data);
 
       if (data) {
         setUserRating(data.rating);
@@ -100,10 +104,9 @@ const MediaDetails = () => {
 
   const handleSave = async () => {
     if (!auth.isLoggedIn) {
-      toast.error("You must be logged in.");
+      toast.error("Sorry, you must be logged in to perform this action.");
       return;
     }
-
     const payload = {
       id,
       mediaType,
@@ -128,16 +131,22 @@ const MediaDetails = () => {
 
       const data = await response.json().catch(() => null);
 
+      console.log(`The handle save data was`);
+      console.log(data);
+
       if (response.ok) {
+        console.log(`The handle save data was`);
+        console.log(data);
         toast.success("Entry saved!");
         setServerId(data.media_id);
         setShowDelete(true);
-        setShowSave(false);
+        setShowSave(false); // hide save button
       } else {
-        toast.error(data.error);
+        console.error("Backend error:", data);
+        toast.error(`${data.error}`);
       }
     } catch (err) {
-      console.error(err);
+      console.error("Error saving review:", err.message);
     }
   };
 
@@ -150,6 +159,7 @@ const MediaDetails = () => {
       );
 
       if (response.ok) {
+        // Reset UI
         setUserRating(0);
         setUserFavorite(false);
         setUserNotes("");
@@ -158,19 +168,23 @@ const MediaDetails = () => {
         setShowDeleteModal(false);
 
         toast.success("Entry deleted.");
+      } else {
+        const data = await response.json().catch(() => null);
+
+        console.error("Backend error:", data);
+        toast.error(`${data.error}`);
       }
     } catch (err) {
-      console.error(err);
+      console.error("Error deleting review:", err.message);
     }
   };
 
   return (
-    <div className="media-details">
-      {/* Sidebar */}
-      <aside className="media-details__sidebar">
-        <div className="media-details__cover">
+    <div className="media-details-container">
+      <div className="left-panel">
+        <div className="lp-img-container">
           {mediaInfo?.coverUrl ? (
-            <img src={mediaInfo.coverUrl} />
+            <img src={mediaInfo.coverUrl}></img>
           ) : (
             <>
               <p>No Image</p>
@@ -180,60 +194,72 @@ const MediaDetails = () => {
         </div>
 
         {Number(mediaInfo?.rating) > 0 && (
-          <div className="media-details__rating">
+          <div className="lp-user-rating">
             <p>{mediaInfo.rating}</p>
-            <FaStar className="media-details__rating-star" />
+            <FaStar className="lp-star-icon" />
           </div>
         )}
 
-        <div className="media-details__meta">
-          {mediaInfo?.runtime && <p>Runtime: {mediaInfo.runtime}</p>}
-          {showInfo && <p>{showInfo}</p>}
-          {mediaInfo?.platforms && <p>Platforms: {mediaInfo.platforms}</p>}
-          {mediaInfo?.pageCount && <p>{mediaInfo.pageCount} pages</p>}
-        </div>
+        {mediaInfo?.mediaType === "movie" && mediaInfo.runtime && (
+          <div className="lp-movie-info">
+            <p>Runtime: {mediaInfo.runtime}</p>
+          </div>
+        )}
+
+        {mediaInfo?.mediaType === "tv" && showInfo && (
+          <div className="lp-show-info">
+            <p>{showInfo}</p>
+          </div>
+        )}
+
+        {mediaInfo?.mediaType === "games" && mediaInfo?.platforms && (
+          <div className="lp-game-platforms">
+            <p>Available on: {mediaInfo.platforms}</p>
+          </div>
+        )}
+
+        {mediaInfo?.mediaType === "books" && mediaInfo?.pageCount && (
+          <div className="lp-pages">
+            <p>{mediaInfo.pageCount} pages</p>
+          </div>
+        )}
 
         {mediaInfo?.genres?.length > 0 && (
-          <div className="media-details__genres">
-            {mediaInfo.genres.map((genre, i) => (
-              <span key={i} className="media-details__genre-chip">
+          <div className="lp-genres">
+            {mediaInfo.genres.map((genre, index) => (
+              <span key={index} className="lp-genre-chip">
                 {genre}
               </span>
             ))}
           </div>
         )}
-      </aside>
+      </div>
 
-      {/* Main */}
-      <main className="media-details__main">
-        <header className="media-details__header">
-          <h1 className="media-details__header-title">{titleYear}</h1>
-          <hr className="gradient-divider" />
+      <div className="right-panel">
+        <div className="rp-header">
+          <h1>{titleYear}</h1>
+          <hr className="gradient-divider"></hr>
           {mediaInfo?.creators && (
-            <h2 className="media-details__header-subtitle">
+            <h2>
               {creatorLabel} {mediaInfo.creators}
             </h2>
           )}
-        </header>
+        </div>
 
-        <section className="media-details__summary">
+        <div className="rp-summary">
           <h3>Description</h3>
-
-          {mediaInfo?.summary?.length > 550 ? (
+          {mediaInfo?.summary?.length > 525 ? (
             <>
               <div
-                className={`media-details__summary-wrapper ${
+                className={`rp-summary-wrapper ${
                   isSummaryExpanded ? "expanded" : "collapsed"
                 }`}
               >
-                <p className="media-details__summary-text">
-                  {mediaInfo.summary}
-                </p>
+                <p className="rp-summary-text">{mediaInfo?.summary}</p>
               </div>
-
-              <div className="media-details__summary-toggle-container">
+              <div className="rp-toggle-container">
                 <button
-                  className="media-details__summary-toggle"
+                  className="rp-summary-toggle"
                   onClick={() => setIsSummaryExpanded(!isSummaryExpanded)}
                 >
                   {isSummaryExpanded ? "Show less" : "Show more"}
@@ -242,9 +268,9 @@ const MediaDetails = () => {
               </div>
             </>
           ) : (
-            <p className="media-details__summary-text"> {mediaInfo?.summary}</p>
+            <p className="rp-summary-text">{mediaInfo?.summary}</p>
           )}
-        </section>
+        </div>
 
         <MediaRate
           rating={userRating}
@@ -259,21 +285,21 @@ const MediaDetails = () => {
           }}
         />
 
-        <section className="media-details__notes">
-          <label htmlFor="notes">
+        <div className="rp-text-section">
+          <label htmlFor="user-notes">
             <h3>Your Notes</h3>
           </label>
-
           <textarea
-            id="notes"
+            id="user-notes"
             value={userNotes}
             onChange={(e) => {
               setUserNotes(e.target.value);
               setShowSave(true);
             }}
-            placeholder="Write your thoughts..."
-          />
-        </section>
+            placeholder="Write your thoughts here..."
+            className="textbox"
+          ></textarea>
+        </div>
 
         {showDelete && (
           <button
@@ -283,35 +309,26 @@ const MediaDetails = () => {
             Delete Entry
           </button>
         )}
-      </main>
 
-      <button
-        className={`media-details__save-btn btn btn-accent ${
-          showSave ? "show" : ""
-        }`}
-        onClick={handleSave}
-      >
-        Save
-      </button>
+        <button
+          className={`save-floating-btn btn btn-accent ${showSave ? "show" : ""}`}
+          onClick={handleSave}
+        >
+          Save
+        </button>
+      </div>
 
       {showDeleteModal && (
         <div
-          className="media-details__delete-overlay"
+          className="delete-modal-overlay"
           onClick={() => setShowDeleteModal(false)}
         >
-          <div
-            className="media-details__delete-modal"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h1 className="media-details__delete-modal-title">
-              Delete Journal Entry?
-            </h1>
+          <div className="delete-modal" onClick={(e) => e.stopPropagation()}>
+            <h1>Delete Journal Entry?</h1>
 
-            <p className="media-details__delete-modal-text">
-              This will permanently remove this entry.
-            </p>
+            <p>This will permanently remove this entry from your journal.</p>
 
-            <div className="media-details__delete-actions">
+            <div className="delete-modal-actions">
               <button
                 className="btn btn-ghost"
                 onClick={() => setShowDeleteModal(false)}

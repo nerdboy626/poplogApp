@@ -122,29 +122,34 @@ const SearchPage = () => {
   }
 
   return (
-    <div className="searchpage">
-      <SearchBar
-        mediaCategory={category}
-        inputValue={inputValue}
-        onInputChange={setInputValue}
-        onSearchSubmit={handleSearchSubmit}
-        showClear={showClearButton}
-        onClear={handleClear}
-        error={searchError}
-      />
-      {searchCache[category].query === "" && (
-        <GenreMenu
-          options={genreOptionsMap[category]}
-          selected={searchCache[category].genre}
-          onChange={(value) => fetchGenreResults(value)}
-          showClear={showGenreClear}
-          onClear={handleClearGenre}
+    <main className="search-page">
+      <section className="search-page__controls">
+        <SearchBar
+          mediaCategory={category}
+          inputValue={inputValue}
+          onInputChange={setInputValue}
+          onSearchSubmit={handleSearchSubmit}
+          showClear={showClearButton}
+          onClear={handleClear}
+          error={searchError}
         />
-      )}
-      <div className="search-display">
+
+        {entry.query === "" && (
+          <GenreMenu
+            options={genreOptionsMap[category]}
+            selected={entry.genre}
+            onChange={(value) => fetchGenreResults(value)}
+            showClear={showGenreClear}
+            onClear={handleClearGenre}
+          />
+        )}
+      </section>
+
+      <section className="search-page__results">
         {displayArray.length === 0 && entry.query !== "" && (
-          <div className="empty-state">
-            <div className="empty-icon">🔍</div>
+          <div className="search-page__empty">
+            <div className="search-page__empty-icon">🔍</div>
+
             <h3>
               No results found
               {entry.query && (
@@ -154,15 +159,17 @@ const SearchPage = () => {
                 </>
               )}
             </h3>
+
             <p>Try adjusting your search or selecting a different category.</p>
           </div>
         )}
+
         {displayArray.length > 0 &&
           displayArray.map((item, index) => (
             <SearchDisplay key={index} item={item} />
           ))}
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 

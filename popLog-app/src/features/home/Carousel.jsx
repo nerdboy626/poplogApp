@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import CardDisplay from "./CardDisplay";
+import CardDisplay from "../../components/CardDisplay.jsx";
 import "./Carousel.css";
 
 const Carousel = ({ itemsArray }) => {
@@ -39,16 +39,20 @@ const Carousel = ({ itemsArray }) => {
   };
 
   return (
-    <div className="carousel-wrapper">
+    <div className="media-carousel">
       <button
-        className={`carousel-arrow left ${showLeft ? "visible" : ""}`}
+        className={`media-carousel__arrow left ${showLeft ? "visible" : ""}`}
         onClick={() => scroll("left")}
         disabled={!showLeft}
       >
         <FaChevronLeft />
       </button>
 
-      <div className="carousel" ref={scrollRef} onScroll={updateArrows}>
+      <div
+        className="media-carousel__track"
+        ref={scrollRef}
+        onScroll={updateArrows}
+      >
         {itemsArray.map((item, index) => (
           <CardDisplay
             key={index}
@@ -63,7 +67,7 @@ const Carousel = ({ itemsArray }) => {
       </div>
 
       <button
-        className={`carousel-arrow right ${showRight ? "visible" : ""}`}
+        className={`media-carousel__arrow right ${showRight ? "visible" : ""}`}
         onClick={() => scroll("right")}
         disabled={!showRight}
       >

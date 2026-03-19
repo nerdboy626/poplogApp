@@ -18,11 +18,11 @@ const CardDisplay = ({
 
   const imageIcon = (mediaType) => {
     if (mediaType === "books") {
-      return <IoIosBook className="icon" />;
+      return <IoIosBook className="media-card__icon" />;
     } else if (mediaType === "games") {
-      return <IoGameController className="icon" />;
+      return <IoGameController className="media-card__icon" />;
     } else {
-      return <BiSolidMoviePlay className="icon" />;
+      return <BiSolidMoviePlay className="media-card__icon" />;
     }
   };
 
@@ -37,7 +37,7 @@ const CardDisplay = ({
 
     const spaceRight = window.innerWidth - rect.right;
 
-    const tooltip = card.querySelector(".card-info-box");
+    const tooltip = card.querySelector(".media-card__tooltip");
     if (!tooltip) return;
 
     if (spaceRight >= tooltipWidth + gap) {
@@ -52,16 +52,20 @@ const CardDisplay = ({
   }, [isHovered]);
 
   return (
-    <div
-      className="card-container"
+    <article
+      className="media-card"
       ref={cardRef}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <Link to={`/media/${mediaType}/${id}`} className="card-link">
-        <div className="card">
+      <Link to={`/media/${mediaType}/${id}`} className="media-card__link">
+        <div className="media-card__image-container">
           {imageUrl ? (
-            <img src={imageUrl} alt={title} className="card-image" />
+            <img
+              src={imageUrl}
+              alt={`${title} cover`}
+              className="media-card__image"
+            />
           ) : (
             <>
               <p>No Image</p>
@@ -72,14 +76,14 @@ const CardDisplay = ({
       </Link>
 
       {isHovered && (
-        <div className="card-info-box">
+        <div className="media-card__tooltip">
           <h3>
             {title} {releaseYear && `(${releaseYear})`}
           </h3>
-          <p className="card-desc">{description}</p>
+          <p className="media-card__description">{description}</p>
         </div>
       )}
-    </div>
+    </article>
   );
 };
 

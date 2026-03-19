@@ -8,32 +8,21 @@ const SearchDisplay = ({ item }) => {
   if (!item) return null;
   const imageIcon = (item) => {
     if (item.mediaType === "books") {
-      return <IoIosBook className="icon" />;
-    } else if (item.mediaType === "games") {
-      return <IoGameController className="icon" />;
-    } else {
-      return <BiSolidMoviePlay className="icon" />;
+      return <IoIosBook className="search-card__icon" />;
     }
+    if (item.mediaType === "games") {
+      return <IoGameController className="search-card__icon" />;
+    }
+    return <BiSolidMoviePlay className="search-card__icon" />;
   };
 
-  const mediaCreator = (item) => {
-    if (item.mediaType === "books" || item.mediaType === "games") {
-      return (
-        <>
-          {item.creators && (
-            <h2 className="search-entry-creator">by {item.creators}</h2>
-          )}
-        </>
-      );
-    }
-  };
   return (
     <Link
       to={`/media/${item.mediaType}/${item.id}`}
-      className="search-entry-link"
+      className="search-card__link"
     >
-      <article className="search-entry">
-        <div className="entry-img-container">
+      <article className="search-card">
+        <figure className="search-card__cover">
           {item.coverUrl ? (
             <img src={item.coverUrl}></img>
           ) : (
@@ -42,26 +31,28 @@ const SearchDisplay = ({ item }) => {
               {imageIcon(item)}
             </>
           )}
-        </div>
-        <div className="search-entry-text">
-          <div className="search-entry-header">
-            <h2 className="search-entry-title">{item.title}</h2>
+        </figure>
+        <div className="search-card__content">
+          <header className="search-card__header">
+            <h2 className="search-card__title">{item.title}</h2>
             {item.releaseYear && (
-              <h2 className="search-entry-year">({item.releaseYear})</h2>
+              <h2 className="search-card__year">({item.releaseYear})</h2>
             )}
-          </div>
+          </header>
           <hr className="gradient-divider"></hr>
-          {mediaCreator(item)}
+          {item.creators && (
+            <p className="search-card__creator">by {item.creators}</p>
+          )}
           {item.genres.length > 0 && (
-            <div className="genres-container">
+            <div className="search-card__genres">
               {item.genres.map((genre, index) => (
-                <span key={index} className="genre-chip">
+                <span key={index} className="search-card__genre">
                   {genre}
                 </span>
               ))}
             </div>
           )}
-          <p>{item.summary}</p>
+          <p className="search-card__summary">{item.summary}</p>
         </div>
       </article>
     </Link>
