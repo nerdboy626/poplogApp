@@ -18,7 +18,7 @@
   box-shadow: var(--shadow-strong);
 }
 
-.notfound-code {
+.notfound-card__code {
   font-size: 5rem;
   font-weight: 800;
   background: linear-gradient(
@@ -31,19 +31,23 @@
   -webkit-text-fill-color: transparent;
 }
 
-.notfound-title {
+.notfound-card__title {
   font-size: 1.5rem;
 }
 
-.notfound-text {
+.notfound-card__text {
   color: var(--text-secondary);
   font-size: var(--font-size-medium);
   margin-bottom: 1.5rem;
   line-height: 1.6;
 }
 
-.notfound-actions {
+.notfound-card__footer {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+.notfound-card__footer a {
+  text-decoration: none;
 }

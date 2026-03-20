@@ -1,13 +1,12 @@
-.login-page {
+.auth-page {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 1.5rem 2.5rem;
-  /* border: 5px solid salmon; */
 }
 
-.login-info-message {
+.auth-page__message {
   background-color: var(--bg-elevated);
   color: var(--text-secondary);
   border: 1px solid var(--border-subtle);
@@ -17,7 +16,7 @@
   text-align: center;
 }
 
-.login-card {
+.auth-card {
   width: 100%;
   max-width: 420px;
   padding: 1.5rem;
@@ -26,43 +25,38 @@
   gap: 1rem;
   background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  /* border: 2px solid blue; */
   border-radius: 16px;
 }
 
-.login-title {
-  font-size: 1.5rem;
-  font-weight: 800;
+.auth-card__header {
   text-align: center;
 }
 
-.login-subtitle {
-  text-align: center;
+.auth-card__title {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.auth-card__subtitle {
   color: var(--text-secondary);
 }
 
-.form-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.google-btn {
+.auth-card__google-btn {
   justify-content: center;
   border: 1px solid var(--border-subtle);
   background-color: var(--bg-elevated);
 }
 
-.google-btn:hover {
+.auth-card__google-btn:hover {
   background-color: var(--bg-surface);
 }
 
-.google-icon {
+.auth-card__google-icon {
   width: 18px;
   height: 18px;
 }
 
-.divider {
+.auth-card__divider {
   position: relative;
   display: flex;
   align-items: center;
@@ -72,10 +66,9 @@
   letter-spacing: 1px;
   width: 100%;
   margin: 0.5rem 0;
-  /* border: 1px solid red; */
 }
 
-.divider::before {
+.auth-card__divider::before {
   content: "";
   position: absolute;
   left: 0;
@@ -91,30 +84,36 @@
   z-index: 5;
 }
 
-.divider span {
+.auth-card__divider span {
   padding: 0 1rem;
   background: var(--bg-surface);
   z-index: 10;
   color: var(--text-secondary);
 }
 
-.forgot-link {
-  /* border: 2px solid red; */
+.auth-card__section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.auth-card__section-title {
+  text-align: center;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.auth-card__forgot-link {
   text-align: center;
   font-size: 0.9rem;
   align-self: center;
 }
 
-.login-card > hr {
-  margin: 0.5rem 0;
-}
-
-.signup-title {
-  text-align: center;
-  /* margin-top: 0.5rem; */
-}
-
-.error-text {
+.auth-form__error {
   color: var(--danger);
   text-align: center;
   background: rgba(239, 68, 68, 0.08);

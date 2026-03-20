@@ -1,12 +1,12 @@
 import "./Loading.css";
 const Loading = ({ text }) => {
   return (
-    <div className="loading-page">
-      <div className="spinner-card">
-        <div className="spinner" />
+    <main className="loading-page">
+      <section className="loading-card">
+        <div className="loading-card__spinner" />
         <p>{!text ? "Loading..." : text}</p>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 

@@ -5,7 +5,7 @@
   justify-content: center;
 }
 
-.spinner-card {
+.loading-card {
   padding: 1.5rem 2rem;
   border-radius: 14px;
   display: flex;
@@ -19,7 +19,7 @@
   font-size: 0.9rem;
 }
 
-.spinner {
+.loading-card__spinner {
   width: 28px;
   height: 28px;
   border-radius: 50%;

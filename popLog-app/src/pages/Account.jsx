@@ -90,94 +90,102 @@ const Account = () => {
 
   if (!stats)
     return (
-      <div className="account-page">
-        <div className="account-card">
-          <h1>No account data found.</h1>
-        </div>
-      </div>
+      <main className="account-page">
+        <section className="account-card">
+          <h1 className="account__title">No account data found.</h1>
+        </section>
+      </main>
     );
 
   return (
-    <div className="account-page">
-      <div className="account-card">
-        <h1>Account</h1>
+    <main className="account-page">
+      <section className="account-card">
+        <h1 className="account__title">Account</h1>
 
-        <section>
-          <h2>Personal Information</h2>
-          <p>
-            <strong>Username:</strong> {auth.user.username}
-          </p>
-          <p>
-            <strong>Email:</strong> {stats.email}
-          </p>
+        <section className="account__section">
+          <h2 className="account__subtitle">Personal Information</h2>
+          <div className="account__info">
+            <p>
+              <span>Username: </span>
+              <strong>{auth.user.username}</strong>
+            </p>
+
+            <p>
+              <span>Email: </span>
+              <strong>{stats.email}</strong>
+            </p>
+          </div>
         </section>
 
         <hr className="gradient-divider" />
 
-        <section>
-          <h2>Journal Stats</h2>
+        <section className="account__section">
+          <h2 className="account__subtitle">Journal Stats</h2>
 
-          <div className="total-entries">
+          <div className="account__total">
             <span>Total Entries</span>
             <h3>{stats.total}</h3>
           </div>
 
-          <ul>
+          <ul className="account__stats">
             <li>
-              <span className="stat-label">
+              <span>
                 <GiFilmStrip /> Movies
               </span>
-              <span className="stat-value">{stats.movies}</span>
+              <strong>{stats.movies}</strong>
             </li>
             <li>
-              <span className="stat-label">
+              <span>
                 <GiTv /> TV
               </span>
-              <span className="stat-value">{stats.tv}</span>
+              <strong>{stats.tv}</strong>
             </li>
             <li>
-              <span className="stat-label">
+              <span>
                 <GiBlackBook /> Books
               </span>
-              <span className="stat-value">{stats.books}</span>
+              <strong>{stats.books}</strong>
             </li>
             <li>
-              <span className="stat-label">
+              <span>
                 <GiGameConsole /> Games
               </span>
-              <span className="stat-value">{stats.games}</span>
+              <strong>{stats.games}</strong>
             </li>
           </ul>
         </section>
 
         <hr className="gradient-divider" />
 
-        <section>
-          <h2>Account Actions</h2>
+        <section className="account__section">
+          <h2 className="account__subtitle">Account Actions</h2>
 
-          <div className="action-item">
-            <div className="action-text">
-              <span className="action-label">Reset Password</span>
-              <span className="action-description">
+          <div className="account__action">
+            <div className="account__action-text">
+              <span className="account__action-title">Reset Password</span>
+              <span className="account__action-desc">
                 We’ll send a secure reset link to your email
               </span>
             </div>
 
             <button
               onClick={handleClick}
-              className="btn btn-ghost"
+              className="btn btn-ghost account__reset"
               disabled={sendingReset}
             >
               {sendingReset ? "Sending..." : "Reset Password"}
             </button>
           </div>
 
-          <button onClick={handleLogout} className="btn btn-danger logout-btn">
+          <button
+            onClick={handleLogout}
+            className="btn btn-danger account__logout"
+          >
             Logout
           </button>
         </section>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 

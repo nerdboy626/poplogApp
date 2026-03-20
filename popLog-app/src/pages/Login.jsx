@@ -9,6 +9,7 @@ const Login = () => {
   const auth = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+
   const message = location.state?.message;
   const redirectPath =
     sessionStorage.getItem("redirectAfterLogin") || location.state?.from || "/";
@@ -19,6 +20,7 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const [loginError, setLoginError] = useState("");
   const [signUpError, setSignUpError] = useState("");
 
@@ -87,15 +89,18 @@ const Login = () => {
       setSignUpError("Something went wrong. Please try again.");
     }
   };
+
   return (
-    <div className="login-page">
-      {message && <div className="login-info-message">{message}</div>}
-      <div className="login-card">
-        <h1 className="login-title">Welcome back</h1>
-        <p className="login-subtitle">Sign in to continue to PopLog</p>
+    <main className="auth-page">
+      {message && <section className="auth-page__message">{message}</section>}
+      <section className="auth-card">
+        <header className="auth-card__header">
+          <h1 className="auth-card__title">Welcome back</h1>
+          <p className="auth-card__subtitle">Sign in to continue to PopLog</p>
+        </header>
 
         <button
-          className="btn btn-ghost google-btn"
+          className="btn btn-ghost auth-card__google-btn"
           onClick={() => {
             window.location.href = "http://localhost:3500/api/auth/google";
           }}
@@ -103,17 +108,17 @@ const Login = () => {
           <img
             src="./google.svg"
             alt=""
-            className="google-icon"
+            className="auth-card__google-icon"
             aria-hidden="true"
           />
           Continue with Google
         </button>
 
-        <div className="divider">
+        <div className="auth-card__divider">
           <span>or</span>
         </div>
 
-        <form className="form-container" onSubmit={handleLogin}>
+        <form className="auth-form" onSubmit={handleLogin}>
           <input
             type="email"
             placeholder="Email"
@@ -133,46 +138,55 @@ const Login = () => {
           </button>
         </form>
 
-        {loginError && <p className="error-text">{loginError}</p>}
+        {loginError && (
+          <p className="auth-form__error" aria-live="polite">
+            {loginError}
+          </p>
+        )}
 
-        <Link className="forgot-link" to="/forgot-password">
+        <Link className="auth-card__forgot-link" to="/forgot-password">
           Forgot your password?
         </Link>
 
         <hr className="gradient-divider" />
+        <section className="auth-card__section">
+          <h4 className="auth-card__section-title">New to PopLog?</h4>
 
-        <h4 className="signup-title">New to PopLog?</h4>
+          <form className="auth-form" onSubmit={handleSignUp}>
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button className="btn btn-accent" type="submit">
+              Create account
+            </button>
+          </form>
 
-        <form className="form-container" onSubmit={handleSignUp}>
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button className="btn btn-accent" type="submit">
-            Create account
-          </button>
-        </form>
-
-        {signUpError && <p className="error-text">{signUpError}</p>}
-      </div>
-    </div>
+          {signUpError && (
+            <p className="auth-form__error" aria-live="polite">
+              {signUpError}
+            </p>
+          )}
+        </section>
+      </section>
+    </main>
   );
 };
 

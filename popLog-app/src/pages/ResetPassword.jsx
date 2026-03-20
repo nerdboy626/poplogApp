@@ -56,31 +56,31 @@ const ResetPassword = () => {
 
   if (!token) {
     return (
-      <div className="reset-page">
-        <div className="reset-card">
-          <h1 className="reset-title">Invalid reset link</h1>
-          <p className="reset-subtitle">
+      <main className="reset-page">
+        <section className="reset-card">
+          <h1 className="reset-card__title">Invalid reset link</h1>
+          <p className="reset-card__subtitle">
             This password reset link is missing or expired.
           </p>
-          {auth.user ? (
-            <Link className="request-link" to="/account">
-              Go to your account
-            </Link>
-          ) : (
-            <Link className="request-link" to="/forgot-password">
-              Request a new link
-            </Link>
-          )}
-        </div>
-      </div>
+          <p className="reset-card__footer">
+            {auth.user ? (
+              <Link to="/account">Go to your account</Link>
+            ) : (
+              <Link to="/forgot-password">Request a new link</Link>
+            )}
+          </p>
+        </section>
+      </main>
     );
   }
 
   return (
-    <div className="reset-page">
-      <div className="reset-card">
-        <h1 className="reset-title">Reset your password</h1>
-        <p className="reset-subtitle">Choose a new password for your account</p>
+    <main className="reset-page">
+      <section className="reset-card">
+        <h1 className="reset-card__title">Reset your password</h1>
+        <p className="reset-card__subtitle">
+          Choose a new password for your account
+        </p>
 
         <form className="reset-form" onSubmit={handleSubmit}>
           <input
@@ -105,22 +105,18 @@ const ResetPassword = () => {
           </button>
         </form>
 
-        <p className="reset-back">
+        {passwordError && <p className="reset-form__error">{passwordError}</p>}
+
+        <p className="reset-card__footer">
           Changed your mind?{" "}
           {auth.user ? (
-            <Link className="request-link" to="/account">
-              Go to your account
-            </Link>
+            <Link to="/account">Go to your account</Link>
           ) : (
-            <Link className="request-link" to="/forgot-password">
-              Request a new link
-            </Link>
+            <Link to="/forgot-password">Request a new link</Link>
           )}
         </p>
-
-        {passwordError && <p className="error-text">{passwordError}</p>}
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 

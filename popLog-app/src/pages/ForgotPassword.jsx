@@ -30,10 +30,10 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="forgot-page">
-      <div className="forgot-card">
-        <h1 className="forgot-title">Forgot your password?</h1>
-        <p className="forgot-subtitle">
+    <main className="forgot-page">
+      <section className="forgot-card">
+        <h1 className="forgot-card__title">Forgot your password?</h1>
+        <p className="forgot-card__subtitle">
           Enter your email and we’ll send you a reset link
         </p>
 
@@ -51,11 +51,11 @@ const ForgotPassword = () => {
           </button>
         </form>
 
-        <p className="forgot-back">
+        <p className="forgot-card__footer">
           Remembered your password? <Link to="/login">Back to login</Link>
         </p>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 

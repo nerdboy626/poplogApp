@@ -14,59 +14,58 @@ const Navbar = () => {
   const location = useLocation();
 
   return (
-    <nav className="navbar">
-      <div className="navbar-container">
-        <div className="navbar-left">
-          <Link to="/" className="logo-link">
-            <div className="navbar-logo">
-              <img src={logo} alt="Poplog logo" />
-            </div>
+    <header className="nav">
+      <nav className="nav__inner">
+        <div className="nav__left">
+          <Link to="/" className="nav__brand">
+            <img src={logo} alt="PopLog logo" className="nav__logo" />
           </Link>
 
-          <ul className="navbar-primary-links">
+          <ul className="nav__links">
             <li>
-              <NavLink to="/" end>
+              <NavLink to="/" end className="nav__link">
                 <IoHomeOutline />
-                Home
+                <span>Home</span>
               </NavLink>
             </li>
 
             <li>
-              <NavLink to="/searchpage">
+              <NavLink to="/searchpage" className="nav__link">
                 <IoSearch />
-                Search
+                <span>Search</span>
               </NavLink>
             </li>
 
             <li>
-              <NavLink to="/journal">
+              <NavLink to="/journal" className="nav__link">
                 <LuNotebookPen />
-                Journal
+                <span>Journal</span>
               </NavLink>
             </li>
           </ul>
         </div>
 
-        <div className="navbar-right">
+        <div className="nav__user">
           {auth.user ? (
-            <NavLink to="/account">
-              <IoPersonCircleOutline className="profile-icon" />
-              <span>{auth.user.username} </span>
+            <NavLink to="/account" className="nav__link">
+              <IoPersonCircleOutline className="nav__icon" />
+              <span>{auth.user.username}</span>
             </NavLink>
           ) : (
             <NavLink
               to="/login"
+              className="nav__link"
               state={{
                 from: location.pathname + location.search + location.hash,
               }}
             >
-              <IoPersonCircleOutline className="profile-icon" />
+              <IoPersonCircleOutline className="nav__icon" />
               <span>Login</span>
             </NavLink>
           )}
         </div>
-      </div>
-    </nav>
+      </nav>
+    </header>
   );
 };
 

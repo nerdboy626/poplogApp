@@ -1,4 +1,4 @@
-.navbar {
+.nav {
   position: fixed;
   top: 0;
   left: 0;
@@ -6,80 +6,74 @@
   height: 60px;
   z-index: 80;
 
-  background-color: var(--bg-surface);
   background-color: #151327b3;
   border-bottom: 1px solid var(--border-subtle);
   backdrop-filter: blur(8px);
-
-  /* border: 2px solid red; */
 }
 
-.navbar-container {
+.nav__inner {
   height: 100%;
   margin: 0 auto;
 
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 
   padding: 0 2.5rem;
-
-  /* border: 2px solid green; */
 }
 
-.navbar-left {
+.nav__left {
   height: 100%;
   display: flex;
   align-items: center;
   gap: 2rem;
 }
 
-.logo-link {
+.nav__brand {
   height: 100%;
+  display: flex;
+  align-items: center;
 }
 
-.navbar-logo {
-  height: 100%;
-  /* border: 2px solid pink; */
-}
-
-.navbar-logo img {
+.nav__logo {
   height: 100%;
   width: auto;
   display: block;
   transition: transform 0.2s ease;
 }
 
-.navbar-primary-links {
+.nav__links {
   list-style: none;
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  /* border: 2px solid orange; */
 }
 
-.navbar-container a {
+.nav__link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
   font-size: var(--font-size-medium);
   font-weight: 600;
   color: var(--text-secondary);
   text-decoration: none;
+
   position: relative;
   padding: 0.3rem 0;
   transition: color 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
-.navbar-container a:hover {
+.nav__link:hover {
   color: var(--text-primary);
+  text-decoration: none;
 }
 
-.navbar-container a.active {
+.nav__link.active {
   color: var(--brand-primary);
 }
 
-.navbar-container a.active::after {
+.nav__link.active::after {
   content: "";
   position: absolute;
   left: 0;
@@ -90,30 +84,39 @@
   border-radius: 2px;
 }
 
+.nav__user {
+  display: flex;
+  align-items: center;
+}
+
+.nav__icon {
+  font-size: 1.3rem;
+}
+
 @media (max-width: 900px) {
-  .navbar-right span {
+  .nav__user span {
     display: none;
   }
 
-  .navbar-right svg {
+  .nav__icon {
     font-size: 1.5rem;
   }
 }
 
 @media (max-width: 700px) {
-  .navbar-container {
+  .nav__inner {
     padding: 0 1rem;
   }
 
-  .navbar-left {
+  .nav__left {
     gap: 1rem;
   }
 
-  .navbar-links {
+  .nav__links {
     gap: 1rem;
   }
 
-  .navbar-container a {
-    gap: 0;
+  .nav__link {
+    gap: 0.2rem;
   }
 }
