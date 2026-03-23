@@ -22,6 +22,11 @@ const SearchPage = () => {
     books: { query: "", searchResults: [], genre: "", genreResults: [] },
   });
   const entry = searchCache[category];
+  const isInitialState =
+    entry.query === "" &&
+    entry.genre === "" &&
+    entry.searchResults.length === 0 &&
+    entry.genreResults.length === 0;
   const showClearButton = inputValue !== "" || entry.query !== "";
   const showGenreClear = entry.genre !== "";
   const displayArray =
@@ -136,6 +141,7 @@ const SearchPage = () => {
 
         {entry.query === "" && (
           <GenreMenu
+            mediaCategory={category}
             options={genreOptionsMap[category]}
             selected={entry.genre}
             onChange={(value) => fetchGenreResults(value)}
@@ -146,6 +152,15 @@ const SearchPage = () => {
       </section>
 
       <section className="search-page__results">
+        {isInitialState && (
+          <div className="search-page__welcome">
+            <h2>Find your next journal entry here!</h2>
+            <p>
+              Search for movies, games, or books — or browse by genre to get
+              started.
+            </p>
+          </div>
+        )}
         {displayArray.length === 0 && entry.query !== "" && (
           <div className="search-page__empty">
             <div className="search-page__empty-icon">🔍</div>

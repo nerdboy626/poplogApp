@@ -1,11 +1,23 @@
 import "./GenreMenu.css";
 
-const GenreMenu = ({ options, selected, onChange, showClear, onClear }) => {
+const GenreMenu = ({
+  mediaCategory,
+  options,
+  selected,
+  onChange,
+  showClear,
+  onClear,
+}) => {
+  const labelCategory =
+    mediaCategory === "movies"
+      ? "Movies & TV"
+      : mediaCategory.charAt(0).toUpperCase() + mediaCategory.slice(1);
+
   return (
     <section className="genre-menu">
       <div className="genre-menu__controls">
         <label htmlFor="genre-select" className="genre-menu__label">
-          Browse Popular Titles by Genre:
+          Browse Popular {labelCategory} by Genre:
         </label>
 
         <div className="genre-menu__select-wrapper">

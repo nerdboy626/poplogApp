@@ -125,6 +125,17 @@
   margin-bottom: 0.5rem;
 }
 
+/* .media-details__main > section,
+.media-details__main > header,
+.media-rate {
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.media-details__main > *:last-child {
+  border-bottom: none;
+} */
+
 /* Header */
 
 .media-details__header {

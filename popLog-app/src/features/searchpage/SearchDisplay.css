@@ -75,7 +75,6 @@
   overflow: hidden;
   line-height: 1.5;
   font-size: var(--font-size-medium);
-  /* border: 2px solid orange; */
 }
 
 .search-card__creator {
@@ -93,13 +92,17 @@
 .search-card__genres {
   margin-top: 0.5rem;
   display: flex;
-  gap: 0.5rem; /* space between genre chips */
-  overflow: hidden; /* hide any chips that don’t fit */
+  gap: 0.5rem;
+
   overflow-x: auto;
+  overflow-y: hidden; /* prevent vertical weirdness */
+
+  white-space: nowrap; /* force single line */
+  max-width: 100%;
+
   scrollbar-width: none;
   -ms-overflow-style: none;
-  white-space: nowrap; /* keep all chips on one line */
-  text-overflow: clip; /* just clip extra content */
+  min-width: 0;
   /* border: 2px solid plum; */
 }
 
@@ -108,19 +111,17 @@
 }
 
 .search-card__genre {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px 12px;
-  border-radius: 9999px;
-  background: linear-gradient(
-    135deg,
-    var(--brand-primary),
-    var(--brand-primary-hover)
-  );
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  text-align: center;
+  flex-shrink: 0;
+  /* color: var(--text-primary); */
+
+  background: var(--brand-accent);
+  border: 1px solid var(--border-subtle);
+  white-space: nowrap;
+
   font-size: var(--font-size-small);
-  white-space: nowrap; /* prevent text wrap inside chip */
-  color: var(--text-primary);
 }
 
 .search-card__cover {
@@ -164,6 +165,10 @@
     gap: 0.5rem;
   }
 
+  .search-card__content {
+    width: 100%;
+  }
+
   .search-card__header {
     justify-content: center;
   }
@@ -173,7 +178,7 @@
   }
 
   .search-card__genres {
-    justify-content: center;
+    justify-content: flex-start;
   }
 
   .search-card__header h2 {

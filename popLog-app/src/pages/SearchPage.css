@@ -12,6 +12,27 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 0rem 0.5rem;
+  margin: 1.5rem 0rem;
+
+  box-shadow: var(--shadow-soft);
+  position: relative;
+  overflow: hidden;
+}
+
+.search-page__controls::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at top,
+    rgba(124, 58, 237, 0.15),
+    transparent 70%
+  );
+  pointer-events: none;
 }
 
 .search-page__results {
@@ -23,14 +44,25 @@
   /* border: 3px solid purple; */
 }
 
-.search-page__empty {
-  padding: 1.5rem 1rem;
+.search-page__welcome {
+  margin-top: 2rem;
   text-align: center;
-  background: var(--bg-surface);
+  color: var(--text-secondary);
+}
+
+.search-page__welcome h2 {
+  color: var(--text-primary);
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.search-page__empty {
+  margin-top: 2rem;
+  text-align: center;
 }
 
 .search-page__empty-icon {
-  font-size: 2rem;
+  font-size: 1.8rem;
   margin-bottom: 0.5rem;
   color: var(--text-muted);
 }
