@@ -40,7 +40,9 @@ const ResetPassword = () => {
         return;
       }
 
-      toast.success("Password reset successful.");
+      toast.success("Password reset successful.", {
+        id: "main",
+      });
       if (auth.user) {
         navigate("/account");
       } else {

@@ -3,14 +3,14 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem 2.5rem;
+  padding: 1.5rem 1rem;
 }
 
 .auth-page__message {
   background-color: var(--bg-elevated);
   color: var(--text-secondary);
   border: 1px solid var(--border-subtle);
-  padding: 0.7rem 1rem;
+  padding: 0.75rem 1rem;
   border-radius: 8px;
   margin-bottom: 1rem;
   text-align: center;
@@ -38,6 +38,7 @@
 }
 
 .auth-card__subtitle {
+  font-size: var(--font-size-medium);
   color: var(--text-secondary);
 }
 
@@ -61,7 +62,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8rem;
+  font-size: var(--font-size-small);
   text-transform: uppercase;
   letter-spacing: 1px;
   width: 100%;
@@ -109,7 +110,7 @@
 
 .auth-card__forgot-link {
   text-align: center;
-  font-size: 0.9rem;
+  font-size: var(--font-size-small);
   align-self: center;
 }
 
@@ -118,7 +119,7 @@
   text-align: center;
   background: rgba(239, 68, 68, 0.08);
   border: 1px solid rgba(239, 68, 68, 0.3);
-  padding: 0.5rem 0.7rem;
+  padding: 0.5rem 0.75rem;
   border-radius: 8px;
   font-size: var(--font-size-small);
 }

@@ -4,15 +4,11 @@ import { BiSolidMoviePlay } from "react-icons/bi";
 import { IoGameController } from "react-icons/io5";
 import { IoIosBook } from "react-icons/io";
 import { FaStar, FaSortUp, FaSortDown } from "react-icons/fa";
-
-import MediaRate from "./MediaRate.jsx";
-
+import MediaRate from "../features/mediadetails/MediaRate.jsx";
 import { useAuth } from "../utils/AuthContext.jsx";
 import { fetchWithAuth } from "../utils/fetchWithAuth.js";
-
 import toast from "react-hot-toast";
 import { useLoaderData } from "react-router-dom";
-
 import "./MediaDetails.css";
 
 const MediaDetails = () => {
@@ -100,7 +96,9 @@ const MediaDetails = () => {
 
   const handleSave = async () => {
     if (!auth.isLoggedIn) {
-      toast.error("You must be logged in.");
+      toast.error("You must be logged in.", {
+        id: "main",
+      });
       return;
     }
 
@@ -129,12 +127,16 @@ const MediaDetails = () => {
       const data = await response.json().catch(() => null);
 
       if (response.ok) {
-        toast.success("Entry saved!");
+        toast.success("Entry saved!", {
+          id: "main",
+        });
         setServerId(data.media_id);
         setShowDelete(true);
         setShowSave(false);
       } else {
-        toast.error(data.error);
+        toast.error(data.error, {
+          id: "main",
+        });
       }
     } catch (err) {
       console.error(err);
@@ -157,7 +159,9 @@ const MediaDetails = () => {
         setShowSave(false);
         setShowDeleteModal(false);
 
-        toast.success("Entry deleted.");
+        toast.success("Entry deleted.", {
+          id: "main",
+        });
       }
     } catch (err) {
       console.error(err);
@@ -219,7 +223,7 @@ const MediaDetails = () => {
         <section className="media-details__summary">
           <h3>Description</h3>
 
-          {mediaInfo?.summary?.length > 550 ? (
+          {mediaInfo?.summary?.length > 525 ? (
             <>
               <div
                 className={`media-details__summary-wrapper ${

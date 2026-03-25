@@ -8,7 +8,7 @@ const App = () => {
       <Toaster
         position="top-right"
         toastOptions={{
-          duration: 3000,
+          duration: 2500,
           className: "poplog-toast",
           success: {
             iconTheme: {

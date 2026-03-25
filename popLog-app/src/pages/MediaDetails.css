@@ -4,7 +4,7 @@
   gap: 2rem;
 
   height: calc(100vh - 60px);
-  padding: 0 2rem;
+  padding: 0 2.5rem;
 }
 
 /* Sidebar */
@@ -26,8 +26,6 @@
   border: 1px solid var(--border-subtle);
   border-radius: 12px;
 }
-
-/* Cover */
 
 .media-details__cover {
   width: 100%;
@@ -57,34 +55,26 @@
   color: var(--text-muted);
 }
 
-/* Rating */
-
 .media-details__rating {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  /* padding: 0.5rem; */
 
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: bold;
-  /* border: 3px solid paleturquoise; */
 }
 
 .media-details__rating-star {
   color: gold;
 }
 
-/* Meta */
-
 .media-details__meta {
   text-align: center;
 }
 
 .media-details__meta p {
-  font-size: 1.1rem;
+  font-size: var(--font-size-medium);
 }
-
-/* Genres */
 
 .media-details__genres {
   display: flex;
@@ -120,23 +110,10 @@
 }
 
 .media-details__main h3 {
-  font-size: 1.1rem;
+  font-size: 1.125rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
-
-/* .media-details__main > section,
-.media-details__main > header,
-.media-rate {
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--border-subtle);
-}
-
-.media-details__main > *:last-child {
-  border-bottom: none;
-} */
-
-/* Header */
 
 .media-details__header {
   display: flex;
@@ -153,10 +130,8 @@
   color: var(--text-secondary);
 }
 
-/* Summary */
-
 .media-details__summary-text {
-  font-size: 1.1rem;
+  font-size: 1.125rem;
   line-height: 1.5;
   color: var(--text-secondary);
 }
@@ -167,7 +142,7 @@
 }
 
 .media-details__summary-wrapper.collapsed {
-  max-height: 8.2rem;
+  max-height: 8.25rem;
   position: relative;
 }
 
@@ -190,26 +165,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* border: 2px solid green; */
 }
 
 .media-details__summary-toggle {
   background: none;
   border: none;
   color: var(--brand-primary);
-  font-size: 1rem;
+  font-size: var(--font-size-medium);
   font-weight: 600;
   padding: 0.5rem;
   cursor: pointer;
-  /* border: 2px solid red; */
 }
 
 .media-details__summary-toggle:hover {
   background: none;
   border: none;
 }
-
-/* Notes */
 
 .media-details__notes textarea {
   width: 100%;
@@ -218,8 +189,6 @@
   padding: 0.75rem;
   resize: vertical;
 }
-
-/* Save button */
 
 .media-details__save-btn {
   position: fixed;
@@ -277,8 +246,6 @@
   justify-content: flex-end;
   gap: 1rem;
 }
-
-/* Mobile */
 
 @media (max-width: 700px) {
   .media-details {

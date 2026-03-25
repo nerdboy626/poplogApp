@@ -20,10 +20,15 @@ const ForgotPassword = () => {
 
       toast.success(
         "If an account exists for that email, a reset link has been sent.",
+        {
+          id: "main",
+        },
       );
       setEmail("");
     } catch (err) {
-      toast.error("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.", {
+        id: "main",
+      });
     } finally {
       setLoading(false);
     }

@@ -26,7 +26,7 @@
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  padding: 1rem;
+  padding: 1.5rem 1rem;
 }
 
 .journal-filters__group {
@@ -71,6 +71,8 @@
   padding: 1.5rem;
   background-color: var(--bg-surface);
   border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+  margin: 0 2.5rem 1.5rem 2.5rem;
 }
 
 .journal-empty {
@@ -88,4 +90,11 @@
 .journal-empty__subtitle {
   font-size: var(--font-size-medium);
   color: var(--text-secondary);
+}
+
+@media (max-width: 700px) {
+  .journal-entries {
+    padding: 1rem 0;
+    margin: 0 1rem 1.5rem 1rem;
+  }
 }

@@ -1,9 +1,8 @@
 .search-card__link {
   text-decoration: none;
   color: inherit;
-  display: block; /* expand to full width of result block */
+  display: block;
   cursor: pointer;
-  /* border: 3px solid green; */
 }
 
 .search-card__link:hover {
@@ -35,10 +34,8 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  /* margin-bottom: 1rem; */
   width: 100%;
   max-width: 100%;
-  /* border: 2px solid pink; */
 }
 
 .search-card__header h2 {
@@ -50,20 +47,17 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   min-width: 0;
-  /* border: 2px solid red; */
 }
 
 .search-card__year {
   white-space: nowrap;
   flex-shrink: 0;
-  /* border: 2px solid palegreen; */
 }
 
 .search-card__content {
   flex: 1;
   min-width: 0;
   max-width: 100%;
-  /* border: 2px solid green; */
 }
 
 .search-card__summary {
@@ -86,7 +80,6 @@
   line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  /* border: 2px solid blue; */
 }
 
 .search-card__genres {
@@ -95,7 +88,7 @@
   gap: 0.5rem;
 
   overflow-x: auto;
-  overflow-y: hidden; /* prevent vertical weirdness */
+  overflow-y: hidden;
 
   white-space: nowrap; /* force single line */
   max-width: 100%;
@@ -103,11 +96,10 @@
   scrollbar-width: none;
   -ms-overflow-style: none;
   min-width: 0;
-  /* border: 2px solid plum; */
 }
 
 .search-card__genres::-webkit-scrollbar {
-  display: none; /* Hides the scrollbar visually */
+  display: none; /* hides the scrollbar visually */
 }
 
 .search-card__genre {
@@ -115,7 +107,6 @@
   border-radius: 999px;
   text-align: center;
   flex-shrink: 0;
-  /* color: var(--text-primary); */
 
   background: var(--brand-accent);
   border: 1px solid var(--border-subtle);
@@ -125,7 +116,6 @@
 }
 
 .search-card__cover {
-  /* border: 2px solid peru; */
   border-radius: 10px;
   width: 150px;
   height: 225px;

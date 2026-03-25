@@ -24,7 +24,9 @@ const OAuthSuccess = () => {
 
       navigate("/", { replace: true });
     } else {
-      toast.error("Login with Google failed.");
+      toast.error("Login with Google failed.", {
+        id: "main",
+      });
       navigate("/login", { replace: true });
     }
   }, []);

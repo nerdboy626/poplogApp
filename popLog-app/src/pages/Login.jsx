@@ -26,12 +26,14 @@ const Login = () => {
 
   useEffect(() => {
     if (auth.logoutReason === "expired") {
-      toast.error("Your session expired. Please log in again.");
+      toast.error("Your session expired. Please log in again.", {
+        id: "main",
+      });
     }
   }, [auth.logoutReason]);
 
-  const handleLogin = async (event) => {
-    event.preventDefault();
+  const handleLogin = async (e) => {
+    e.preventDefault();
     setLoginError("");
 
     try {
@@ -51,9 +53,11 @@ const Login = () => {
         return;
       }
 
-      // store user + token in context/localStorage
+      // Store user + token in context/localStorage
       auth.login({ ...data.user, token: data.accessToken });
-      toast.success("Welcome back!");
+      toast.success("Welcome back!", {
+        id: "main",
+      });
       navigate(redirectPath, { replace: true });
       sessionStorage.removeItem("redirectAfterLogin");
     } catch (err) {
@@ -62,8 +66,8 @@ const Login = () => {
     }
   };
 
-  const handleSignUp = async (event) => {
-    event.preventDefault();
+  const handleSignUp = async (e) => {
+    e.preventDefault();
     setSignUpError("");
 
     try {
@@ -80,9 +84,11 @@ const Login = () => {
         return;
       }
 
-      // store user + token in context/localStorage
+      // Store user + token in context/localStorage
       auth.login({ ...data.user, token: data.accessToken });
-      toast.success("Account created! We're happy to have you here!");
+      toast.success("Account created! We're happy to have you here!", {
+        id: "main",
+      });
       navigate(redirectPath, { replace: true });
     } catch (err) {
       console.error("Signup error: ", err);

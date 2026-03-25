@@ -59,13 +59,9 @@ const CardDisplay = ({
       onMouseLeave={() => setIsHovered(false)}
     >
       <Link to={`/media/${mediaType}/${id}`} className="media-card__link">
-        <div className="media-card__image-container">
+        <div className="media-card__cover">
           {imageUrl ? (
-            <img
-              src={imageUrl}
-              alt={`${title} cover`}
-              className="media-card__image"
-            />
+            <img src={imageUrl} alt={`${title} cover`} />
           ) : (
             <>
               <p>No Image</p>

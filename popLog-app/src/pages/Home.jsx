@@ -1,8 +1,10 @@
-import Greeting from "../features/home/Greeting.jsx";
+import { useAuth } from "../utils/AuthContext.jsx";
 import Carousel from "../features/home/Carousel.jsx";
+import { Link } from "react-router-dom";
 import { useLoaderData } from "react-router-dom";
 import "./Home.css";
 const Home = () => {
+  const auth = useAuth();
   const trendingTitles = useLoaderData();
   const mediaCategories = [
     { name: "Movies", data: trendingTitles.movies },
@@ -13,7 +15,23 @@ const Home = () => {
 
   return (
     <main className="home-page">
-      <Greeting />
+      <header className="home-header">
+        {auth.isLoggedIn ? (
+          <>
+            <h1 className="home-header__title">Welcome back</h1>
+            <p className="home-header__subtitle">
+              Here’s what people are loving right now
+            </p>
+          </>
+        ) : (
+          <>
+            <h1 className="home-header__title">Discover what’s trending</h1>
+            <p className="home-header__subtitle">
+              Track your favorites by <Link to="/login">signing in</Link>
+            </p>
+          </>
+        )}
+      </header>
 
       <hr className="gradient-divider" />
 

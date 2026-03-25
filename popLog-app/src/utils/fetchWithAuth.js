@@ -14,7 +14,6 @@ export const fetchWithAuth = async (url, options = {}, auth) => {
     if (auth.isLoggedIn) {
       auth.logout("expired");
     }
-    // throw new Error("Session expired");
   }
 
   console.log(response.status);

@@ -30,7 +30,7 @@ const Navbar = () => {
             </li>
 
             <li>
-              <NavLink to="/searchpage" className="nav__link">
+              <NavLink to="/search-page" className="nav__link">
                 <IoSearch />
                 <span>Search</span>
               </NavLink>
@@ -48,7 +48,7 @@ const Navbar = () => {
         <div className="nav__user">
           {auth.user ? (
             <NavLink to="/account" className="nav__link">
-              <IoPersonCircleOutline className="nav__icon" />
+              <IoPersonCircleOutline className="nav__profile-icon" />
               <span>{auth.user.username}</span>
             </NavLink>
           ) : (
@@ -59,7 +59,7 @@ const Navbar = () => {
                 from: location.pathname + location.search + location.hash,
               }}
             >
-              <IoPersonCircleOutline className="nav__icon" />
+              <IoPersonCircleOutline className="nav__profile-icon" />
               <span>Login</span>
             </NavLink>
           )}

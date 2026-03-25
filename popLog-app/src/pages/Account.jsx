@@ -7,14 +7,12 @@ import { GiGameConsole } from "react-icons/gi";
 import { GiTv } from "react-icons/gi";
 import { GiBlackBook } from "react-icons/gi";
 import { GiFilmStrip } from "react-icons/gi";
-import Loading from "../components/Loading.jsx";
 import "./Account.css";
 
 const Account = () => {
   const auth = useAuth();
   const navigate = useNavigate();
   const [stats, setStats] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [sendingReset, setSendingReset] = useState(false);
   const location = useLocation();
   const message = location.state?.message;
@@ -25,7 +23,9 @@ const Account = () => {
 
   useEffect(() => {
     if (location.state?.message) {
-      toast.error(location.state.message);
+      toast.error(location.state.message, {
+        id: "main",
+      });
 
       navigate(location.pathname, { replace: true, state: {} });
     }
@@ -53,9 +53,9 @@ const Account = () => {
 
       setStats(data);
     } catch (err) {
-      toast.error(err.message);
-    } finally {
-      setLoading(false);
+      toast.error(err.message, {
+        id: "main",
+      });
     }
   };
 
@@ -72,9 +72,13 @@ const Account = () => {
         body: JSON.stringify({ email: stats.email }),
       });
 
-      toast.success("A reset link has been sent to your email.");
+      toast.success("A reset link has been sent to your email.", {
+        id: "main",
+      });
     } catch (err) {
-      toast.error("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.", {
+        id: "main",
+      });
     } finally {
       setSendingReset(false);
     }
@@ -82,11 +86,11 @@ const Account = () => {
 
   const handleLogout = () => {
     auth.logout("manual");
-    toast.success("Logged out successfully!");
+    toast.success("Logged out successfully!", {
+      id: "main",
+    });
     navigate("/login", { replace: true });
   };
-
-  if (loading) return <Loading text="Loading account info..." />;
 
   if (!stats)
     return (

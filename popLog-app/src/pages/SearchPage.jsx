@@ -1,5 +1,6 @@
 import { useLoaderData } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { IoSearch } from "react-icons/io5";
 import SearchBar from "../features/searchpage/SearchBar.jsx";
 import SearchDisplay from "../features/searchpage/SearchDisplay.jsx";
 import GenreMenu from "../features/searchpage/GenreMenu.jsx";
@@ -38,7 +39,7 @@ const SearchPage = () => {
     }
   }, [inputValue]);
 
-  // load saved cache from localStorage on mount
+  // Load saved cache from localStorage on mount
   useEffect(() => {
     const savedCache = localStorage.getItem("searchCache");
     if (savedCache) {
@@ -46,7 +47,7 @@ const SearchPage = () => {
     }
   }, []);
 
-  // save to localStorage whenever cache changes
+  // Save to localStorage whenever cache changes
   useEffect(() => {
     localStorage.setItem("searchCache", JSON.stringify(searchCache));
   }, [searchCache]);
@@ -65,7 +66,7 @@ const SearchPage = () => {
       },
     }));
 
-    setInputValue(""); // reset UI input
+    setInputValue("");
   }
 
   function handleClearGenre() {
@@ -102,7 +103,7 @@ const SearchPage = () => {
       setSearchError("Search field cannot be empty");
       return;
     }
-    setSearchError(""); // clear error if valid
+    setSearchError("");
     if (inputValue.trim()) {
       fetchSearchResults(inputValue);
     }
@@ -154,16 +155,16 @@ const SearchPage = () => {
       <section className="search-page__results">
         {isInitialState && (
           <div className="search-page__welcome">
-            <h2>Find your next journal entry here!</h2>
+            <h2>Find your favorite media here!</h2>
             <p>
-              Search for movies, games, or books — or browse by genre to get
-              started.
+              Search for movies, tv shows, games, or books — or browse by genre
+              to get started.
             </p>
           </div>
         )}
         {displayArray.length === 0 && entry.query !== "" && (
           <div className="search-page__empty">
-            <div className="search-page__empty-icon">🔍</div>
+            <IoSearch className="search-page__empty-icon" />
 
             <h3>
               No results found

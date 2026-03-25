@@ -45,7 +45,7 @@ const SearchBar = ({
         {mediaCategories.map((category) => (
           <Link
             key={category.path}
-            to={`/searchpage/${category.path}`}
+            to={`/search-page/${category.path}`}
             className={`search-bar__category ${
               mediaCategory === category.path ? "active" : ""
             }`}

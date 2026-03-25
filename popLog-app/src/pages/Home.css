@@ -5,6 +5,22 @@
   color: var(--text-primary);
 }
 
+.home-header {
+  padding: 1.5rem 1rem;
+  text-align: center;
+}
+
+.home-header__title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.home-header__subtitle {
+  margin-top: 0.5rem;
+  font-size: var(--font-size-small);
+  color: var(--text-muted);
+}
+
 .home-trending {
   width: 100%;
   display: flex;
@@ -12,8 +28,14 @@
 }
 
 .home-trending__title {
-  margin: 2rem 0 0.3rem 2.5rem;
-  font-size: 1.3rem;
+  margin: 2rem 0 0.25rem 2.5rem;
+  font-size: var(--font-size-large);
   letter-spacing: 0.05rem;
   color: var(--text-secondary);
+}
+
+@media (max-width: 700px) {
+  .home-trending__title {
+    margin: 2rem 0 0.25rem 1rem;
+  }
 }

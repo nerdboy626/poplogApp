@@ -10,7 +10,7 @@
   overflow-y: hidden;
   scroll-behavior: smooth;
   gap: 1.5rem;
-  padding: 0.7rem 2.5rem; /* space for arrows */
+  padding: 0.75rem 2.5rem;
 }
 
 .media-carousel__track::-webkit-scrollbar {
@@ -58,11 +58,11 @@
 }
 
 .media-carousel__arrow.left {
-  left: 0.3rem;
+  left: 0.25rem;
 }
 
 .media-carousel__arrow.right {
-  right: 0.3rem;
+  right: 0.25rem;
 }
 
 .media-carousel::before,
@@ -89,5 +89,11 @@
 @media (hover: none) {
   .media-carousel__arrow {
     display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .media-carousel__track {
+    padding: 0.7rem 1rem;
   }
 }

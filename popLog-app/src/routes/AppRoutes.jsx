@@ -11,7 +11,7 @@ import { searchPageLoader } from "../loaders/searchPageLoader.js";
 import Home from "../pages/Home.jsx";
 import Journal from "../pages/Journal.jsx";
 import SearchPage from "../pages/SearchPage.jsx";
-import MediaDetails from "../components/MediaDetails.jsx";
+import MediaDetails from "../pages/MediaDetails.jsx";
 import Login from "../pages/Login.jsx";
 import NotFound from "../pages/NotFound.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
@@ -25,6 +25,7 @@ export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />}>
       <Route index element={<Home />} loader={trendingTitlesLoader} />
+
       <Route
         path="journal"
         element={
@@ -34,7 +35,7 @@ export const router = createBrowserRouter(
         }
       />
 
-      <Route path="searchpage">
+      <Route path="search-page">
         <Route index element={<Navigate to="movies" replace />} />
         <Route
           path=":category"

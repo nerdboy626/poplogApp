@@ -5,7 +5,6 @@
   gap: 1rem;
   flex-wrap: wrap;
   white-space: nowrap;
-  /* border: 2px solid pink; */
   padding: 1rem 0;
   margin-top: 1rem;
 }
@@ -16,28 +15,23 @@
   justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
-  /* border: 2px solid blueviolet; */
 }
 
 .genre-menu__label {
   font-size: var(--font-size-medium);
   color: var(--text-secondary);
   text-align: center;
-  /* border: 2px solid aqua; */
 }
 
 .genre-menu__select-wrapper {
   position: relative;
-  /* display: inline-block; */
   width: max-content;
-  /* border: 2px solid palegreen; */
 }
 
 .genre-menu__select {
   appearance: none;
-  padding-right: 2rem; /* space for arrow */
+  padding-right: 2rem;
   cursor: pointer;
-  /* border: 2px solid red; */
 }
 
 .genre-menu__select-wrapper::after {
@@ -47,9 +41,7 @@
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
-  /* padding-left: 1rem; */
 
   color: var(--text-muted);
   font-size: var(--font-size-small);
-  /* border: 2px solid orange; */
 }
