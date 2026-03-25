@@ -125,7 +125,7 @@ const Journal = () => {
             </h3>
 
             <p className="journal-empty__subtitle">
-              Add some from the homepage or search page!
+              Add some from the home page or search page!
             </p>
           </div>
         ) : (

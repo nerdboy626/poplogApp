@@ -136,7 +136,7 @@ const Account = () => {
               <span>
                 <GiFilmStrip /> Movies
               </span>
-              <strong>{stats.movies}</strong>
+              <strong>{stats.movie}</strong>
             </li>
             <li>
               <span>
