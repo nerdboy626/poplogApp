@@ -44,7 +44,7 @@ export async function saveReview(req, res) {
 
     res.json(review);
   } catch (err) {
-    console.error(err);
+    console.error("saveReview error:", err);
     res.status(500).json({ error: "Failed to save entry" });
   }
 }
@@ -54,9 +54,15 @@ export async function deleteUserReview(req, res) {
   const media_id = req.params.mediaId;
 
   try {
-    await deleteReview(user_id, media_id);
-    res.json({ success: true });
+    const deleted = await deleteReview(user_id, media_id);
+
+    if (deleted === 0) {
+      return res.status(404).json({ error: "Review not found" });
+    }
+
+    res.json({ message: "Review deleted" });
   } catch (err) {
+    console.error("deleteUserReview error:", err);
     res.status(500).json({ error: "Failed to delete entry" });
   }
 }
@@ -68,6 +74,7 @@ export async function getUserDashboard(req, res) {
     const items = await getDashboardItems(user_id);
     res.json(items);
   } catch (err) {
+    console.error("getUserDashboard error:", err);
     res.status(500).json({ error: "Failed to retrieve journal entries" });
   }
 }
@@ -97,7 +104,7 @@ export async function getUserReview(req, res) {
       notes: review.notes,
     });
   } catch (err) {
-    console.error("Error fetching user entry:", err);
+    console.error("getUserReview error:", err);
     res.status(500).json({ error: "Failed to fetch entry" });
   }
 }

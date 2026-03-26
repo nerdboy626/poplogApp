@@ -3,7 +3,7 @@ import pool from "./pool.js";
 export async function getReviewQuery(userId, mediaId) {
   const result = await pool.query(
     `SELECT * FROM reviews WHERE user_id = $1 AND media_id = $2`,
-    [userId, mediaId]
+    [userId, mediaId],
   );
   return result.rows[0];
 }
@@ -26,17 +26,18 @@ export async function upsertReview({
       notes = EXCLUDED.notes
     RETURNING *;
     `,
-    [user_id, media_id, rating, favorite, notes]
+    [user_id, media_id, rating, favorite, notes],
   );
 
   return result.rows[0];
 }
 
 export async function deleteReview(userId, mediaId) {
-  return pool.query(
+  const result = await pool.query(
     `DELETE FROM reviews WHERE user_id = $1 AND media_id = $2`,
-    [userId, mediaId]
+    [userId, mediaId],
   );
+  return result.rowCount;
 }
 
 export async function getDashboardItems(userId) {
@@ -59,7 +60,7 @@ export async function getDashboardItems(userId) {
     WHERE r.user_id = $1
     ORDER BY r.updated_at DESC;
     `,
-    [userId]
+    [userId],
   );
 
   return result.rows;

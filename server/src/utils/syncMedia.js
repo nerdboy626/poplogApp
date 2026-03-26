@@ -1,7 +1,10 @@
 import { findOrCreateMedia } from "../database/mediaQueries.js";
 
 export async function syncMedia(media) {
-  if (!media?.id || !media?.mediaType) return null;
+  if (!media?.id || !media?.mediaType) {
+    console.warn("Invalid media passed to syncMedia:", media);
+    return null;
+  }
 
   try {
     const result = await findOrCreateMedia({
@@ -15,7 +18,7 @@ export async function syncMedia(media) {
 
     return result;
   } catch (err) {
-    console.error("Media sync failed:", err);
+    console.error("syncMedia error:", err);
     return null;
   }
 }
