@@ -9,6 +9,6 @@ import {
 export const bookRouter = express.Router();
 
 bookRouter.get("/search", getBookResults);
-bookRouter.get("/search/:listName", getBooksByList);
+bookRouter.get("/genre/:listName", getBooksByList);
 bookRouter.get("/trending", getTrendingBooks);
 bookRouter.get("/details/:id", getBookDetails);

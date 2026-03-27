@@ -12,5 +12,5 @@ export const movieRouter = express.Router();
 movieRouter.get("/trending/movies", getTrendingMovies);
 movieRouter.get("/trending/shows", getTrendingShows);
 movieRouter.get("/search", getTMDBResults);
-movieRouter.get("/search/:genreId", getByGenre);
+movieRouter.get("/genre/:genreId", getByGenre);
 movieRouter.get("/details/:mediaType/:id", getTMDBDetailsById);

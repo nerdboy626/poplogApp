@@ -26,7 +26,13 @@ async function fetchIGDBQuery(query, endpoint = "games") {
     throw new Error(`IGDB API error: ${response.status} - ${errorText}`);
   }
 
-  const data = await response.json();
+  let data;
+
+  try {
+    data = await response.json();
+  } catch {
+    throw new Error("Invalid JSON response from IGDB");
+  }
 
   if (endpoint !== "games") return data;
 
@@ -68,14 +74,12 @@ export const getGameGenres = async (req, res) => {
       limit 50;
     `;
 
-    console.log(`Fetching game genres ...`);
-
     const genres = await fetchIGDBQuery(queryBody, "genres");
 
     res.json(genres);
   } catch (error) {
-    console.error("Server error:", error);
-    res.status(500).json({
+    console.error("getGameGenres error:", error);
+    return res.status(500).json({
       error: "Failed to fetch game genres.",
     });
   }
@@ -102,16 +106,12 @@ export const getTrendingGamesByGenre = async (req, res) => {
       limit 30;
     `;
 
-    console.log(`Fetching popular games for genre ID ${genreId} ...`);
-
     const games = await fetchIGDBQuery(queryBody);
-
-    console.log("Successfully obtained popular games by genre!");
 
     res.json(games);
   } catch (error) {
-    console.error("Server error:", error);
-    res.status(500).json({
+    console.error("getTrendingGamesByGenre error:", error);
+    return res.status(500).json({
       error: "Failed to fetch games for genre.",
     });
   }
@@ -124,7 +124,6 @@ export const getTrendingGames = async (req, res) => {
     trendingGamesCache &&
     now - trendingGamesTimestamp < TRENDING_CACHE_DURATION
   ) {
-    console.log("Serving trending games from cache");
     return res.json(trendingGamesCache);
   }
 
@@ -143,25 +142,21 @@ export const getTrendingGames = async (req, res) => {
       limit 30;
     `;
 
-    console.log(`Fetching trending games ... `);
-
     const trendingGames = await fetchIGDBQuery(queryBody);
 
     trendingGamesCache = trendingGames;
     trendingGamesTimestamp = now;
 
-    console.log("Successfully obtained trending games!");
-
     res.json(trendingGames);
   } catch (error) {
-    console.error("Server error:", error);
+    console.error("getTrendingGames error:", error);
 
     if (trendingGamesCache) {
       console.warn("Returning stale trending games cache due to error");
       return res.json(trendingGamesCache);
     }
 
-    res.status(500).json({
+    return res.status(500).json({
       error: "Failed to fetch trending games.",
     });
   }
@@ -174,25 +169,23 @@ export const getGameResults = async (req, res) => {
     return res.status(400).json({ error: "Missing query parameter" });
   }
 
+  const safeQuery = query.replace(/"/g, '\\"');
+
   try {
     const queryBody = `
-      search "${query}";
+      search "${safeQuery}";
       fields name, summary, first_release_date, cover.image_id, 
         involved_companies.company.name, genres.name, platforms.name, 
         total_rating;
       limit 10;
     `;
 
-    console.log(`Fetching games results for ${query} ... `);
-
     const responseData = await fetchIGDBQuery(queryBody);
-
-    console.log("Successfully obtained game results!");
 
     res.json(responseData);
   } catch (error) {
-    console.error("Server error:", error);
-    res.status(500).json({
+    console.error("getGameResults error:", error);
+    return res.status(500).json({
       error: "Failed to fetch game search results.",
     });
   }
@@ -209,7 +202,7 @@ export const getGameDetails = async (req, res) => {
 
   try {
     if (IGDBGamesCache.has(gameId)) {
-      res.json(IGDBGamesCache.get(gameId));
+      return res.json(IGDBGamesCache.get(gameId));
     } else {
       const queryBody = `
       fields name, summary, first_release_date, cover.image_id,
@@ -221,7 +214,7 @@ export const getGameDetails = async (req, res) => {
 
       const responseData = await fetchIGDBQuery(queryBody);
 
-      if (!responseData) {
+      if (!responseData || responseData.length === 0) {
         return res.status(404).json({ error: "Game not found" });
       }
 
@@ -229,7 +222,7 @@ export const getGameDetails = async (req, res) => {
       res.json(responseData[0]);
     }
   } catch (err) {
-    console.error("Error fetching game details:", err);
-    res.status(500).json({ error: "Failed to game details." });
+    console.error("getGameDetails error:", err);
+    res.status(500).json({ error: "Failed to fetch game details." });
   }
 };

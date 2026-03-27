@@ -7,19 +7,21 @@ let tokenExpiration = 0;
 export async function getIGDBToken() {
   const now = Date.now();
   if (cachedToken && now < tokenExpiration) {
-    console.log("Returning cached IGDB token!");
     return cachedToken;
   }
 
   console.log("Fetching new IGDB token ... ");
   const url = `https://id.twitch.tv/oauth2/token?client_id=${IGDB_CLIENT_ID}&client_secret=${IGDB_CLIENT_SECRET}&grant_type=client_credentials`;
   const response = await fetch(url, { method: "POST" });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch IGDB token");
+  }
+
   const data = await response.json();
 
   cachedToken = data.access_token;
   tokenExpiration = now + data.expires_in * 1000;
-
-  console.log("New IGDB token obtained!");
 
   return cachedToken;
 }

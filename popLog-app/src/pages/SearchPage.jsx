@@ -113,7 +113,7 @@ const SearchPage = () => {
     console.log(`Fetching ${category} with genre ID of ${genreId} ...`);
 
     const response = await fetch(
-      `http://localhost:3500/api/${category}/search/${genreId}`,
+      `http://localhost:3500/api/${category}/genre/${genreId}`,
     );
 
     const data = await response.json();
