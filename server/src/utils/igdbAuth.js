@@ -10,7 +10,6 @@ export async function getIGDBToken() {
     return cachedToken;
   }
 
-  console.log("Fetching new IGDB token ... ");
   const url = `https://id.twitch.tv/oauth2/token?client_id=${IGDB_CLIENT_ID}&client_secret=${IGDB_CLIENT_SECRET}&grant_type=client_credentials`;
   const response = await fetch(url, { method: "POST" });
 

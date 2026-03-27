@@ -218,7 +218,10 @@ export const getGameDetails = async (req, res) => {
         return res.status(404).json({ error: "Game not found" });
       }
 
-      await syncMedia(responseData[0]);
+      syncMedia(responseData[0]).catch((err) => {
+        console.error("syncMedia error:", err);
+      });
+
       res.json(responseData[0]);
     }
   } catch (err) {

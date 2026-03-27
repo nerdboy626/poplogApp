@@ -10,26 +10,34 @@ const options = {
   },
 };
 
-let movieGenresMap = {};
-let tvGenresMap = {};
-let trendingShowsCache = null;
-let trendingMoviesCache = null;
-let trendingTimestamp = 0;
 const TRENDING_CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
-const fetchGenres = async () => {
-  try {
-    const movieResponse = await fetch(
-      "https://api.themoviedb.org/3/genre/movie/list?language=en-US",
-      options,
-    );
-    const tvResponse = await fetch(
-      "https://api.themoviedb.org/3/genre/tv/list?language=en-US",
-      options,
-    );
+let movieGenresMap = {};
+let tvGenresMap = {};
 
-    const movieData = await movieResponse.json();
-    const tvData = await tvResponse.json();
+let trendingShowsCache = null;
+let trendingMoviesCache = null;
+
+let trendingShowsTimestamp = 0;
+let trendingMoviesTimestamp = 0;
+
+const fetchTMDB = async (url) => {
+  const response = await fetch(url, options);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`TMDB API error: ${response.status} - ${errorText}`);
+  }
+
+  return response.json();
+};
+
+const fetchMovieAndTVGenres = async () => {
+  try {
+    const [movieData, tvData] = await Promise.all([
+      fetchTMDB("https://api.themoviedb.org/3/genre/movie/list?language=en-US"),
+      fetchTMDB("https://api.themoviedb.org/3/genre/tv/list?language=en-US"),
+    ]);
 
     movieGenresMap = movieData.genres.reduce((acc, genre) => {
       acc[genre.id] = genre.name;
@@ -40,26 +48,41 @@ const fetchGenres = async () => {
       acc[genre.id] = genre.name;
       return acc;
     }, {});
-
-    console.log("Genres cached successfully!");
   } catch (error) {
-    console.error("Failed to fetch genres:", error);
+    console.error("fetchMovieAndTVGenres error:", error);
   }
 };
 
-// call it once at server start
-fetchGenres();
+const ensureGenresLoaded = async () => {
+  if (Object.keys(movieGenresMap).length === 0) {
+    await fetchMovieAndTVGenres();
+  }
+};
+
+const getTitle = (item) =>
+  item.media_type === "movie" ? item.title : item.name;
+
+const getReleaseYear = (item) =>
+  (item.media_type === "movie"
+    ? item.release_date
+    : item.first_air_date
+  )?.slice(0, 4) || null;
+
+const getGenres = (item) => {
+  const map = item.media_type === "movie" ? movieGenresMap : tvGenresMap;
+  return item.genre_ids?.map((id) => map[id]).filter(Boolean) || [];
+};
+
+const normalizeMediaType = (items, type) =>
+  items.map((item) => ({ ...item, media_type: type }));
 
 function formatData(data) {
   return data.map((item) => ({
     id: item.id,
     mediaType: item.media_type,
-    title: item.media_type === "movie" ? item.title : item.name,
+    title: getTitle(item),
     summary: item.overview || "No summary available.",
-    releaseYear:
-      (item.media_type === "movie"
-        ? item.release_date?.slice(0, 4)
-        : item.first_air_date?.slice(0, 4)) || null,
+    releaseYear: getReleaseYear(item),
     coverUrl: item.poster_path
       ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
       : null,
@@ -70,11 +93,20 @@ function formatData(data) {
       typeof item.vote_average === "number"
         ? Math.round(item.vote_average * 10) / 10
         : null,
-    genres:
-      item.media_type === "movie"
-        ? item.genre_ids?.map((id) => movieGenresMap[id]).filter(Boolean) || []
-        : item.genre_ids?.map((id) => tvGenresMap[id]).filter(Boolean) || [],
+    genres: getGenres(item),
   }));
+}
+
+function formatRuntime(minutes) {
+  if (!minutes || typeof minutes !== "number") return null;
+
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+
+  if (hours === 0) return `${mins}m`;
+  if (mins === 0) return `${hours}h`;
+
+  return `${hours}h ${mins}m`;
 }
 
 const unifiedGenres = {
@@ -104,89 +136,63 @@ export const getByGenre = async (req, res) => {
   }
 
   try {
-    console.log(`Fetching popular titles for genre '${genrePair.label}' ...`);
-
-    const [moviesRes, tvRes] = await Promise.all([
-      fetch(
-        `https://api.themoviedb.org/3/discover/movie?with_genres=${genrePair.movie}&sort_by=popularity.desc&language=en-US`,
-        options,
-      ),
-      fetch(
-        `https://api.themoviedb.org/3/discover/tv?with_genres=${genrePair.tv}&sort_by=popularity.desc&language=en-US`,
-        options,
-      ),
-    ]);
-
-    if (!moviesRes.ok || !tvRes.ok) {
-      throw new Error(`TMDB API error: ${moviesRes.status}/${tvRes.status}`);
-    }
+    await ensureGenresLoaded();
 
     const [moviesData, tvData] = await Promise.all([
-      moviesRes.json(),
-      tvRes.json(),
+      fetchTMDB(
+        `https://api.themoviedb.org/3/discover/movie?with_genres=${genrePair.movie}&sort_by=popularity.desc&language=en-US`,
+      ),
+      fetchTMDB(
+        `https://api.themoviedb.org/3/discover/tv?with_genres=${genrePair.tv}&sort_by=popularity.desc&language=en-US`,
+      ),
     ]);
 
-    const movies = Array.isArray(moviesData.results)
-      ? moviesData.results.map((movie) => ({ ...movie, media_type: "movie" }))
-      : [];
-    const shows = Array.isArray(tvData.results)
-      ? tvData.results.map((tv) => ({ ...tv, media_type: "tv" }))
-      : [];
+    const movies = normalizeMediaType(moviesData.results || [], "movie");
+    const shows = normalizeMediaType(tvData.results || [], "tv");
 
-    const combined = [...movies, ...shows].sort(
-      (a, b) => b.popularity - a.popularity,
-    );
+    const combined = [...movies, ...shows]
+      .sort((a, b) => b.popularity - a.popularity)
+      .slice(0, 30);
 
-    const formatted = formatData(combined.slice(0, 30));
-
-    console.log(
-      `Returned ${formatted.length} titles for '${genrePair.label}'!`,
-    );
-    res.json(formatted);
+    res.json(formatData(combined));
   } catch (error) {
-    console.error("Server error:", error);
-    res.status(500).json({ error: "Failed to fetch genre results" });
+    console.error("getByGenre error:", error);
+    return res.status(500).json({ error: "Failed to fetch genre results" });
   }
 };
 
 export const getTrendingShows = async (req, res) => {
   const now = Date.now();
 
-  if (trendingShowsCache && now - trendingTimestamp < TRENDING_CACHE_DURATION) {
-    console.log("Serving trending shows from cache");
+  if (
+    trendingShowsCache &&
+    now - trendingShowsTimestamp < TRENDING_CACHE_DURATION
+  ) {
     return res.json(trendingShowsCache);
   }
+
   try {
-    const url = "https://api.themoviedb.org/3/trending/tv/week?language=en-US";
+    await ensureGenresLoaded();
+    const data = await fetchTMDB(
+      "https://api.themoviedb.org/3/trending/tv/week?language=en-US",
+    );
 
-    console.log(`Fetching trending shows ... `);
+    const results = data.results || [];
+    const formatted = formatData(results.slice(0, 20));
 
-    const response = await fetch(url, options);
+    trendingShowsCache = formatted;
+    trendingShowsTimestamp = now;
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`TMDB API error: ${response.status} - ${errorText}`);
-    }
-
-    const data = await response.json();
-    const results = Array.isArray(data.results) ? data.results : [];
-    const formattedData = formatData(results.slice(0, 20));
-
-    console.log("Successfully obtained trending shows!");
-
-    trendingShowsCache = formattedData;
-    trendingTimestamp = now;
-
-    res.json(formattedData);
+    res.json(formatted);
   } catch (error) {
-    console.error("Server error:", error);
+    console.error("getTrendingShows error:", error);
 
     if (trendingShowsCache) {
-      console.warn("Returning stale trending shows cache due to error");
+      console.warn("Returning stale trending shows cache");
       return res.json(trendingShowsCache);
     }
 
-    res.status(500).json({ error: "Failed to fetch trending shows" });
+    return res.status(500).json({ error: "Failed to fetch trending shows" });
   }
 };
 
@@ -195,43 +201,34 @@ export const getTrendingMovies = async (req, res) => {
 
   if (
     trendingMoviesCache &&
-    now - trendingTimestamp < TRENDING_CACHE_DURATION
+    now - trendingMoviesTimestamp < TRENDING_CACHE_DURATION
   ) {
-    console.log("Serving trending movies from cache");
     return res.json(trendingMoviesCache);
   }
+
   try {
-    const url =
-      "https://api.themoviedb.org/3/trending/movie/week?language=en-US";
+    await ensureGenresLoaded();
 
-    console.log(`Fetching trending movies ... `);
+    const data = await fetchTMDB(
+      "https://api.themoviedb.org/3/trending/movie/week?language=en-US",
+    );
 
-    const response = await fetch(url, options);
+    const results = data.results || [];
+    const formatted = formatData(results.slice(0, 30));
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`TMDB API error: ${response.status} - ${errorText}`);
-    }
+    trendingMoviesCache = formatted;
+    trendingMoviesTimestamp = now;
 
-    const data = await response.json();
-    const results = Array.isArray(data.results) ? data.results : [];
-    const formattedData = formatData(results.slice(0, 30));
-
-    console.log("Successfully obtained trending movies!");
-
-    trendingMoviesCache = formattedData;
-    trendingTimestamp = now;
-
-    res.json(formattedData);
+    res.json(formatted);
   } catch (error) {
-    console.error("Server error:", error);
+    console.error("getTrendingMovies error:", error);
 
     if (trendingMoviesCache) {
-      console.warn("Returning stale trending shows cache due to error");
+      console.warn("Returning stale trending movies cache");
       return res.json(trendingMoviesCache);
     }
 
-    res.status(500).json({ error: "Failed to fetch trending movies" });
+    return res.status(500).json({ error: "Failed to fetch trending movies" });
   }
 };
 
@@ -243,7 +240,7 @@ export const getTMDBResults = async (req, res) => {
   }
 
   try {
-    const baseUrl = "https://api.themoviedb.org/3/search/multi";
+    await ensureGenresLoaded();
 
     const params = new URLSearchParams({
       query,
@@ -252,45 +249,22 @@ export const getTMDBResults = async (req, res) => {
       page: page.toString(),
     });
 
-    const url = `${baseUrl}?${params.toString()}`;
+    const data = await fetchTMDB(
+      `https://api.themoviedb.org/3/search/multi?${params.toString()}`,
+    );
 
-    console.log(`Fetching movie results on ${query} ... `);
-
-    const response = await fetch(url, options);
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`TMDB API error: ${response.status} - ${errorText}`);
-    }
-
-    const data = await response.json();
-
-    const filteredData = data.results.filter(
+    const filtered = data.results.filter(
       (item) => item.media_type === "movie" || item.media_type === "tv",
     );
 
-    const formattedData = formatData(filteredData);
-
-    console.log("Successfully obtained movie results!");
-
-    res.json(formattedData);
+    res.json(formatData(filtered));
   } catch (error) {
-    console.error("Server error:", error);
-    res.status(500).json({ error: "Failed to fetch movie search results" });
+    console.error("getTMDBResults error:", error);
+    return res
+      .status(500)
+      .json({ error: "Failed to fetch movie search results" });
   }
 };
-
-function formatRuntime(minutes) {
-  if (!minutes || typeof minutes !== "number") return null;
-
-  const hours = Math.floor(minutes / 60);
-  const mins = minutes % 60;
-
-  if (hours === 0) return `${mins}m`;
-  if (mins === 0) return `${hours}h`;
-
-  return `${hours}h ${mins}m`;
-}
 
 export const getTMDBDetailsById = async (req, res) => {
   const { mediaType, id } = req.params;
@@ -308,20 +282,10 @@ export const getTMDBDetailsById = async (req, res) => {
   }
 
   try {
-    const url = `https://api.themoviedb.org/3/${mediaType}/${id}?append_to_response=credits`;
+    const data = await fetchTMDB(
+      `https://api.themoviedb.org/3/${mediaType}/${id}?append_to_response=credits`,
+    );
 
-    console.log(`Fetching ${mediaType} details for ID ${id} ...`);
-
-    const response = await fetch(url, options);
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`TMDB API error: ${response.status} - ${errorText}`);
-    }
-
-    const data = await response.json();
-
-    // main cast (first 6 actors)
     const mainCast =
       data.credits?.cast?.slice(0, 6).map((actor) => ({
         id: actor.id,
@@ -336,38 +300,15 @@ export const getTMDBDetailsById = async (req, res) => {
 
     if (mediaType === "tv") {
       creators = data.created_by?.length
-        ? data.created_by.map((creator) => creator.name).join(", ")
+        ? data.created_by.map((c) => c.name).join(", ")
         : null;
     } else {
-      // movie directors come from crew
-      const directors =
+      creators =
         data.credits?.crew
-          ?.filter((person) => person.job === "Director")
-          .map((director) => director.name)
+          ?.filter((p) => p.job === "Director")
+          .map((d) => d.name)
           .join(", ") || null;
-
-      creators = directors;
     }
-
-    const tvInfo =
-      mediaType === "tv"
-        ? {
-            numberOfSeasons: data.number_of_seasons || null,
-            numberOfEpisodes: data.number_of_episodes || null,
-            episodeRuntime: Array.isArray(data.episode_run_time)
-              ? formatRuntime(data.episode_run_time[0])
-              : null,
-          }
-        : null;
-
-    const movieInfo =
-      mediaType === "movie"
-        ? {
-            runtime: formatRuntime(data.runtime) || null,
-          }
-        : null;
-
-    // console.log(data);
 
     const formatted = {
       id: data.id,
@@ -376,8 +317,9 @@ export const getTMDBDetailsById = async (req, res) => {
       summary: data.overview || "No summary available.",
       releaseYear:
         (mediaType === "movie"
-          ? data.release_date?.slice(0, 4)
-          : data.first_air_date?.slice(0, 4)) || null,
+          ? data.release_date
+          : data.first_air_date
+        )?.slice(0, 4) || null,
       coverUrl: data.poster_path
         ? `https://image.tmdb.org/t/p/w500${data.poster_path}`
         : null,
@@ -392,16 +334,25 @@ export const getTMDBDetailsById = async (req, res) => {
       productionCompanies: data.production_companies || [],
       creators,
       cast: mainCast,
-      ...tvInfo,
-      ...movieInfo,
+      ...(mediaType === "tv" && {
+        numberOfSeasons: data.number_of_seasons || null,
+        numberOfEpisodes: data.number_of_episodes || null,
+        episodeRuntime: Array.isArray(data.episode_run_time)
+          ? formatRuntime(data.episode_run_time[0])
+          : null,
+      }),
+      ...(mediaType === "movie" && {
+        runtime: formatRuntime(data.runtime) || null,
+      }),
     };
 
-    await syncMedia(formatted);
+    syncMedia(formatted).catch((err) => {
+      console.error("syncMedia error:", err);
+    });
 
-    console.log(`Successfully returned details for ID ${id}`);
     res.json(formatted);
   } catch (error) {
-    console.error("Server error:", error);
-    res.status(500).json({ error: "Failed to fetch TMDB details" });
+    console.error("getTMDBDetailsById error:", error);
+    return res.status(500).json({ error: "Failed to fetch TMDB details" });
   }
 };

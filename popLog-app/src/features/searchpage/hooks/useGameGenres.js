@@ -4,7 +4,7 @@ export default function useGameGenres() {
   const [gameGenres, setGameGenres] = useState([]);
 
   useEffect(() => {
-    async function fetchGenres() {
+    async function fetchGameGenres() {
       try {
         const res = await fetch("http://localhost:3500/api/games/genres");
         const data = await res.json();
@@ -14,7 +14,7 @@ export default function useGameGenres() {
       }
     }
 
-    fetchGenres();
+    fetchGameGenres();
   }, []);
 
   return gameGenres;
