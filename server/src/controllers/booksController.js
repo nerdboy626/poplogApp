@@ -3,94 +3,31 @@ import { syncMedia } from "../utils/syncMedia.js";
 import { findMediaByExternalId } from "../database/mediaQueries.js";
 import { GOOGLE_API_KEY, NYT_API_KEY } from "../config/env.js";
 
-const googleBooksCache = new Map();
-let trendingBooksCache = null;
-let trendingBooksTimestamp = 0;
 const TRENDING_CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
-async function fetchNYTList(category) {
-  console.log("Fetching NYT list:", category);
-  const response = await fetch(
-    `https://api.nytimes.com/svc/books/v3/lists/current/${category}.json?api-key=${NYT_API_KEY}`,
-  );
+const googleBooksCache = new Map();
 
-  // const body = await response.text();
-  // console.log("NYT response body:", body);
+let trendingBooksCache = null;
+let trendingBooksTimestamp = 0;
+
+const fetchJSON = async (url) => {
+  const response = await fetch(url);
 
   if (!response.ok) {
     const errorText = await response.text();
-    throw new Error(`NYT API error: ${response.status} - ${errorText}`);
+    throw new Error(`API error: ${response.status} - ${errorText}`);
   }
 
-  const data = await response.json();
-  return data.results?.books || [];
-}
-
-export const getBooksByList = async (req, res) => {
-  const { listName } = req.params;
-
-  if (!listName) {
-    return res.status(400).json({ error: "Missing listName parameter" });
-  }
-
-  try {
-    const nytBooks = await fetchNYTList(listName);
-
-    const formatted = await Promise.all(
-      nytBooks.slice(0, 20).map(async (book) => {
-        try {
-          const googleBookData = await fetchGoogleBookByISBN(
-            book.primary_isbn13,
-          );
-          if (googleBookData) {
-            const merged = {
-              ...googleBookData,
-              coverUrl: book.book_image || googleBookData.coverUrl || null,
-            };
-            googleBooksCache.set(book.primary_isbn13, merged);
-
-            return merged;
-          }
-        } catch (err) {
-          // ignore enrichment errors, fall through to fallback
-          console.warn("Google Books enrichment failed:", err);
-        }
-
-        const bookId = book.primary_isbn13 || `nyt-${book.title}`;
-
-        const bookData = {
-          id: bookId,
-          mediaType: "books",
-          title: book.title || null,
-          summary: book.description || "No summary available.",
-          releaseYear: book.published_date?.slice(0, 4) || null,
-          coverUrl: book.book_image || null,
-          rating: null,
-          creators: book.author || null,
-          genres: [],
-          pageCount: null,
-        };
-
-        googleBooksCache.set(bookId, bookData);
-
-        return bookData;
-      }),
-    );
-
-    res.json(formatted);
-  } catch (error) {
-    console.error("Server error (getBooksByList):", error);
-    res.status(500).json({ error: "Failed to fetch books for list." });
-  }
+  return response.json();
 };
 
-function getHighResCover(imageLinks) {
-  // if (!imageLinks) return null;
-  // const base = imageLinks.thumbnail || imageLinks.smallThumbnail;
-  // if (!base) return null;
-  // // Try to increase resolution — Google accepts zoom up to 5
-  // return base.replace(/zoom=\d+/, "zoom=5");
+async function fetchNYTList(category) {
+  return fetchJSON(
+    `https://api.nytimes.com/svc/books/v3/lists/current/${category}.json?api-key=${NYT_API_KEY}`,
+  ).then((data) => data.results?.books || []);
+}
 
+function getHighResCover(imageLinks) {
   if (!imageLinks) return null;
 
   return (
@@ -103,6 +40,35 @@ function getHighResCover(imageLinks) {
   );
 }
 
+const formatGoogleBook = (book, isbn) => ({
+  id: isbn,
+  mediaType: "books",
+  title: book.title || null,
+  summary: book.description || "No summary available.",
+  releaseYear: book.publishedDate?.slice(0, 4) || null,
+  coverUrl: getHighResCover(book.imageLinks),
+  rating:
+    typeof book.averageRating === "number"
+      ? Math.round(book.averageRating * 20) / 10
+      : null,
+  creators: book.authors?.join(", ") || null,
+  genres: book.categories || [],
+  pageCount: book.pageCount || null,
+});
+
+const formatNYTBookFallback = (book) => ({
+  id: book.primary_isbn13 || `nyt-${book.title}`,
+  mediaType: "books",
+  title: book.title || null,
+  summary: book.description || "No summary available.",
+  releaseYear: book.published_date?.slice(0, 4) || null,
+  coverUrl: book.book_image || null,
+  rating: null,
+  creators: book.author || null,
+  genres: [],
+  pageCount: null,
+});
+
 async function fetchGoogleBookByISBN(isbn) {
   if (!isbn) return null;
 
@@ -111,49 +77,54 @@ async function fetchGoogleBookByISBN(isbn) {
   }
 
   try {
-    const response = await fetch(
+    const data = await fetchJSON(
       `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${GOOGLE_API_KEY}&maxResults=1`,
     );
 
-    if (!response.ok) {
-      console.log(`Google Books fetch failed for ISBN ${isbn}:`);
-      return null;
-    }
-
-    const data = await response.json();
     if (!data.items?.length) return null;
 
-    const book = data.items[0].volumeInfo;
-    const enriched = {
-      id: isbn,
-      mediaType: "books",
-      title: book.title || null,
-      summary: book.description || "No summary available.",
-      releaseYear: book.publishedDate?.slice(0, 4) || null,
-      coverUrl: getHighResCover(book.imageLinks),
-      rating:
-        typeof book.averageRating === "number"
-          ? Math.round(book.averageRating * 20) / 10
-          : null,
-      creators: book.authors?.join(", ") || null,
-      genres: book.categories || [],
-      pageCount: book.pageCount || null,
-    };
+    const formatted = formatGoogleBook(data.items[0].volumeInfo, isbn);
 
-    googleBooksCache.set(isbn, enriched);
+    googleBooksCache.set(isbn, formatted);
 
-    return enriched;
+    return formatted;
   } catch (err) {
-    console.warn("Google Books fetch failed:", err);
+    console.warn("fetchGoogleBookByISBN error:", err);
     return null;
   }
 }
 
+async function enrichBookWithGoogle(nytBook) {
+  const isbn = nytBook.primary_isbn13;
+
+  try {
+    const googleData = await fetchGoogleBookByISBN(isbn);
+
+    if (googleData) {
+      const merged = {
+        ...googleData,
+        coverUrl: nytBook.book_image || googleData.coverUrl || null,
+      };
+
+      googleBooksCache.set(isbn, merged);
+      return merged;
+    }
+  } catch (err) {
+    console.warn("Google enrichment failed:", err);
+  }
+
+  const fallback = formatNYTBookFallback(nytBook);
+  googleBooksCache.set(fallback.id, fallback);
+
+  return fallback;
+}
+
 function getUniqueBooks(books) {
   const unique = new Set();
+
   return books.filter((book) => {
-    const key = book.primary_isbn13 || book.title.toLowerCase();
-    if (unique.has(key)) return false;
+    const key = book.primary_isbn13 || book.title?.toLowerCase();
+    if (!key || unique.has(key)) return false;
     unique.add(key);
     return true;
   });
@@ -179,101 +150,69 @@ function shuffleArray(array) {
   return array;
 }
 
+export const getBooksByList = async (req, res) => {
+  const { listName } = req.params;
+
+  if (!listName) {
+    return res.status(400).json({ error: "Missing listName parameter" });
+  }
+
+  try {
+    const nytBooks = await fetchNYTList(listName);
+
+    const formatted = await Promise.all(
+      nytBooks.slice(0, 20).map(enrichBookWithGoogle),
+    );
+
+    res.json(formatted);
+  } catch (error) {
+    console.error("getBooksByList error:", error);
+    return res.status(500).json({ error: "Failed to fetch books for list." });
+  }
+};
+
 export const getTrendingBooks = async (req, res) => {
   const now = Date.now();
 
-  // If cache exists and is less than 24 hours old → return cached data
   if (
     trendingBooksCache &&
     now - trendingBooksTimestamp < TRENDING_CACHE_DURATION
   ) {
-    console.log("Serving trending books from cache");
     return res.json(trendingBooksCache);
   }
 
   try {
-    // you can add or remove lists for variety
     const categories = [
       "hardcover-fiction",
       "hardcover-nonfiction",
-      "young-adult",
-      "advice-how-to-and-miscellaneous",
-      "business-books",
-      "science",
+      "combined-print-and-e-book-fiction",
+      "combined-print-and-e-book-nonfiction",
     ];
 
-    console.log("Fetching trending books from NYT...");
-
-    // fetch all lists in parallel
     const nytResults = await Promise.allSettled(categories.map(fetchNYTList));
 
-    // combine and flatten successful results
     const allBooks = nytResults
-      .filter((result) => result.status === "fulfilled")
-      .flatMap((list) => list.value);
+      .filter((r) => r.status === "fulfilled")
+      .flatMap((r) => r.value);
 
-    // make sure each book only appears once
     const uniqueBooks = getUniqueBooks(allBooks);
-    const randomizedBooks = shuffleArray(uniqueBooks);
+    const shuffled = shuffleArray(uniqueBooks).slice(0, 30);
 
-    // limit to top 30 for performance
-    const limitedBooks = randomizedBooks.slice(0, 30);
+    const enriched = await Promise.all(shuffled.map(enrichBookWithGoogle));
 
-    console.log(
-      `Found ${limitedBooks.length} unique books — enriching with Google data...`,
-    );
-
-    // enrich with Google Books info using ISBN
-    const enrichedBooks = await Promise.all(
-      limitedBooks.map(async (book) => {
-        const googleBookData = await fetchGoogleBookByISBN(book.primary_isbn13);
-
-        if (googleBookData) {
-          const bookData = {
-            ...googleBookData,
-            coverUrl: book.book_image || googleBookData.coverUrl || null,
-          };
-
-          googleBooksCache.set(book.primary_isbn13, bookData);
-
-          return bookData;
-        } else {
-          const bookId = book.primary_isbn13 || `nyt-${book.title}`;
-          const bookData = {
-            id: bookId,
-            mediaType: "books",
-            title: book.title || null,
-            summary: book.description || "No summary available.",
-            releaseYear: book.published_date?.slice(0, 4) || null,
-            coverUrl: book.book_image || null,
-            rating: null,
-            creators: book.author ? book.author : null,
-            genres: [],
-            pageCount: null,
-          };
-
-          googleBooksCache.set(bookId, bookData);
-
-          return bookData;
-        }
-      }),
-    );
-
-    console.log("Successfully fetched trending books!");
-
-    trendingBooksCache = enrichedBooks;
+    trendingBooksCache = enriched;
     trendingBooksTimestamp = now;
 
-    res.json(enrichedBooks);
+    res.json(enriched);
   } catch (error) {
-    console.error("Server error:", error);
+    console.error("getTrendingBooks error:", error);
 
     if (trendingBooksCache) {
       console.warn("Returning stale trending books cache due to error");
       return res.json(trendingBooksCache);
     }
 
-    res.status(500).json({ error: "Failed to fetch trending books." });
+    return res.status(500).json({ error: "Failed to fetch trending books." });
   }
 };
 
@@ -284,52 +223,25 @@ export const getBookResults = async (req, res) => {
     return res.status(400).json({ error: "Missing 'query' parameter" });
   }
 
-  console.log(query);
-
   try {
-    const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(
-      query,
-    )}&key=${GOOGLE_API_KEY}&maxResults=10`;
+    const data = await fetchJSON(
+      `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(
+        query,
+      )}&key=${GOOGLE_API_KEY}&maxResults=10`,
+    );
 
-    console.log(`Fetching book results on ${query} ...`);
-
-    const response = await fetch(url);
-    const data = await response.json();
-
-    const formattedData =
+    const formatted =
       data.items
         ?.map((item) => {
           const identifiers = item.volumeInfo?.industryIdentifiers || [];
 
-          const isbn13 = identifiers.find(
-            (id) => id.type === "ISBN_13" && id.identifier,
-          );
-          const isbn10 = identifiers.find(
-            (id) => id.type === "ISBN_10" && id.identifier,
-          );
+          const isbn =
+            identifiers.find((id) => id.type === "ISBN_13")?.identifier ||
+            identifiers.find((id) => id.type === "ISBN_10")?.identifier;
 
-          const isbn = isbn13?.identifier || isbn10?.identifier || null;
-
-          // Skip books without valid ISBN
           if (!isbn) return null;
 
-          const bookData = {
-            id: isbn,
-            mediaType: "books",
-            title: item.volumeInfo.title || null,
-            summary: item.volumeInfo.description || "No summary available.",
-            releaseYear: item.volumeInfo.publishedDate?.slice(0, 4) || null,
-            coverUrl: getHighResCover(item.volumeInfo.imageLinks) || null,
-            rating:
-              typeof item.volumeInfo.averageRating === "number"
-                ? Math.round(item.volumeInfo.averageRating * 20) / 10
-                : null,
-            creators: item.volumeInfo.authors?.join(", ") || null,
-            genres: item.volumeInfo.categories || [],
-            pageCount: item.volumeInfo.pageCount || null,
-          };
-
-          console.log(bookData);
+          const bookData = formatGoogleBook(item.volumeInfo, isbn);
 
           googleBooksCache.set(isbn, bookData);
 
@@ -337,12 +249,12 @@ export const getBookResults = async (req, res) => {
         })
         .filter(Boolean) || [];
 
-    console.log("Successfully obtained book results!");
-
-    res.json(formattedData);
+    res.json(formatted);
   } catch (error) {
-    console.error("Server error:", error);
-    res.status(500).json({ error: "Failed to fetch book search results" });
+    console.error("getBookResults error:", error);
+    return res
+      .status(500)
+      .json({ error: "Failed to fetch book search results" });
   }
 };
 
@@ -355,8 +267,11 @@ export const getBookDetails = async (req, res) => {
 
   try {
     if (googleBooksCache.has(id)) {
-      await syncMedia(googleBooksCache.get(id));
-      return res.json(googleBooksCache.get(id));
+      const cached = googleBooksCache.get(id);
+
+      syncMedia(cached).catch((err) => console.error("syncMedia error:", err));
+
+      return res.json(cached);
     }
 
     const looksLikeISBN = /^\d{10}(\d{3})?$/.test(id);
@@ -365,7 +280,10 @@ export const getBookDetails = async (req, res) => {
       const googleBook = await fetchGoogleBookByISBN(id);
 
       if (googleBook) {
-        await syncMedia(googleBook);
+        syncMedia(googleBook).catch((err) =>
+          console.error("syncMedia error:", err),
+        );
+
         return res.json(googleBook);
       }
     }
@@ -387,13 +305,12 @@ export const getBookDetails = async (req, res) => {
       };
 
       googleBooksCache.set(id, formatted);
-
       return res.json(formatted);
     }
 
-    return res.status(404).json({ error: "Book not found" });
+    res.status(404).json({ error: "Book not found" });
   } catch (err) {
-    console.error("Error fetching book details:", err);
-    res.status(500).json({ error: "Failed to fetch book details." });
+    console.error("getBookDetails error:", err);
+    return res.status(500).json({ error: "Failed to fetch book details." });
   }
 };
