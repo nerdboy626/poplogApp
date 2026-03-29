@@ -204,8 +204,8 @@ export const getTrendingBooks = async (req, res) => {
     trendingBooksTimestamp = now;
 
     res.json(enriched);
-  } catch (error) {
-    console.error("getTrendingBooks error:", error);
+  } catch (err) {
+    console.error("getTrendingBooks error:", err);
 
     if (trendingBooksCache) {
       console.warn("Returning stale trending books cache due to error");
@@ -250,8 +250,8 @@ export const getBookResults = async (req, res) => {
         .filter(Boolean) || [];
 
     res.json(formatted);
-  } catch (error) {
-    console.error("getBookResults error:", error);
+  } catch (err) {
+    console.error("getBookResults error:", err);
     return res
       .status(500)
       .json({ error: "Failed to fetch book search results" });

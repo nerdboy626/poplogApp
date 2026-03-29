@@ -40,22 +40,13 @@ CREATE TABLE password_reset_tokens (
     created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );`;
 
-// INSERT INTO users (username, email, hashed_password)
-// VALUES
-//     ('Jane', 'movielover@gmail.com', 'password1'),
-//     ('Joe', 'tvlover@gmail.com', 'password2'),
-//     ('Jerry', 'booklover@gmail.com', 'password3');
-// `;
-
 async function main() {
-  console.log("seeding...");
   const client = new Client({
     connectionString: `${DATABASE_URL}`,
   });
   await client.connect();
   await client.query(seedTables);
   await client.end();
-  console.log("done");
 }
 
 main();

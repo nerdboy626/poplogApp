@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "../config/env";
 export const mediaDetailsLoader = async ({ params }) => {
   const { mediaType, id } = params;
 
@@ -8,12 +9,11 @@ export const mediaDetailsLoader = async ({ params }) => {
   }
 
   try {
-    const baseUrl =
-      mediaType === "movie" || mediaType === "tv"
-        ? `http://localhost:3500/api/movies/details/${mediaType}/${id}`
-        : `http://localhost:3500/api/${mediaType}/details/${id}`;
+    const isMovieOrTv = ["movie", "tv"].includes(mediaType);
 
-    console.log(`Searching ${mediaType} for ${id}`);
+    const baseUrl = isMovieOrTv
+      ? `${API_BASE_URL}/api/movies/details/${mediaType}/${id}`
+      : `${API_BASE_URL}/api/${mediaType}/details/${id}`;
 
     const response = await fetch(baseUrl);
 
@@ -23,11 +23,9 @@ export const mediaDetailsLoader = async ({ params }) => {
 
     const data = await response.json();
 
-    console.log(data);
-
     return data;
-  } catch (error) {
-    console.error("Error fetching media data:", error);
+  } catch (err) {
+    console.error("mediaDetailsLoader error:", err);
     throw new Response("Not Found", { status: 404 });
   }
 };

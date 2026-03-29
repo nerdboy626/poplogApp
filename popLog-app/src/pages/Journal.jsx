@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { useAuth } from "../utils/AuthContext.jsx";
 import { fetchWithAuth } from "../utils/fetchWithAuth.js";
 import CardDisplay from "../components/CardDisplay.jsx";
+import { API_BASE_URL } from "../config/env.js";
 import "./Journal.css";
 
 const Journal = () => {
@@ -14,13 +15,9 @@ const Journal = () => {
   useEffect(() => {
     async function fetchReviews() {
       if (!auth.user) return;
-      const baseUrl = `http://localhost:3500/api/reviews/dashboard`;
+      const baseUrl = `${API_BASE_URL}/api/reviews/dashboard`;
 
       try {
-        console.log(
-          `Trying to grab reviews for user ${auth.user.username} with user id of ${auth.user.id}`,
-        );
-
         const response = await fetchWithAuth(
           baseUrl,
           {
@@ -29,8 +26,6 @@ const Journal = () => {
           auth,
         );
         const data = await response.json();
-
-        console.log(data);
 
         setReviews(data);
       } catch (err) {

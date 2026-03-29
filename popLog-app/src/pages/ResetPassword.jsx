@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext";
 import toast from "react-hot-toast";
 import "./ResetPassword.css";
+import { API_BASE_URL } from "../config/env";
 
 const ResetPassword = () => {
   const auth = useAuth();
@@ -27,7 +28,7 @@ const ResetPassword = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:3500/api/auth/reset-password", {
+      const res = await fetch(`${API_BASE_URL}/api/auth/reset-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token, password }),

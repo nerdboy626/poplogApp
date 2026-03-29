@@ -9,6 +9,7 @@ import { useAuth } from "../utils/AuthContext.jsx";
 import { fetchWithAuth } from "../utils/fetchWithAuth.js";
 import toast from "react-hot-toast";
 import { useLoaderData } from "react-router-dom";
+import { API_BASE_URL } from "../config/env.js";
 import "./MediaDetails.css";
 
 const MediaDetails = () => {
@@ -68,7 +69,7 @@ const MediaDetails = () => {
   async function fetchReview() {
     if (!auth.isLoggedIn) return;
 
-    const baseUrl = `http://localhost:3500/api/reviews/${mediaType}/${id}`;
+    const baseUrl = `${API_BASE_URL}/api/reviews/${mediaType}/${id}`;
 
     try {
       const response = await fetchWithAuth(baseUrl, { method: "GET" }, auth);
@@ -116,7 +117,7 @@ const MediaDetails = () => {
 
     try {
       const response = await fetchWithAuth(
-        "http://localhost:3500/api/reviews/save",
+        `${API_BASE_URL}/api/reviews/save`,
         {
           method: "POST",
           body: JSON.stringify(payload),
@@ -146,7 +147,7 @@ const MediaDetails = () => {
   const handleDelete = async () => {
     try {
       const response = await fetchWithAuth(
-        `http://localhost:3500/api/reviews/delete/${serverId}`,
+        `${API_BASE_URL}/api/reviews/delete/${serverId}`,
         { method: "DELETE" },
         auth,
       );

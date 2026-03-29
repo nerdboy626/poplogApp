@@ -48,8 +48,8 @@ const fetchMovieAndTVGenres = async () => {
       acc[genre.id] = genre.name;
       return acc;
     }, {});
-  } catch (error) {
-    console.error("fetchMovieAndTVGenres error:", error);
+  } catch (err) {
+    console.error("fetchMovieAndTVGenres error:", err);
   }
 };
 
@@ -155,8 +155,8 @@ export const getByGenre = async (req, res) => {
       .slice(0, 30);
 
     res.json(formatData(combined));
-  } catch (error) {
-    console.error("getByGenre error:", error);
+  } catch (err) {
+    console.error("getByGenre error:", err);
     return res.status(500).json({ error: "Failed to fetch genre results" });
   }
 };
@@ -178,14 +178,14 @@ export const getTrendingShows = async (req, res) => {
     );
 
     const results = data.results || [];
-    const formatted = formatData(results.slice(0, 20));
+    const formatted = formatData(results.slice(0, 30));
 
     trendingShowsCache = formatted;
     trendingShowsTimestamp = now;
 
     res.json(formatted);
-  } catch (error) {
-    console.error("getTrendingShows error:", error);
+  } catch (err) {
+    console.error("getTrendingShows error:", err);
 
     if (trendingShowsCache) {
       console.warn("Returning stale trending shows cache");
@@ -220,8 +220,8 @@ export const getTrendingMovies = async (req, res) => {
     trendingMoviesTimestamp = now;
 
     res.json(formatted);
-  } catch (error) {
-    console.error("getTrendingMovies error:", error);
+  } catch (err) {
+    console.error("getTrendingMovies error:", err);
 
     if (trendingMoviesCache) {
       console.warn("Returning stale trending movies cache");
@@ -258,8 +258,8 @@ export const getTMDBResults = async (req, res) => {
     );
 
     res.json(formatData(filtered));
-  } catch (error) {
-    console.error("getTMDBResults error:", error);
+  } catch (err) {
+    console.error("getTMDBResults error:", err);
     return res
       .status(500)
       .json({ error: "Failed to fetch movie search results" });
@@ -351,8 +351,8 @@ export const getTMDBDetailsById = async (req, res) => {
     });
 
     res.json(formatted);
-  } catch (error) {
-    console.error("getTMDBDetailsById error:", error);
+  } catch (err) {
+    console.error("getTMDBDetailsById error:", err);
     return res.status(500).json({ error: "Failed to fetch TMDB details" });
   }
 };

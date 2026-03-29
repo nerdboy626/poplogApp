@@ -7,6 +7,7 @@ import { GiGameConsole } from "react-icons/gi";
 import { GiTv } from "react-icons/gi";
 import { GiBlackBook } from "react-icons/gi";
 import { GiFilmStrip } from "react-icons/gi";
+import { API_BASE_URL } from "../config/env";
 import "./Account.css";
 
 const Account = () => {
@@ -33,13 +34,9 @@ const Account = () => {
 
   const fetchAccountStats = async () => {
     if (!auth.user) return;
-    const baseUrl = `http://localhost:3500/api/auth/account`;
+    const baseUrl = `${API_BASE_URL}/api/auth/account`;
 
     try {
-      console.log(
-        `Trying to grab stats for user ${auth.user.username} with user id of ${auth.user.id}`,
-      );
-
       const response = await fetchWithAuth(
         baseUrl,
         {
@@ -48,8 +45,6 @@ const Account = () => {
         auth,
       );
       const data = await response.json();
-
-      console.log(data);
 
       setStats(data);
     } catch (err) {
@@ -66,7 +61,7 @@ const Account = () => {
     setSendingReset(true);
 
     try {
-      await fetch("http://localhost:3500/api/auth/forgot-password", {
+      await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: stats.email }),

@@ -1,46 +1,27 @@
+import { API_BASE_URL } from "../config/env";
 export const trendingTitlesLoader = async () => {
   try {
-    const bookResponse = await fetch(
-      "http://localhost:3500/api/books/trending",
-    );
-    if (!bookResponse.ok)
-      throw new Error("Network response for books was not ok");
+    const [booksRes, gamesRes, moviesRes, showsRes] = await Promise.all([
+      fetch(`${API_BASE_URL}/api/books/trending`),
+      fetch(`${API_BASE_URL}/api/games/trending`),
+      fetch(`${API_BASE_URL}/api/movies/trending/movies`),
+      fetch(`${API_BASE_URL}/api/movies/trending/shows`),
+    ]);
 
-    const bookData = await bookResponse.json();
+    if (!booksRes.ok || !gamesRes.ok || !moviesRes.ok || !showsRes.ok) {
+      throw new Error("One or more requests failed");
+    }
 
-    console.log(bookData);
+    const [books, games, movies, shows] = await Promise.all([
+      booksRes.json(),
+      gamesRes.json(),
+      moviesRes.json(),
+      showsRes.json(),
+    ]);
 
-    const gamesResponse = await fetch(
-      "http://localhost:3500/api/games/trending",
-    );
-    if (!gamesResponse.ok)
-      throw new Error("Network response for games was not ok");
-
-    const gamesData = await gamesResponse.json();
-
-    const moviesResponse = await fetch(
-      "http://localhost:3500/api/movies/trending/movies",
-    );
-    if (!moviesResponse.ok)
-      throw new Error("Network response for movies was not ok");
-
-    const moviesData = await moviesResponse.json();
-
-    const showsResponse = await fetch(
-      "http://localhost:3500/api/movies/trending/shows",
-    );
-    if (!showsResponse.ok)
-      throw new Error("Network response for shows was not ok");
-
-    const showsData = await showsResponse.json();
-    return {
-      books: bookData,
-      games: gamesData,
-      movies: moviesData,
-      shows: showsData,
-    };
-  } catch (error) {
-    console.error("Error fetching media data:", error);
+    return { books, games, movies, shows };
+  } catch (err) {
+    console.error("trendingTitlesLoader error:", err);
     return { books: [], games: [], movies: [], shows: [] };
   }
 };

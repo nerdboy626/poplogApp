@@ -16,7 +16,5 @@ export const fetchWithAuth = async (url, options = {}, auth) => {
     }
   }
 
-  console.log(response.status);
-
   return response;
 };

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext.jsx";
 import toast from "react-hot-toast";
+import { API_BASE_URL } from "../config/env.js";
 import "./Login.css";
 
 const Login = () => {
@@ -37,7 +38,7 @@ const Login = () => {
     setLoginError("");
 
     try {
-      const res = await fetch("http://localhost:3500/api/auth/login", {
+      const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -71,7 +72,7 @@ const Login = () => {
     setSignUpError("");
 
     try {
-      const res = await fetch("http://localhost:3500/api/auth/signup", {
+      const res = await fetch(`${API_BASE_URL}/api/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),
@@ -108,7 +109,7 @@ const Login = () => {
         <button
           className="btn btn-ghost auth-card__google-btn"
           onClick={() => {
-            window.location.href = "http://localhost:3500/api/auth/google";
+            window.location.href = `${API_BASE_URL}/api/auth/google`;
           }}
         >
           <img

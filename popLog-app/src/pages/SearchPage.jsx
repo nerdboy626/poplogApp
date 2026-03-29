@@ -6,6 +6,7 @@ import SearchDisplay from "../features/searchpage/SearchDisplay.jsx";
 import GenreMenu from "../features/searchpage/GenreMenu.jsx";
 import genreOptions from "../features/searchpage/constants/genreOptions.js";
 import useGameGenres from "../features/searchpage/hooks/useGameGenres.js";
+import { API_BASE_URL } from "../config/env.js";
 import "./SearchPage.css";
 
 const SearchPage = () => {
@@ -81,10 +82,8 @@ const SearchPage = () => {
   }
 
   async function fetchSearchResults(searchInput) {
-    console.log(`Searching ${category} for ${searchInput}`);
-
     const response = await fetch(
-      `http://localhost:3500/api/${category}/search?query=${searchInput}`,
+      `${API_BASE_URL}/api/${category}/search?query=${searchInput}`,
     );
     const searchData = await response.json();
 
@@ -110,10 +109,8 @@ const SearchPage = () => {
   };
 
   async function fetchGenreResults(genreId) {
-    console.log(`Fetching ${category} with genre ID of ${genreId} ...`);
-
     const response = await fetch(
-      `http://localhost:3500/api/${category}/genre/${genreId}`,
+      `${API_BASE_URL}/api/${category}/genre/${genreId}`,
     );
 
     const data = await response.json();
@@ -122,9 +119,6 @@ const SearchPage = () => {
       ...prev,
       [category]: { ...prev[category], genre: genreId, genreResults: data },
     }));
-
-    console.log(`${category} by ${genreId} successfully fetched!`);
-    console.log(data);
   }
 
   return (

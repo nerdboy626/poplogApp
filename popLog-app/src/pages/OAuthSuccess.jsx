@@ -13,7 +13,13 @@ const OAuthSuccess = () => {
   useEffect(() => {
     const token = params.get("token");
 
-    if (token) {
+    if (!token) {
+      toast.error("Login with Google failed.", { id: "main" });
+      navigate("/login", { replace: true });
+      return;
+    }
+
+    try {
       const decoded = jwtDecode(token);
 
       auth.login({
@@ -23,13 +29,12 @@ const OAuthSuccess = () => {
       });
 
       navigate("/", { replace: true });
-    } else {
-      toast.error("Login with Google failed.", {
-        id: "main",
-      });
+    } catch (err) {
+      console.error("OAuth decode error:", err);
+      toast.error("Login failed.", { id: "main" });
       navigate("/login", { replace: true });
     }
-  }, []);
+  }, [params, navigate, auth]);
 
   return <Loading text="Signing you in..." />;
 };

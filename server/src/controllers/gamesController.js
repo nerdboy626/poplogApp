@@ -77,8 +77,8 @@ export const getGameGenres = async (req, res) => {
     const genres = await fetchIGDBQuery(queryBody, "genres");
 
     res.json(genres);
-  } catch (error) {
-    console.error("getGameGenres error:", error);
+  } catch (err) {
+    console.error("getGameGenres error:", err);
     return res.status(500).json({
       error: "Failed to fetch game genres.",
     });
@@ -109,8 +109,8 @@ export const getTrendingGamesByGenre = async (req, res) => {
     const games = await fetchIGDBQuery(queryBody);
 
     res.json(games);
-  } catch (error) {
-    console.error("getTrendingGamesByGenre error:", error);
+  } catch (err) {
+    console.error("getTrendingGamesByGenre error:", err);
     return res.status(500).json({
       error: "Failed to fetch games for genre.",
     });
@@ -148,8 +148,8 @@ export const getTrendingGames = async (req, res) => {
     trendingGamesTimestamp = now;
 
     res.json(trendingGames);
-  } catch (error) {
-    console.error("getTrendingGames error:", error);
+  } catch (err) {
+    console.error("getTrendingGames error:", err);
 
     if (trendingGamesCache) {
       console.warn("Returning stale trending games cache due to error");
@@ -183,8 +183,8 @@ export const getGameResults = async (req, res) => {
     const responseData = await fetchIGDBQuery(queryBody);
 
     res.json(responseData);
-  } catch (error) {
-    console.error("getGameResults error:", error);
+  } catch (err) {
+    console.error("getGameResults error:", err);
     return res.status(500).json({
       error: "Failed to fetch game search results.",
     });
