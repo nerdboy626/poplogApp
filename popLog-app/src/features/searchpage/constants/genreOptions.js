@@ -41,10 +41,13 @@ const genreOptions = {
     { id: "business-books", name: "Business" },
     { id: "graphic-books-and-manga", name: "Graphic Books and Manga" },
     { id: "mass-market-monthly", name: "Mass Market" },
-    { id: "middle-grade-paperback-monthly", name: "Middle Grade Paperback" },
+    {
+      id: "middle-grade-paperback-monthly",
+      name: "Middle Grade Paperback",
+    },
     {
       id: "young-adult-paperback-monthly",
-      name: "Young Adult Paperback Monthly",
+      name: "Young Adult Paperback",
     },
   ],
 };

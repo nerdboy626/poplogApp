@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS reviews (
     UNIQUE (user_id, media_id)
 );
 
-CREATE TABLE password_reset_tokens (
+CREATE TABLE IF NOT EXISTS password_reset_tokens (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     token_hash TEXT NOT NULL,
@@ -42,8 +42,12 @@ CREATE TABLE password_reset_tokens (
 
 async function main() {
   const client = new Client({
-    connectionString: `${DATABASE_URL}`,
+    connectionString: DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false,
+    },
   });
+
   await client.connect();
   await client.query(seedTables);
   await client.end();

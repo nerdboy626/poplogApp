@@ -1,8 +1,8 @@
 :root {
   /* Backgrounds */
-  --bg-main: #0b0a14; /* main app background */
-  --bg-surface: #151327; /* cards, nav, modals */
-  --bg-elevated: #1d1a33; /* hover / raised elements */
+  --bg-main: #0b0a14;
+  --bg-surface: #151327;
+  --bg-elevated: #1d1a33;
 
   /* Text */
   --text-primary: #f5f5f7;
@@ -29,7 +29,6 @@
   --success: #22c55e;
 
   /* Font */
-  /* --font-family: "Inter", sans-serif; */
   --font-family: "Manrope", sans-serif;
   --font-size-small: 0.875rem;
   --font-size-medium: 1rem;
@@ -155,7 +154,6 @@ button:hover {
 .btn-danger:hover {
   background-color: var(--danger);
   color: white;
-  /* box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35); */
 }
 
 .btn:disabled,
@@ -183,7 +181,6 @@ a:focus-visible {
 }
 
 /* Inputs System */
-
 input,
 textarea,
 select {
