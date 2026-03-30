@@ -3,10 +3,10 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext.jsx";
 
 const AuthRedirect = () => {
-  const { isLoggedIn, logoutReason, loading, logout } = useAuth();
+  const { isLoggedIn, logoutReason, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const hasRedirectedRef = useRef(false);
+  const hasRedirected = useRef(false);
 
   useEffect(() => {
     if (loading) return;
@@ -14,21 +14,18 @@ const AuthRedirect = () => {
     if (
       !isLoggedIn &&
       logoutReason === "expired" &&
-      !hasRedirectedRef.current
+      location.pathname !== "/login" &&
+      !hasRedirected.current
     ) {
-      hasRedirectedRef.current = true;
+      hasRedirected.current = true;
 
       const fullPath = location.pathname + location.search + location.hash;
 
       sessionStorage.setItem("redirectAfterLogin", fullPath);
 
       navigate("/login", { replace: true });
-
-      setTimeout(() => {
-        logout(null);
-      }, 500);
     }
-  }, [isLoggedIn, logoutReason, loading, navigate, location, logout]);
+  }, [isLoggedIn, logoutReason, loading, navigate, location]);
 
   return null;
 };
