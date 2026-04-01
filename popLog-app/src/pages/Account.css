@@ -1,8 +1,6 @@
 .account-page {
   min-height: calc(100vh - 60px);
   display: flex;
-  align-items: center;
-  justify-content: center;
   padding: 1.5rem 1rem;
 }
 
@@ -134,6 +132,12 @@
 
 .account__logout {
   margin-top: 0.5rem;
+}
+
+@media (max-width: 700px) {
+  .account-page {
+    padding: 1rem;
+  }
 }
 
 @media (max-width: 500px) {

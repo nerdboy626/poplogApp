@@ -15,7 +15,8 @@
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: 16px;
-  padding: 0rem 0.5rem;
+  padding: 1rem 0.5rem;
+  gap: 2.5rem;
 
   box-shadow: var(--shadow-soft);
   position: relative;
@@ -77,6 +78,10 @@
 
 @media (max-width: 700px) {
   .search-page {
-    padding: 1.5rem 1rem;
+    padding: 1rem;
+  }
+
+  .search-page__controls {
+    gap: 2rem;
   }
 }

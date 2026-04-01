@@ -35,11 +35,18 @@
   align-items: center;
 }
 
-.nav__logo {
+.nav__brand > img {
   height: 100%;
   width: auto;
-  display: block;
   transition: transform 0.2s ease;
+}
+
+.nav__logo-desktop {
+  display: block;
+}
+
+.nav__logo-mobile {
+  display: none;
 }
 
 .nav__links {
@@ -110,6 +117,14 @@
 
   .nav__left {
     gap: 1rem;
+  }
+
+  .nav__logo-desktop {
+    display: none;
+  }
+
+  .nav__logo-mobile {
+    display: block;
   }
 
   .nav__links {

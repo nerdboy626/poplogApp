@@ -7,6 +7,7 @@ import { IoPersonCircleOutline } from "react-icons/io5";
 import { useLocation } from "react-router-dom";
 
 import logo from "../assets/logo.svg";
+import logoSmall from "../assets/logoSmall.svg";
 import "./Navbar.css";
 
 const Navbar = () => {
@@ -18,7 +19,12 @@ const Navbar = () => {
       <nav className="nav__inner">
         <div className="nav__left">
           <Link to="/" className="nav__brand">
-            <img src={logo} alt="PopLog logo" className="nav__logo" />
+            <img src={logo} alt="PopLog logo" className="nav__logo-desktop" />
+            <img
+              src={logoSmall}
+              alt="PopLog logo"
+              className="nav__logo-mobile"
+            />
           </Link>
 
           <ul className="nav__links">
