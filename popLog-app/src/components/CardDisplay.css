@@ -16,11 +16,13 @@
   transition: transform 0.3s ease;
 }
 
-.media-card__cover:hover {
-  transform: scale(1.03);
-  outline: 2px solid var(--brand-primary);
-  outline-offset: 3px;
-  box-shadow: var(--shadow-strong);
+@media (hover: hover) {
+  .media-card__cover:hover {
+    transform: scale(1.03);
+    outline: 2px solid var(--brand-primary);
+    outline-offset: 3px;
+    box-shadow: var(--shadow-strong);
+  }
 }
 
 .media-card__cover img {
@@ -86,4 +88,10 @@
   color: inherit;
   display: inline-block; /* preserves block hover behavior */
   cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .media-card__cover {
+    max-width: 25vw;
+  }
 }

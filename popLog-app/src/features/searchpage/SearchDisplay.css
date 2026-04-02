@@ -154,16 +154,20 @@
     gap: 0.5rem;
   }
 
-  .search-card__cover {
-    margin-right: 0;
+  .search-card__header {
+    justify-content: center;
+  }
+
+  .search-card__header h2 {
+    font-size: var(--font-size-large);
   }
 
   .search-card__content {
     width: 100%;
   }
 
-  .search-card__header {
-    justify-content: center;
+  .search-card__summary {
+    font-size: var(--font-size-small);
   }
 
   .search-card__creator {
@@ -174,11 +178,7 @@
     justify-content: flex-start;
   }
 
-  .search-card__header h2 {
-    font-size: var(--font-size-large);
-  }
-
-  .search-card__summary {
-    font-size: var(--font-size-small);
+  .search-card__cover {
+    margin-right: 0;
   }
 }

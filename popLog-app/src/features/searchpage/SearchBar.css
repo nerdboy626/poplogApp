@@ -51,13 +51,17 @@
   display: flex;
   justify-content: center;
   gap: 1rem;
-  width: 600px;
   max-width: 100%;
+  flex-wrap: wrap;
 }
 
 .search-bar__input-wrapper {
   position: relative;
-  width: 50%;
+}
+
+.search-bar__input-wrapper input {
+  width: 325px;
+  padding-right: 2rem;
 }
 
 .search-bar__clear-btn {

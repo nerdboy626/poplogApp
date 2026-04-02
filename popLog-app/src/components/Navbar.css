@@ -17,22 +17,15 @@
 
   display: flex;
   align-items: center;
-  justify-content: space-between;
 
   padding: 0 2.5rem;
-}
-
-.nav__left {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  gap: 2rem;
 }
 
 .nav__brand {
   height: 100%;
   display: flex;
   align-items: center;
+  margin-right: 1.5rem;
 }
 
 .nav__brand > img {
@@ -92,6 +85,7 @@
 }
 
 .nav__user {
+  margin-left: auto;
   display: flex;
   align-items: center;
 }
@@ -113,10 +107,7 @@
 @media (max-width: 700px) {
   .nav__inner {
     padding: 0 1rem;
-  }
-
-  .nav__left {
-    gap: 1rem;
+    justify-content: space-between;
   }
 
   .nav__logo-desktop {
@@ -128,6 +119,9 @@
   }
 
   .nav__links {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     gap: 1rem;
   }
 

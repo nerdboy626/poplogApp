@@ -17,39 +17,33 @@ const Navbar = () => {
   return (
     <header className="nav">
       <nav className="nav__inner">
-        <div className="nav__left">
-          <Link to="/" className="nav__brand">
-            <img src={logo} alt="PopLog logo" className="nav__logo-desktop" />
-            <img
-              src={logoSmall}
-              alt="PopLog logo"
-              className="nav__logo-mobile"
-            />
-          </Link>
+        <Link to="/" className="nav__brand">
+          <img src={logo} alt="PopLog logo" className="nav__logo-desktop" />
+          <img src={logoSmall} alt="PopLog logo" className="nav__logo-mobile" />
+        </Link>
 
-          <ul className="nav__links">
-            <li>
-              <NavLink to="/" end className="nav__link">
-                <IoHomeOutline />
-                <span>Home</span>
-              </NavLink>
-            </li>
+        <ul className="nav__links">
+          <li>
+            <NavLink to="/" end className="nav__link">
+              <IoHomeOutline />
+              <span>Home</span>
+            </NavLink>
+          </li>
 
-            <li>
-              <NavLink to="/search-page" className="nav__link">
-                <IoSearch />
-                <span>Search</span>
-              </NavLink>
-            </li>
+          <li>
+            <NavLink to="/search-page" className="nav__link">
+              <IoSearch />
+              <span>Search</span>
+            </NavLink>
+          </li>
 
-            <li>
-              <NavLink to="/journal" className="nav__link">
-                <LuNotebookPen />
-                <span>Journal</span>
-              </NavLink>
-            </li>
-          </ul>
-        </div>
+          <li>
+            <NavLink to="/journal" className="nav__link">
+              <LuNotebookPen />
+              <span>Journal</span>
+            </NavLink>
+          </li>
+        </ul>
 
         <div className="nav__user">
           {auth.user ? (

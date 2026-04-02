@@ -43,7 +43,6 @@
 }
 
 .search-page__welcome {
-  margin-top: 2rem;
   text-align: center;
   color: var(--text-secondary);
 }
@@ -79,6 +78,7 @@
 @media (max-width: 700px) {
   .search-page {
     padding: 1rem;
+    gap: 1rem;
   }
 
   .search-page__controls {
