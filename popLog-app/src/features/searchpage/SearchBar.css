@@ -35,10 +35,12 @@
   align-items: center;
 }
 
-.search-bar__category:hover {
-  text-decoration: none;
-  color: var(--brand-primary);
-  border-color: var(--brand-primary);
+@media (hover: hover) {
+  .search-bar__category:hover {
+    text-decoration: none;
+    color: var(--brand-primary);
+    border-color: var(--brand-primary);
+  }
 }
 
 .search-bar__category.active {

@@ -8,6 +8,7 @@ import { GiTv } from "react-icons/gi";
 import { GiBlackBook } from "react-icons/gi";
 import { GiFilmStrip } from "react-icons/gi";
 import { API_BASE_URL } from "../config/env";
+import Loading from "../components/Loading";
 import "./Account.css";
 
 const Account = () => {
@@ -15,10 +16,38 @@ const Account = () => {
   const navigate = useNavigate();
   const [stats, setStats] = useState(null);
   const [sendingReset, setSendingReset] = useState(false);
+  const [loading, setLoading] = useState(true);
   const location = useLocation();
   const message = location.state?.message;
 
   useEffect(() => {
+    const fetchAccountStats = async () => {
+      if (!auth.user) return;
+
+      setLoading(true);
+
+      const baseUrl = `${API_BASE_URL}/api/auth/account`;
+
+      try {
+        const response = await fetchWithAuth(
+          baseUrl,
+          {
+            method: "GET",
+          },
+          auth,
+        );
+        const data = await response.json();
+
+        setStats(data);
+      } catch (err) {
+        toast.error(err.message, {
+          id: "main",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchAccountStats();
   }, [auth.user]);
 
@@ -31,28 +60,6 @@ const Account = () => {
       navigate(location.pathname, { replace: true, state: {} });
     }
   }, [location.state, navigate]);
-
-  const fetchAccountStats = async () => {
-    if (!auth.user) return;
-    const baseUrl = `${API_BASE_URL}/api/auth/account`;
-
-    try {
-      const response = await fetchWithAuth(
-        baseUrl,
-        {
-          method: "GET",
-        },
-        auth,
-      );
-      const data = await response.json();
-
-      setStats(data);
-    } catch (err) {
-      toast.error(err.message, {
-        id: "main",
-      });
-    }
-  };
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -86,6 +93,10 @@ const Account = () => {
     });
     navigate("/login", { replace: true });
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   if (!stats)
     return (

@@ -32,9 +32,10 @@
 .media-rate__star-icon.active {
   color: var(--brand-primary);
 }
-
-.media-rate__star-icon:hover {
-  transform: scale(1.2);
+@media (hover: hover) {
+  .media-rate__star-icon:hover {
+    transform: scale(1.2);
+  }
 }
 
 .media-rate__favorite {
@@ -56,9 +57,11 @@
   color: var(--brand-accent);
 }
 
-.media-rate__heart-icon:hover {
-  transform: scale(1.2);
-  color: var(--brand-accent);
+@media (hover: hover) {
+  .media-rate__heart-icon:hover {
+    transform: scale(1.2);
+    color: var(--brand-accent);
+  }
 }
 
 @media (max-width: 700px) {

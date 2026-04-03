@@ -3,6 +3,7 @@ import { useAuth } from "../utils/AuthContext.jsx";
 import { fetchWithAuth } from "../utils/fetchWithAuth.js";
 import CardDisplay from "../components/CardDisplay.jsx";
 import { API_BASE_URL } from "../config/env.js";
+import Loading from "../components/Loading.jsx";
 import "./Journal.css";
 
 const Journal = () => {
@@ -11,10 +12,14 @@ const Journal = () => {
 
   const [mediaFilter, setMediaFilter] = useState("all");
   const [sortByFilter, setSortByFilter] = useState("recent");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchReviews() {
       if (!auth.user) return;
+
+      setLoading(true);
+
       const baseUrl = `${API_BASE_URL}/api/reviews/dashboard`;
 
       try {
@@ -30,6 +35,8 @@ const Journal = () => {
         setReviews(data);
       } catch (err) {
         console.error("Failed to fetch reviews:", err.message);
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -63,6 +70,10 @@ const Journal = () => {
 
     return result;
   }, [reviews, mediaFilter, sortByFilter]);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <main className="journal-page">

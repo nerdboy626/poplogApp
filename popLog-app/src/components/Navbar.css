@@ -64,9 +64,11 @@
   transition: color 0.2s ease;
 }
 
-.nav__link:hover {
-  color: var(--text-primary);
-  text-decoration: none;
+@media (hover: hover) {
+  .nav__link:hover {
+    color: var(--text-primary);
+    text-decoration: none;
+  }
 }
 
 .nav__link.active {

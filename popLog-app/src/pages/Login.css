@@ -48,8 +48,10 @@
   background-color: var(--bg-elevated);
 }
 
-.auth-card__google-btn:hover {
-  background-color: var(--bg-surface);
+@media (hover: hover) {
+  .auth-card__google-btn:hover {
+    background-color: var(--bg-surface);
+  }
 }
 
 .auth-card__google-icon {
