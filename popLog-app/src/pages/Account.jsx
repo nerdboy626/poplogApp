@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../utils/AuthContext";
 import { fetchWithAuth } from "../utils/fetchWithAuth";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { GiGameConsole } from "react-icons/gi";
 import { GiTv } from "react-icons/gi";
@@ -17,8 +17,6 @@ const Account = () => {
   const [stats, setStats] = useState(null);
   const [sendingReset, setSendingReset] = useState(false);
   const [loading, setLoading] = useState(true);
-  const location = useLocation();
-  const message = location.state?.message;
 
   useEffect(() => {
     const fetchAccountStats = async () => {
@@ -50,16 +48,6 @@ const Account = () => {
 
     fetchAccountStats();
   }, [auth.user]);
-
-  useEffect(() => {
-    if (location.state?.message) {
-      toast.error(location.state.message, {
-        id: "main",
-      });
-
-      navigate(location.pathname, { replace: true, state: {} });
-    }
-  }, [location.state, navigate]);
 
   const handleClick = async (e) => {
     e.preventDefault();

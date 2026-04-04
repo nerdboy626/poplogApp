@@ -10,15 +10,7 @@ const PublicRoute = ({ children }) => {
   if (isLoggedIn) {
     const redirectPath = location.state?.from || "/account";
 
-    return (
-      <Navigate
-        to={redirectPath}
-        replace
-        state={{
-          message: "You are already logged in",
-        }}
-      />
-    );
+    return <Navigate to={redirectPath} replace />;
   }
 
   return children;

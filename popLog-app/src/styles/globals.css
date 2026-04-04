@@ -69,8 +69,10 @@ a {
   text-decoration: none;
 }
 
-a:hover {
-  text-decoration: underline;
+@media (hover: hover) {
+  a:hover {
+    text-decoration: underline;
+  }
 }
 
 /* Buttons */
@@ -84,8 +86,10 @@ button {
   cursor: pointer;
 }
 
-button:hover {
-  background-color: var(--brand-primary-hover);
+@media (hover: hover) {
+  button:hover {
+    background-color: var(--brand-primary-hover);
+  }
 }
 
 /* Button System */
@@ -118,8 +122,10 @@ button:hover {
   color: var(--text-primary);
 }
 
-.btn-primary:hover {
-  background-color: var(--brand-primary-hover);
+@media (hover: hover) {
+  .btn-primary:hover {
+    background-color: var(--brand-primary-hover);
+  }
 }
 
 .btn-primary:active {
@@ -132,8 +138,10 @@ button:hover {
   border: 1px solid var(--brand-primary);
 }
 
-.btn-ghost:hover {
-  color: var(--text-primary);
+@media (hover: hover) {
+  .btn-ghost:hover {
+    color: var(--text-primary);
+  }
 }
 
 .btn-accent {
@@ -141,8 +149,10 @@ button:hover {
   color: var(--text-primary);
 }
 
-.btn-accent:hover {
-  background-color: var(--brand-accent-hover);
+@media (hover: hover) {
+  .btn-accent:hover {
+    background-color: var(--brand-accent-hover);
+  }
 }
 
 .btn-danger {
@@ -151,9 +161,11 @@ button:hover {
   color: var(--danger);
 }
 
-.btn-danger:hover {
-  background-color: var(--danger);
-  color: white;
+@media (hover: hover) {
+  .btn-danger:hover {
+    background-color: var(--danger);
+    color: white;
+  }
 }
 
 .btn:disabled,
@@ -171,8 +183,10 @@ a {
   transition: color 0.2s ease;
 }
 
-a:hover {
-  color: var(--text-primary);
+@media (hover: hover) {
+  a:hover {
+    color: var(--text-primary);
+  }
 }
 
 a:focus-visible {

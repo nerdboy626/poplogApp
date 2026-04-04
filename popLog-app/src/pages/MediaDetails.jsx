@@ -20,11 +20,18 @@ const MediaDetails = () => {
   const [userRating, setUserRating] = useState(0);
   const [userFavorite, setUserFavorite] = useState(false);
   const [userNotes, setUserNotes] = useState("");
-  const [showSave, setShowSave] = useState(false);
   const [isSummaryExpanded, setIsSummaryExpanded] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [serverId, setServerId] = useState(0);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [savedState, setSavedState] = useState(null);
+
+  const showSave =
+    savedState === null
+      ? userRating > 0 || userFavorite || userNotes.trim() !== ""
+      : savedState.rating !== userRating ||
+        savedState.favorite !== userFavorite ||
+        savedState.notes !== userNotes;
 
   const creatorLabel =
     mediaType === "movie"
@@ -81,6 +88,11 @@ const MediaDetails = () => {
         setUserNotes(data.notes);
         setServerId(data.mediaId);
         setShowDelete(true);
+        setSavedState({
+          rating: data.rating,
+          favorite: data.favorite,
+          notes: data.notes,
+        });
       }
     } catch (err) {
       console.error("Error fetching review:", err.message);
@@ -128,12 +140,14 @@ const MediaDetails = () => {
       const data = await response.json().catch(() => null);
 
       if (response.ok) {
-        toast.success("Entry saved!", {
-          id: "main",
-        });
+        toast.success("Entry saved!", { id: "main" });
         setServerId(data.media_id);
         setShowDelete(true);
-        setShowSave(false);
+        setSavedState({
+          rating: userRating,
+          favorite: userFavorite,
+          notes: userNotes,
+        });
       } else {
         toast.error(data.error, {
           id: "main",
@@ -157,12 +171,9 @@ const MediaDetails = () => {
         setUserFavorite(false);
         setUserNotes("");
         setShowDelete(false);
-        setShowSave(false);
         setShowDeleteModal(false);
-
-        toast.success("Entry deleted.", {
-          id: "main",
-        });
+        setSavedState(null);
+        toast.success("Entry deleted.", { id: "main" });
       }
     } catch (err) {
       console.error(err);
@@ -256,11 +267,9 @@ const MediaDetails = () => {
           favorite={userFavorite}
           onRatingChange={(val) => {
             setUserRating(val);
-            setShowSave(true);
           }}
           onFavoriteToggle={() => {
             setUserFavorite(!userFavorite);
-            setShowSave(true);
           }}
         />
 
@@ -274,7 +283,6 @@ const MediaDetails = () => {
             value={userNotes}
             onChange={(e) => {
               setUserNotes(e.target.value);
-              setShowSave(true);
             }}
             placeholder="Write your thoughts..."
           />

@@ -24,10 +24,12 @@
   opacity: 0;
 }
 
-.search-card:hover {
-  border-color: var(--brand-primary);
-  background-color: var(--bg-elevated);
-  transform: translateY(-2px);
+@media (hover: hover) {
+  .search-card:hover {
+    border-color: var(--brand-primary);
+    background-color: var(--bg-elevated);
+    transform: translateY(-2px);
+  }
 }
 
 .search-card__header {
@@ -82,24 +84,66 @@
   overflow: hidden;
 }
 
-.search-card__genres {
+.search-card__genres-wrapper {
+  position: relative;
+  min-width: 0;
+  max-width: 100%;
   margin-top: 0.5rem;
+}
+
+.search-card__genres-wrapper::before,
+.search-card__genres-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3rem;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.search-card__genres-wrapper::before {
+  left: 0;
+  background: linear-gradient(to right, var(--bg-surface), transparent);
+}
+
+.search-card__genres-wrapper::after {
+  right: 0;
+  background: linear-gradient(to left, var(--bg-surface), transparent);
+}
+
+@media (hover: hover) {
+  .search-card:hover .search-card__genres-wrapper::before {
+    background: linear-gradient(to right, var(--bg-elevated), transparent);
+  }
+
+  .search-card:hover .search-card__genres-wrapper::after {
+    background: linear-gradient(to left, var(--bg-elevated), transparent);
+  }
+}
+
+.search-card__genres-wrapper.fade-left::before,
+.search-card__genres-wrapper.fade-right::after {
+  opacity: 1;
+}
+
+.search-card__genres {
   display: flex;
   gap: 0.5rem;
-
   overflow-x: auto;
   overflow-y: hidden;
-
-  white-space: nowrap; /* force single line */
+  white-space: nowrap;
   max-width: 100%;
-
   scrollbar-width: none;
   -ms-overflow-style: none;
   min-width: 0;
+  padding-right: 0.5rem; /* keeps last genre clear of the right fade */
 }
 
 .search-card__genres::-webkit-scrollbar {
-  display: none; /* hides the scrollbar visually */
+  display: none;
 }
 
 .search-card__genre {

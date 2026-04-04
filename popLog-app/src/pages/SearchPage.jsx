@@ -55,7 +55,7 @@ const SearchPage = () => {
 
   useEffect(() => {
     setInputValue(entry.query);
-  }, [category]);
+  }, [category, entry.query]);
 
   function handleClear() {
     setSearchCache((prev) => ({

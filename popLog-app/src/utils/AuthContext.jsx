@@ -50,6 +50,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setLogoutReason(reason);
     localStorage.removeItem("user");
+    localStorage.removeItem("searchCache");
 
     if (logoutTimer.current) clearTimeout(logoutTimer.current);
   };
