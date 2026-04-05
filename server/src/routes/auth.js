@@ -39,7 +39,7 @@ authRouter.get(
     const token = jwt.sign(
       { id: req.user.id, username: req.user.username },
       ACCESS_TOKEN_SECRET,
-      { expiresIn: "1h" },
+      { expiresIn: "24h" },
     );
 
     res.redirect(`${FRONTEND_URL}/oauth-success?token=${token}`);
