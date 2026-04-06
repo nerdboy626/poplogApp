@@ -21,6 +21,9 @@ let trendingMoviesCache = null;
 let trendingShowsTimestamp = 0;
 let trendingMoviesTimestamp = 0;
 
+const byGenreCache = new Map();
+const BY_GENRE_CACHE_DURATION = 24 * 60 * 60 * 1000;
+
 const fetchTMDB = async (url) => {
   const response = await fetch(url, options);
 
@@ -135,6 +138,13 @@ export const getByGenre = async (req, res) => {
     return res.status(400).json({ error: `Invalid genre '${genreId}'` });
   }
 
+  const now = Date.now();
+  const cached = byGenreCache.get(genreId.toLowerCase());
+
+  if (cached && now - cached.timestamp < BY_GENRE_CACHE_DURATION) {
+    return res.json(cached.data);
+  }
+
   try {
     await ensureGenresLoaded();
 
@@ -154,9 +164,22 @@ export const getByGenre = async (req, res) => {
       .sort((a, b) => b.popularity - a.popularity)
       .slice(0, 30);
 
-    res.json(formatData(combined));
+    const formatted = formatData(combined);
+
+    byGenreCache.set(genreId.toLowerCase(), {
+      data: formatted,
+      timestamp: now,
+    });
+
+    res.json(formatted);
   } catch (err) {
     console.error("getByGenre error:", err);
+
+    if (cached) {
+      console.warn(`Returning stale cache for genre "${genreId}" due to error`);
+      return res.json(cached.data);
+    }
+
     return res.status(500).json({ error: "Failed to fetch genre results" });
   }
 };

@@ -8,6 +8,13 @@ let trendingGamesCache = null;
 let trendingGamesTimestamp = 0;
 const TRENDING_CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
+const gamesByGenreCache = new Map();
+const GAMES_BY_GENRE_CACHE_DURATION = 24 * 60 * 60 * 1000;
+
+let gameGenresCache = null;
+let gameGenresTimestamp = 0;
+const GAME_GENRES_CACHE_DURATION = 24 * 60 * 60 * 1000;
+
 async function fetchIGDBQuery(query, endpoint = "games") {
   const token = await getIGDBToken();
 
@@ -68,6 +75,15 @@ async function fetchIGDBQuery(query, endpoint = "games") {
 }
 
 export const getGameGenres = async (req, res) => {
+  const now = Date.now();
+
+  if (
+    gameGenresCache &&
+    now - gameGenresTimestamp < GAME_GENRES_CACHE_DURATION
+  ) {
+    return res.json(gameGenresCache);
+  }
+
   try {
     const queryBody = `
       fields name;
@@ -76,12 +92,19 @@ export const getGameGenres = async (req, res) => {
 
     const genres = await fetchIGDBQuery(queryBody, "genres");
 
+    gameGenresCache = genres;
+    gameGenresTimestamp = now;
+
     res.json(genres);
   } catch (err) {
     console.error("getGameGenres error:", err);
-    return res.status(500).json({
-      error: "Failed to fetch game genres.",
-    });
+
+    if (gameGenresCache) {
+      console.warn("Returning stale game genres cache due to error");
+      return res.json(gameGenresCache);
+    }
+
+    return res.status(500).json({ error: "Failed to fetch game genres." });
   }
 };
 
@@ -90,6 +113,13 @@ export const getTrendingGamesByGenre = async (req, res) => {
 
   if (!genreId) {
     return res.status(400).json({ error: "Missing genreId parameter" });
+  }
+
+  const now = Date.now();
+  const cached = gamesByGenreCache.get(genreId);
+
+  if (cached && now - cached.timestamp < GAMES_BY_GENRE_CACHE_DURATION) {
+    return res.json(cached.data);
   }
 
   try {
@@ -108,12 +138,20 @@ export const getTrendingGamesByGenre = async (req, res) => {
 
     const games = await fetchIGDBQuery(queryBody);
 
+    gamesByGenreCache.set(genreId, { data: games, timestamp: now });
+
     res.json(games);
   } catch (err) {
     console.error("getTrendingGamesByGenre error:", err);
-    return res.status(500).json({
-      error: "Failed to fetch games for genre.",
-    });
+
+    if (cached) {
+      console.warn(
+        `Returning stale cache for genreId "${genreId}" due to error`,
+      );
+      return res.json(cached.data);
+    }
+
+    return res.status(500).json({ error: "Failed to fetch games for genre." });
   }
 };
 

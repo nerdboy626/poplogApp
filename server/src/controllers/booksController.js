@@ -10,6 +10,9 @@ const googleBooksCache = new Map();
 let trendingBooksCache = null;
 let trendingBooksTimestamp = 0;
 
+const booksByListCache = new Map();
+const BOOKS_BY_LIST_CACHE_DURATION = 24 * 60 * 60 * 1000;
+
 const fetchJSON = async (url) => {
   const response = await fetch(url);
 
@@ -157,16 +160,30 @@ export const getBooksByList = async (req, res) => {
     return res.status(400).json({ error: "Missing listName parameter" });
   }
 
+  const now = Date.now();
+  const cached = booksByListCache.get(listName);
+
+  if (cached && now - cached.timestamp < BOOKS_BY_LIST_CACHE_DURATION) {
+    return res.json(cached.data);
+  }
+
   try {
     const nytBooks = await fetchNYTList(listName);
-
     const formatted = await Promise.all(
       nytBooks.slice(0, 20).map(enrichBookWithGoogle),
     );
 
+    booksByListCache.set(listName, { data: formatted, timestamp: now });
+
     res.json(formatted);
   } catch (error) {
     console.error("getBooksByList error:", error);
+
+    if (cached) {
+      console.warn(`Returning stale cache for list "${listName}" due to error`);
+      return res.json(cached.data);
+    }
+
     return res.status(500).json({ error: "Failed to fetch books for list." });
   }
 };
