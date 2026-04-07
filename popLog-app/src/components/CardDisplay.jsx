@@ -12,6 +12,7 @@ const CardDisplay = ({
   releaseYear,
   imageUrl,
   mediaType,
+  isMock = false,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const cardRef = useRef(null);
@@ -51,6 +52,21 @@ const CardDisplay = ({
     }
   }, [isHovered]);
 
+  const cover = (
+    <div
+      className={`media-card__cover${isMock ? " media-card__cover--mock" : ""}`}
+    >
+      {imageUrl ? (
+        <img src={imageUrl} alt={`${title} cover`} />
+      ) : (
+        <>
+          <p>{title}</p>
+          {imageIcon(mediaType)}
+        </>
+      )}
+    </div>
+  );
+
   return (
     <article
       className="media-card"
@@ -58,18 +74,13 @@ const CardDisplay = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <Link to={`/media/${mediaType}/${id}`} className="media-card__link">
-        <div className="media-card__cover">
-          {imageUrl ? (
-            <img src={imageUrl} alt={`${title} cover`} />
-          ) : (
-            <>
-              <p>No Image</p>
-              {imageIcon(mediaType)}
-            </>
-          )}
-        </div>
-      </Link>
+      {isMock ? (
+        cover
+      ) : (
+        <Link to={`/media/${mediaType}/${id}`} className="media-card__link">
+          {cover}
+        </Link>
+      )}
 
       {isHovered && (
         <div className="media-card__tooltip">

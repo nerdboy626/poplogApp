@@ -1,9 +1,11 @@
 import { useEffect, useState, useMemo } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext.jsx";
 import { fetchWithAuth } from "../utils/fetchWithAuth.js";
 import CardDisplay from "../components/CardDisplay.jsx";
 import { API_BASE_URL } from "../config/env.js";
 import Loading from "../components/Loading.jsx";
+import mockEntries from "../features/journal/constants/mockEntries.js";
 import "./Journal.css";
 
 const Journal = () => {
@@ -16,7 +18,10 @@ const Journal = () => {
 
   useEffect(() => {
     async function fetchReviews() {
-      if (!auth.user) return;
+      if (!auth.user) {
+        setLoading(false);
+        return;
+      }
 
       setLoading(true);
 
@@ -41,10 +46,11 @@ const Journal = () => {
     }
 
     fetchReviews();
-  }, []);
+  }, [auth.user]);
 
   const filteredAndSorted = useMemo(() => {
-    let result = [...reviews];
+    const sourceData = auth.user ? reviews : mockEntries;
+    let result = [...sourceData];
 
     // Filter by media type
     if (mediaFilter !== "all") {
@@ -61,7 +67,14 @@ const Journal = () => {
     }
 
     if (sortByFilter === "rating") {
-      result.sort((a, b) => b.rating - a.rating);
+      result = result
+        .filter(
+          (entry) =>
+            entry.rating !== null &&
+            entry.rating !== undefined &&
+            entry.rating !== 0,
+        )
+        .sort((a, b) => b.rating - a.rating);
     }
 
     if (sortByFilter === "favorited") {
@@ -78,10 +91,22 @@ const Journal = () => {
   return (
     <main className="journal-page">
       <header className="journal-header">
-        <h1 className="journal-title">Your Journal</h1>
-        <p className="journal-subtitle">
-          Track, revisit, and edit your media journal
-        </p>
+        {auth.isLoggedIn ? (
+          <>
+            <h1 className="journal-title">Your Journal</h1>
+            <p className="journal-subtitle">
+              Track, revisit, and edit your media journal
+            </p>
+          </>
+        ) : (
+          <>
+            <h1 className="journal-title">Log your favorites</h1>
+            <p className="journal-subtitle">
+              Build your media journal by{" "}
+              <Link to="/login">getting started</Link>
+            </p>
+          </>
+        )}
       </header>
 
       <hr className="gradient-divider" />
@@ -144,6 +169,7 @@ const Journal = () => {
               releaseYear={item.release_year}
               imageUrl={item.image_url}
               mediaType={item.media_type}
+              isMock={!auth.user}
             />
           ))
         )}

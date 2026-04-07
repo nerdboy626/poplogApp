@@ -26,14 +26,7 @@ export const router = createBrowserRouter(
     <Route path="/" element={<RootLayout />}>
       <Route index element={<Home />} loader={trendingTitlesLoader} />
 
-      <Route
-        path="journal"
-        element={
-          <ProtectedRoute>
-            <Journal />
-          </ProtectedRoute>
-        }
-      />
+      <Route path="journal" element={<Journal />} />
 
       <Route path="search-page">
         <Route index element={<Navigate to="movies" replace />} />
