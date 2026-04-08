@@ -8,6 +8,15 @@ I created Poplog because I consume a wide range of media and often lose track of
 
 https://poplog-app.vercel.app/
 
+### Demo Account
+
+Want to explore Poplog without signing up? Use the demo account below:
+
+Email: exampleuser@gmail.com
+Password: EXAMpass1
+
+Note: This is a shared public account intended for demo purposes. Data may change over time.
+
 ## Screenshots
 
 <p align="center">
