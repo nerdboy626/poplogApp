@@ -79,7 +79,6 @@ const Account = () => {
     toast.success("Logged out successfully!", {
       id: "main",
     });
-    navigate("/login", { replace: true });
   };
 
   if (loading) {

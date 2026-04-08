@@ -13,6 +13,7 @@ https://poplog-app.vercel.app/
 Want to explore Poplog without signing up? Use the demo account below:
 
 Email: exampleuser@gmail.com
+
 Password: EXAMpass1
 
 Note: This is a shared public account intended for demo purposes. Data may change over time.
