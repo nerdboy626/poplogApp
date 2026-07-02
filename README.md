@@ -6,7 +6,7 @@ I created Poplog because I consume a wide range of media and often lose track of
 
 ## Live Demo
 
-https://poplog-app.vercel.app/
+https://poplog.dev
 
 ### Demo Account
 

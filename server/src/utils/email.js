@@ -8,7 +8,7 @@ export async function sendResetEmail(email, token) {
     const resetUrl = `${FRONTEND_URL}/reset-password?token=${token}`;
 
     await resend.emails.send({
-      from: "PopLog <onboarding@resend.dev>",
+      from: "PopLog <hello@nicolascaminero.com>",
       to: email,
       subject: "Reset your PopLog password",
       html: `
