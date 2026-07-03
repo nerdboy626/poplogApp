@@ -43,13 +43,19 @@
 
 html,
 body {
-  height: 100%;
   font-family: var(--font-family);
   background-color: var(--bg-main);
   color: var(--text-primary);
 }
 
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
 body {
+  margin: 0;
   padding-top: 60px;
   letter-spacing: 0.01em;
 }
