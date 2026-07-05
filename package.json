@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix poplog-app\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run test:run --prefix poplog-app && npm run test:run --prefix server"
   },
   "keywords": [],
   "author": "Nico Caminero",

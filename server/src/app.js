@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { PORT, FRONTEND_URL } from "./config/env.js";
+import { FRONTEND_URL } from "./config/env.js";
 import { authRouter } from "./routes/auth.js";
 import { movieRouter } from "./routes/movies.js";
 import { bookRouter } from "./routes/books.js";
@@ -41,10 +41,6 @@ app.use((req, res) => {
   res.status(404).json({ message: "Endpoint not found." });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is connected to port ${PORT}`);
-});
-
 app.use((err, req, res, next) => {
   console.error(err.stack);
 
@@ -52,3 +48,5 @@ app.use((err, req, res, next) => {
     message: err.message || "Internal server error",
   });
 });
+
+export default app;
