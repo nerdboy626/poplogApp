@@ -14,6 +14,7 @@ import {
 } from "../database/authQueries.js";
 import { getDashboardItems } from "../database/reviewQueries.js";
 import { sendResetEmail } from "../utils/email.js";
+import { generateResetToken } from "../utils/token.js";
 import { ACCESS_TOKEN_SECRET } from "../config/env.js";
 
 export const loginUser = async (req, res) => {
@@ -50,7 +51,7 @@ export const loginUser = async (req, res) => {
       expiresIn: "24h",
     });
 
-    res.status(200).json({
+    res.json({
       message: "Login successful",
       user: userInfo,
       accessToken,
@@ -121,21 +122,12 @@ export const postNewUser = async (req, res) => {
   }
 };
 
-function generateResetToken() {
-  const token = crypto.randomBytes(32).toString("hex");
-  const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
-
-  return { token, tokenHash };
-}
-
 export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
 
     if (!email) {
-      return res
-        .status(200)
-        .json({ message: "If the account exists, an email was sent." });
+      return res.json({ message: "If the account exists, an email was sent." });
     }
 
     const normalizedEmail = email.trim().toLowerCase();
@@ -144,9 +136,7 @@ export const forgotPassword = async (req, res) => {
 
     if (!user || user.hashed_password === null) {
       // OAuth-only users don't need password reset
-      return res
-        .status(200)
-        .json({ message: "If the account exists, an email was sent." });
+      return res.json({ message: "If the account exists, an email was sent." });
     }
 
     await deleteAllPasswordResetTokens(user.id);
