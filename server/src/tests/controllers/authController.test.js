@@ -67,7 +67,6 @@ describe("authController", () => {
 
   beforeEach(() => {
     req = {
-      headers: {},
       body: {},
     };
 

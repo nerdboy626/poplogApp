@@ -60,7 +60,7 @@ export async function deleteUserReview(req, res) {
       return res.status(404).json({ error: "Review not found" });
     }
 
-    res.json({ message: "Review deleted" });
+    res.json({ message: "Review successfully deleted" });
   } catch (err) {
     console.error("deleteUserReview error:", err);
     res.status(500).json({ error: "Failed to delete entry" });
