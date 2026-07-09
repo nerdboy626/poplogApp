@@ -1,6 +1,6 @@
-import { ACCESS_TOKEN_SECRET } from "../../config/env.js";
+import { ACCESS_TOKEN_SECRET } from "../../src/config/env.js";
 import jwt from "jsonwebtoken";
-import { authenticateUser } from "../../middleware/authenticateUser.js";
+import { authenticateUser } from "../../src/middleware/authenticateUser.js";
 
 vi.mock("jsonwebtoken", () => ({
   default: {
@@ -59,7 +59,7 @@ describe("authenticateUser middleware", () => {
   });
 
   it("should return 401 if the JWT is invalid", () => {
-    req.headers.authorization = "Bearer fake-token";
+    req.headers.authorization = "Bearer invalid-token";
 
     jwt.verify.mockImplementation(() => {
       throw new Error("Invalid token");

@@ -1,7 +1,7 @@
 import request from "supertest";
 import express from "express";
 
-import { authRouter } from "../../routes/auth.js";
+import { authRouter } from "../../src/routes/auth.js";
 
 import {
   postNewUser,
@@ -9,11 +9,11 @@ import {
   forgotPassword,
   resetPassword,
   getAccountInfo,
-} from "../../controllers/authController.js";
+} from "../../src/controllers/authController.js";
 
-import { authenticateUser } from "../../middleware/authenticateUser.js";
+import { authenticateUser } from "../../src/middleware/authenticateUser.js";
 
-vi.mock("../../controllers/authController.js", () => ({
+vi.mock("../../src/controllers/authController.js", () => ({
   postNewUser: vi.fn((req, res) =>
     res.status(201).json({ message: "postNewUser called" }),
   ),
@@ -35,7 +35,7 @@ vi.mock("../../controllers/authController.js", () => ({
   ),
 }));
 
-vi.mock("../../middleware/authenticateUser.js", () => ({
+vi.mock("../../src/middleware/authenticateUser.js", () => ({
   authenticateUser: vi.fn((req, res, next) => {
     next();
   }),

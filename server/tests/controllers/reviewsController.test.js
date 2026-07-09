@@ -3,29 +3,29 @@ import {
   deleteReview,
   getDashboardItems,
   getReviewQuery,
-} from "../../database/reviewQueries.js";
+} from "../../src/database/reviewQueries.js";
 
 import {
   findOrCreateMedia,
   findMediaByExternalId,
-} from "../../database/mediaQueries.js";
+} from "../../src/database/mediaQueries.js";
 
 import {
   saveReview,
   deleteUserReview,
   getUserDashboard,
   getUserReview,
-} from "../../controllers/reviewsController.js";
+} from "../../src/controllers/reviewsController.js";
 import { use } from "passport";
 
-vi.mock("../../database/reviewQueries.js", () => ({
+vi.mock("../../src/database/reviewQueries.js", () => ({
   upsertReview: vi.fn(),
   deleteReview: vi.fn(),
   getDashboardItems: vi.fn(),
   getReviewQuery: vi.fn(),
 }));
 
-vi.mock("../../database/mediaQueries.js", () => ({
+vi.mock("../../src/database/mediaQueries.js", () => ({
   findOrCreateMedia: vi.fn(),
   findMediaByExternalId: vi.fn(),
 }));

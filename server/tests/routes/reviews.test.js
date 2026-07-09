@@ -1,23 +1,23 @@
 import express from "express";
 import request from "supertest";
 
-import { reviewRouter } from "../../routes/reviews.js";
+import { reviewRouter } from "../../src/routes/reviews.js";
 
 import {
   saveReview,
   deleteUserReview,
   getUserDashboard,
   getUserReview,
-} from "../../controllers/reviewsController.js";
+} from "../../src/controllers/reviewsController.js";
 
-vi.mock("../../middleware/authenticateUser.js", () => ({
+vi.mock("../../src/middleware/authenticateUser.js", () => ({
   authenticateUser: vi.fn((req, res, next) => {
     req.user = { id: 1 };
     next();
   }),
 }));
 
-vi.mock("../../controllers/reviewsController.js", () => ({
+vi.mock("../../src/controllers/reviewsController.js", () => ({
   saveReview: vi.fn((req, res) => {
     res.json({ message: "saveReview called" });
   }),

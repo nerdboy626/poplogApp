@@ -11,11 +11,11 @@ import {
   deleteAllPasswordResetTokens,
   updateUserPassword,
   getUserById,
-} from "../../database/authQueries.js";
+} from "../../src/database/authQueries.js";
 
-import { getDashboardItems } from "../../database/reviewQueries.js";
-import { sendResetEmail } from "../../utils/email.js";
-import { generateResetToken } from "../../utils/token.js";
+import { getDashboardItems } from "../../src/database/reviewQueries.js";
+import { sendResetEmail } from "../../src/utils/email.js";
+import { generateResetToken } from "../../src/utils/token.js";
 
 import {
   loginUser,
@@ -23,7 +23,7 @@ import {
   forgotPassword,
   resetPassword,
   getAccountInfo,
-} from "../../controllers/authController.js";
+} from "../../src/controllers/authController.js";
 
 vi.mock("bcryptjs", () => ({
   default: {
@@ -38,7 +38,7 @@ vi.mock("jsonwebtoken", () => ({
   },
 }));
 
-vi.mock("../../database/authQueries.js", () => ({
+vi.mock("../../src/database/authQueries.js", () => ({
   getUserByEmail: vi.fn(),
   userExists: vi.fn(),
   insertUser: vi.fn(),
@@ -49,15 +49,15 @@ vi.mock("../../database/authQueries.js", () => ({
   getUserById: vi.fn(),
 }));
 
-vi.mock("../../utils/email.js", () => ({
+vi.mock("../../src/utils/email.js", () => ({
   sendResetEmail: vi.fn(),
 }));
 
-vi.mock("../../utils/token.js", () => ({
+vi.mock("../../src/utils/token.js", () => ({
   generateResetToken: vi.fn(),
 }));
 
-vi.mock("../../database/reviewQueries.js", () => ({
+vi.mock("../../src/database/reviewQueries.js", () => ({
   getDashboardItems: vi.fn(),
 }));
 
