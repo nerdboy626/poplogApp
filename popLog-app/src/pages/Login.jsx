@@ -127,6 +127,7 @@ const Login = () => {
 
         <form className="auth-form" onSubmit={handleLogin}>
           <input
+            aria-label="Login email"
             type="email"
             placeholder="Email"
             value={loginEmail}
@@ -134,6 +135,7 @@ const Login = () => {
             required
           />
           <input
+            aria-label="Login password"
             type="password"
             placeholder="Password"
             value={loginPassword}
@@ -141,7 +143,7 @@ const Login = () => {
             required
           />
           <button className="btn btn-primary" type="submit">
-            Login
+            Log in
           </button>
         </form>
 
@@ -161,6 +163,7 @@ const Login = () => {
 
           <form className="auth-form" onSubmit={handleSignUp}>
             <input
+              aria-label="Signup username"
               type="text"
               placeholder="Username"
               value={username}
@@ -168,6 +171,7 @@ const Login = () => {
               required
             />
             <input
+              aria-label="Signup email"
               type="email"
               placeholder="Email"
               value={email}
@@ -175,6 +179,7 @@ const Login = () => {
               required
             />
             <input
+              aria-label="Signup password"
               type="password"
               placeholder="Password"
               value={password}
