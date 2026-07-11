@@ -59,6 +59,7 @@ const SearchBar = ({
       <form className="search-bar__form" onSubmit={handleSubmit}>
         <div className="search-bar__input-wrapper">
           <input
+            aria-label="Search input"
             id="searchInput"
             name="searchInput"
             type="text"
@@ -69,6 +70,7 @@ const SearchBar = ({
           />
           {showClear && (
             <button
+              aria-label="Clear search"
               type="button"
               className="search-bar__clear-btn btn btn-ghost"
               onClick={onClear}
@@ -78,6 +80,7 @@ const SearchBar = ({
           )}
         </div>
         <button
+          aria-label="Submit search"
           type="submit"
           id="searchButton"
           disabled={!inputValue.trim()}

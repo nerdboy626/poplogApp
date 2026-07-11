@@ -39,6 +39,7 @@ const GenreMenu = ({
       </div>
 
       <button
+        aria-label="Clear genre"
         className="btn btn-primary"
         onClick={onClear}
         disabled={!showClear}

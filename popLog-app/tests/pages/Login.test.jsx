@@ -34,7 +34,7 @@ vi.mock("react-hot-toast", () => ({
   },
 }));
 
-describe("Login Page", () => {
+describe("Login", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     global.fetch = vi.fn();
