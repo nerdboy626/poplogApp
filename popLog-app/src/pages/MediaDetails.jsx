@@ -186,7 +186,7 @@ const MediaDetails = () => {
       <aside className="media-details__sidebar">
         <div className="media-details__cover">
           {mediaInfo?.coverUrl ? (
-            <img src={mediaInfo.coverUrl} />
+            <img src={mediaInfo.coverUrl} alt="Movie poster image" />
           ) : (
             <>
               <p>No Image</p>
@@ -332,7 +332,11 @@ const MediaDetails = () => {
                 Cancel
               </button>
 
-              <button className="btn btn-danger" onClick={handleDelete}>
+              <button
+                aria-label="Confirm delete"
+                className="btn btn-danger"
+                onClick={handleDelete}
+              >
                 Delete Entry
               </button>
             </div>
