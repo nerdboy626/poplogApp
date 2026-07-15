@@ -6,8 +6,6 @@ import { IoIosBook } from "react-icons/io";
 import "./SearchDisplay.css";
 
 const SearchDisplay = ({ item }) => {
-  if (!item) return null;
-
   const genresRef = useRef(null);
   const [fadeLeft, setFadeLeft] = useState(false);
   const [fadeRight, setFadeRight] = useState(false);
@@ -31,6 +29,8 @@ const SearchDisplay = ({ item }) => {
       observer.disconnect();
     };
   }, []);
+
+  if (!item) return null;
 
   const imageIcon = (item) => {
     if (item.mediaType === "books") {

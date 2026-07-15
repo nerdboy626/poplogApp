@@ -26,7 +26,7 @@ const ForgotPassword = () => {
         },
       );
       setEmail("");
-    } catch (err) {
+    } catch {
       toast.error("Something went wrong. Please try again.", {
         id: "main",
       });

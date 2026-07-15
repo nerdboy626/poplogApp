@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
-import { useAuth } from "../utils/AuthContext.jsx";
+import { useAuth } from "../utils/useAuth.js";
 import { IoHomeOutline } from "react-icons/io5";
 import { IoSearch } from "react-icons/io5";
 import { LuNotebookPen } from "react-icons/lu";

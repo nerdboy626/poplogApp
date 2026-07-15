@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../utils/AuthContext.jsx";
+import { useAuth } from "../utils/useAuth.js";
 import { fetchWithAuth } from "../utils/fetchWithAuth.js";
 import CardDisplay from "../components/CardDisplay.jsx";
 import { API_BASE_URL } from "../config/env.js";

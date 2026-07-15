@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../utils/AuthContext";
+import { useAuth } from "../utils/useAuth.js";
 import toast from "react-hot-toast";
 import "./ResetPassword.css";
 import { API_BASE_URL } from "../config/env";

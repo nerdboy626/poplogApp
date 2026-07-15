@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { useAuth } from "../utils/AuthContext.jsx";
+import { useAuth } from "../utils/useAuth.js";
 import { jwtDecode } from "jwt-decode";
 import toast from "react-hot-toast";
 import Loading from "../components/Loading.jsx";

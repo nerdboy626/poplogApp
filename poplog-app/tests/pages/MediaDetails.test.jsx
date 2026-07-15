@@ -2,7 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useLoaderData, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useAuth } from "../../src/utils/AuthContext";
+import { useAuth } from "../../src/utils/useAuth.js";
 import { fetchWithAuth } from "../../src/utils/fetchWithAuth";
 import MediaDetails from "../../src/pages/MediaDetails.jsx";
 
@@ -16,7 +16,7 @@ vi.mock("react-router-dom", async () => {
   };
 });
 
-vi.mock("../../src/utils/AuthContext", () => ({
+vi.mock("../../src/utils/useAuth.js", () => ({
   useAuth: vi.fn(),
 }));
 

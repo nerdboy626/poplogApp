@@ -20,7 +20,7 @@ vi.mock("react-router-dom", async () => {
   };
 });
 
-vi.mock("../../src/utils/AuthContext.jsx", () => ({
+vi.mock("../../src/utils/useAuth.js", () => ({
   useAuth: () => ({
     login: mockLogin,
     logoutReason: null,

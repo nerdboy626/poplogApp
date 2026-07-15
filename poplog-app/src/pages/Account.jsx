@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../utils/AuthContext";
+import { useAuth } from "../utils/useAuth.js";
 import { fetchWithAuth } from "../utils/fetchWithAuth";
-import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { GiGameConsole } from "react-icons/gi";
 import { GiTv } from "react-icons/gi";
@@ -13,7 +12,6 @@ import "./Account.css";
 
 const Account = () => {
   const auth = useAuth();
-  const navigate = useNavigate();
   const [stats, setStats] = useState(null);
   const [sendingReset, setSendingReset] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -65,7 +63,7 @@ const Account = () => {
       toast.success("A reset link has been sent to your email.", {
         id: "main",
       });
-    } catch (err) {
+    } catch {
       toast.error("Something went wrong. Please try again.", {
         id: "main",
       });

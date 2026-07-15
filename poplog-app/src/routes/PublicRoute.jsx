@@ -1,5 +1,5 @@
 import { Navigate, useLocation } from "react-router-dom";
-import { useAuth } from "../utils/AuthContext.jsx";
+import { useAuth } from "../utils/useAuth.js";
 
 const PublicRoute = ({ children }) => {
   const location = useLocation();

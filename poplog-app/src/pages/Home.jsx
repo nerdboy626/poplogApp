@@ -1,4 +1,4 @@
-import { useAuth } from "../utils/AuthContext.jsx";
+import { useAuth } from "../utils/useAuth.js";
 import Carousel from "../features/home/Carousel.jsx";
 import { Link } from "react-router-dom";
 import { useLoaderData } from "react-router-dom";

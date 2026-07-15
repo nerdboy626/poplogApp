@@ -1,14 +1,6 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useRef,
-  useMemo,
-} from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { jwtDecode } from "jwt-decode";
-
-const AuthContext = createContext();
+import { AuthContext } from "./AuthContextObject";
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -102,5 +94,3 @@ export const AuthProvider = ({ children }) => {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-
-export const useAuth = () => useContext(AuthContext);

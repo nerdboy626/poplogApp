@@ -1,7 +1,8 @@
 import { render, screen, waitFor, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { fireEvent } from "@testing-library/react";
-import { AuthProvider, useAuth } from "../../src/utils/AuthContext";
+import { useAuth } from "../../src/utils/useAuth.js";
+import { AuthProvider } from "../../src/utils/AuthContext.jsx";
 import { jwtDecode } from "jwt-decode";
 
 vi.mock("jwt-decode", () => ({

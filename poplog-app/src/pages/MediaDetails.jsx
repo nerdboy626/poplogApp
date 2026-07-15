@@ -5,7 +5,7 @@ import { IoGameController } from "react-icons/io5";
 import { IoIosBook } from "react-icons/io";
 import { FaStar, FaSortUp, FaSortDown } from "react-icons/fa";
 import MediaRate from "../features/mediadetails/MediaRate.jsx";
-import { useAuth } from "../utils/AuthContext.jsx";
+import { useAuth } from "../utils/useAuth.js";
 import { fetchWithAuth } from "../utils/fetchWithAuth.js";
 import toast from "react-hot-toast";
 import { useLoaderData } from "react-router-dom";
