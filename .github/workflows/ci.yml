@@ -29,11 +29,23 @@ jobs:
       - name: Install Root Dependencies
         run: npm ci
 
+      - name: Debug Environment
+        run: |
+          node -v
+          npm -v
+          pwd
+          ls -la
+          ls -la poplog-app
+          cat poplog-app/package.json
+          head -20 poplog-app/package-lock.json
+
       - name: Install Frontend Dependencies
-        run: npm ci --prefix poplog-app
+        working-directory: poplog-app
+        run: npm ci
 
       - name: Install Backend Dependencies
-        run: npm ci --prefix server
+        working-directory: server
+        run: npm ci
 
       - name: Run Linter
         run: npm run lint
