@@ -20,12 +20,14 @@ const Home = () => {
           <>
             <h1 className="home-header__title">Welcome back</h1>
             <p className="home-header__subtitle">
-              Here’s what people are loving right now
+              Here&apos;s what people are loving right now
             </p>
           </>
         ) : (
           <>
-            <h1 className="home-header__title">Discover what’s trending</h1>
+            <h1 className="home-header__title">
+              Discover what&apos;s trending
+            </h1>
             <p className="home-header__subtitle">
               Track your favorites by <Link to="/login">signing in</Link>
             </p>

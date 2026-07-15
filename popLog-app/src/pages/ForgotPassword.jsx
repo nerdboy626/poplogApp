@@ -40,7 +40,7 @@ const ForgotPassword = () => {
       <section className="forgot-card">
         <h1 className="forgot-card__title">Forgot your password?</h1>
         <p className="forgot-card__subtitle">
-          Enter your email and we’ll send you a reset link
+          Enter your email and we&apos;ll send you a reset link
         </p>
 
         <form className="forgot-form" onSubmit={handleSubmit}>

@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix poplog-app\"",
-    "test": "npm run test:run --prefix poplog-app && npm run test:run --prefix server"
+    "test": "npm run test:run --prefix poplog-app && npm run test:run --prefix server",
+    "lint": "npm run lint --prefix poplog-app",
+    "build": "npm run build --prefix poplog-app"
   },
   "keywords": [],
   "author": "Nico Caminero",

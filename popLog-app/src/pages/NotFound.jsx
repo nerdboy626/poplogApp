@@ -8,7 +8,8 @@ const NotFound = () => {
         <h1 className="notfound-card__code">404</h1>
         <h2 className="notfound-card__title">Page Not Found</h2>
         <p className="notfound-card__text">
-          The page you're looking for doesn’t exist or may have been moved.
+          The page you&apos;re looking for doesn&apos;t exist or may have been
+          moved.
         </p>
 
         <div className="notfound-card__footer">

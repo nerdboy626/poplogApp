@@ -161,7 +161,7 @@ const Account = () => {
             <div className="account__action-text">
               <span className="account__action-title">Reset Password</span>
               <span className="account__action-desc">
-                We’ll send a secure reset link to your email
+                We&apos;ll send a secure reset link to your email
               </span>
             </div>
 
