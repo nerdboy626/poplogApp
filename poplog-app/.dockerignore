@@ -3,7 +3,7 @@ node_modules
 .gitignore
 .github
 .env
-.env.
+.env.*
 coverage
 Dockerfile
 .dockerignore

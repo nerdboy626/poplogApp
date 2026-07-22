@@ -1,9 +1,6 @@
-import { Client } from "pg";
-import { DATABASE_URL, NODE_ENV } from "../config/env.js";
-
-const seedTables = `CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY, 
-    username VARCHAR ( 32 ) UNIQUE NOT NULL,
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    username VARCHAR(32) UNIQUE NOT NULL,
     email TEXT UNIQUE NOT NULL,
     hashed_password TEXT,
     google_id TEXT UNIQUE
@@ -38,17 +35,4 @@ CREATE TABLE IF NOT EXISTS password_reset_tokens (
     token_hash TEXT NOT NULL,
     expires_at TIMESTAMP NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW()
-);`;
-
-async function main() {
-  const client = new Client({
-    connectionString: DATABASE_URL,
-    ssl: NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
-  });
-
-  await client.connect();
-  await client.query(seedTables);
-  await client.end();
-}
-
-main();
+);

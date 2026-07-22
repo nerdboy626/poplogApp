@@ -1,0 +1,36 @@
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: poplog-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: poplog
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./server/src/database/createTables.sql:/docker-entrypoint-initdb.d/createTables.sql
+
+  backend:
+    build:
+      context: ./server
+    container_name: poplog-server
+    ports:
+      - "3500:3500"
+    env_file:
+      - ./server/.env.docker
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./poplog-app
+      args:
+        VITE_API_BASE_URL: http://localhost:3500
+    container_name: poplog-client
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres-data:

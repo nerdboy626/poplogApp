@@ -1,6 +1,12 @@
+# Environment files
 .env
-server.env
-poplog-app.env
+.env.*
+!.env.example
+server/.env
+server/.env.docker
+poplog-app/.env
+
+# Dependencies
 node_modules/
 server/node_modules/
 poplog-app/node_modules/
