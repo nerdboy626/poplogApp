@@ -2,6 +2,7 @@
 .env
 .env.*
 !.env.example
+!.env.docker.example
 server/.env
 server/.env.docker
 poplog-app/.env
