@@ -43,3 +43,10 @@ jobs:
 
       - name: Build Frontend
         run: npm run build
+
+      - name: Start Docker Compose
+        run: docker compose up -d --build
+
+      - name: Stop Docker Compose
+        if: always()
+        run: docker compose down -v
