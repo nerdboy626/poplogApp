@@ -38,25 +38,39 @@ Note: This is a shared public account intended for demo purposes. Data may chang
 
 - Search across multiple media types (movies, TV shows, books, and games)
 - Browse trending content from external APIs
-- User authentication with protected routes (JWT-based)
+- JWT user authentication with protected routes
 - Save media entries and manage them within a personal journal
 - Sync external API data with a PostgreSQL database
 - Fully responsive design for desktop and mobile devices
+- Server-side caching to reduce external API requests and improve performance
 
 ## Tech Stack
 
-### Client
+### Frontend
 
 - React
 - React Router
 - JavaScript
-- CSS (Flexbox, responsive design)
+- CSS
+- Vite
 
-### Server
+### Backend
 
 - Node.js
 - Express
 - PostgreSQL
+
+### Testing
+
+- Vitest
+- React Testing Library
+- Supertest
+
+### DevOps
+
+- Docker
+- Docker Compose
+- GitHub Actions
 
 ### APIs
 
@@ -71,6 +85,58 @@ Note: This is a shared public account intended for demo purposes. Data may chang
 - Backend: Render
 - Database: PostgreSQL (hosted on Render)
 
+## Running Locally
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/nerdboy626/poplogApp.git
+cd poplogApp
+```
+
+### 2. Install dependencies
+
+Install the frontend and backend dependencies:
+
+```bash
+npm run install:all
+```
+
+### 3. Configure environment variables
+
+Create the required environment files using the provided example files.
+
+```
+server/.env
+poplog-app/.env
+```
+
+The backend also requires a running PostgreSQL database. Update the `DATABASE_URL` in `server/.env` to point to your local database.
+
+### 4. Start the application
+
+From the project root, run:
+
+```bash
+npm start
+```
+
+This starts both the Express backend and the React development server.
+
+Once both are running, visit http://localhost:3000.
+
+## Running with Docker
+
+After cloning the repository, start the application with Docker Compose:
+
+```bash
+docker compose up --build
+```
+
+This launches the React frontend, Express backend, and a PostgreSQL database in separate containers. The backend automatically connects to the database using Docker's internal network.
+
+Once the containers are running, visit http://localhost:3000.
+
 ## What I Learned
 
 Before building Poplog, I had a basic understanding of creating frontend applications with JavaScript and React, but very little experience working with servers. Through this project, I gained hands-on experience across the entire stack, from implementing authentication and designing a database to integrating multiple external APIs and optimizing performance.
@@ -79,6 +145,9 @@ Before building Poplog, I had a basic understanding of creating frontend applica
 - Integrating and managing multiple third-party APIs
 - Designing and querying a PostgreSQL database
 - Handling asynchronous data flow and API caching strategies
+- Building an automated CI pipeline using GitHub Actions
+- Containerizing a multi-service application with Docker and Docker Compose
+- Deploying a full-stack application using Vercel and Render
 
 ## Challenges
 

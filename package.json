@@ -1,13 +1,14 @@
 {
   "name": "poplog",
   "version": "1.0.0",
-  "description": "",
+  "description": "A full stack media tracking application built with React, Express, PostgreSQL, Docker, and Vitest.",
   "main": "index.js",
   "scripts": {
     "start": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix poplog-app\"",
     "test": "npm run test:run --prefix poplog-app && npm run test:run --prefix server",
     "lint": "npm run lint --prefix poplog-app",
-    "build": "npm run build --prefix poplog-app"
+    "build": "npm run build --prefix poplog-app",
+    "install:all": "npm install --prefix server && npm install --prefix poplog-app"
   },
   "keywords": [],
   "author": "Nico Caminero",
